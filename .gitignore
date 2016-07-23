@@ -87,3 +87,7 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# Auxiliary build files
+pydart2/pydart2_api.py
+pydart2/*wrap*

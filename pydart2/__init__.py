@@ -1,3 +1,6 @@
-def foo():
-    print("pydart2.foo is excuted")
-    return "test1-2-3"
+from pydart2_api import foo
+
+
+def boo(x):
+    print("pydart2.boo is excuted")
+    return x * 2

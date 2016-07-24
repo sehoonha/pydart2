@@ -1,4 +1,4 @@
-from pydart2_api import foo
+import pydart2_api as api
 
 
 def boo(x):

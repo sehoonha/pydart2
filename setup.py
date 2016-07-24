@@ -1,4 +1,5 @@
 from setuptools import setup
+from setuptools import find_packages
 from distutils.core import Extension
 
 
@@ -10,11 +11,13 @@ CXX_FLAGS += '-g -fno-omit-frame-pointer -fno-inline-functions '
 CXX_FLAGS += '-fno-inline-functions-called-once -fno-optimize-sibling-calls '
 
 libraries = list()
+libraries += ['dart', 'dart-gui']
+libraries += ['dart-optimizer-ipopt', 'dart-optimizer-nlopt',
+              'dart-planning', 'dart-utils', 'dart-utils-urdf']
 libraries += ['python2.7']
-# libraries += ['dart', 'dart-core']
-# libraries += ['GL', 'glut', 'Xmu', 'Xi']
-# libraries += ['BulletDynamics', 'BulletCollision',
-#               'LinearMath', 'BulletSoftBody']
+libraries += ['GL', 'glut', 'Xmu', 'Xi']
+libraries += ['BulletDynamics', 'BulletCollision',
+              'LinearMath', 'BulletSoftBody']
 
 
 pydart2_api = Extension('_pydart2_api',
@@ -34,7 +37,7 @@ pydart2_api = Extension('_pydart2_api',
 
 
 setup(name='pydart2',
-      version='0.3.3',
+      version='0.3.4',
       description='Python Interface for DART Simulator',
       url='https://github.com/sehoonha/pydart2',
       author='Sehoon Ha',
@@ -43,5 +46,5 @@ setup(name='pydart2',
       install_requires=[
           'numpy',
       ],
-      packages=['pydart2'],
+      packages=find_packages(),
       ext_modules=[pydart2_api])

@@ -12,7 +12,15 @@ using std::endl;
 
 // Dart headers
 #include "dart/dart.hpp"
+#include "dart/gui/gui.hpp"
 #include "dart/utils/utils.hpp"
+
+#include "pydart2_draw.h"
+
+#define MSG if (Manager::g_verbose) dtmsg
+#define DBG if (Manager::g_verbose) dtdbg
+#define WARN if (Manager::g_verbose) dtwarn
+#define ERR if (Manager::g_verbose) dterr
 
 namespace pydart {
 
@@ -23,9 +31,9 @@ public:
     static void init();
     static void destroy();
     static Manager* getInstance() { return g_manager; }
-    // static dart::renderer::RenderInterface* getRI() {
-    //     return g_ri;
-    // }
+    static dart::gui::RenderInterface* getRI() {
+        return g_ri;
+    }
 
     static dart::simulation::WorldPtr world(int index = 0);
     static dart::dynamics::SkeletonPtr skeleton(int index);
@@ -33,10 +41,10 @@ public:
     static int createWorld(double timestep);
     static int createWorldFromSkel(const char* const path);
     static void destroyWorld(int id);
-    
+    static bool g_verbose;
 protected:
     static Manager* g_manager;
-    // static dart::renderer::RenderInterface* g_ri;
+    static dart::gui::RenderInterface* g_ri;
 
     // std::vector<dart::simulation::WorldPtr> worlds;
     int next_id;
@@ -45,14 +53,16 @@ protected:
 };
 
 Manager* Manager::g_manager = NULL;
-// dart::renderer::RenderInterface* Manager::g_ri = NULL;
+bool Manager::g_verbose = true;
+dart::gui::RenderInterface* Manager::g_ri = NULL;
 
 void Manager::init() {
     g_manager = new Manager();
-    // g_ri = new dart::renderer::OpenGLRenderInterface();
-    //   g_ri->initialize();
+    g_ri = new dart::gui::OpenGLRenderInterface();
+    g_ri->initialize();
     g_manager->next_id = 0;
-    cout << " [pydart_api] Initialize pydart manager OK" << endl;
+    // if (verbose) dtmsg << "Hello!";
+    MSG << " [pydart2_api] Initialize pydart manager OK\n";
 }
 
 void Manager::destroy() {
@@ -60,11 +70,11 @@ void Manager::destroy() {
         delete g_manager;
         g_manager = NULL;
     }
-    // if (g_ri) {
-    //     delete g_ri;
-    //     g_ri = NULL;
-    // }
-    cout << " [pydart_api] Destroy pydart manager OK" << endl;
+    if (g_ri) {
+        delete g_ri;
+        g_ri = NULL;
+    }
+    MSG << " [pydart2_api] Destroy pydart manager OK\n";
 }
 
 dart::simulation::WorldPtr Manager::world(int index) {
@@ -111,9 +121,9 @@ void Manager::destroyWorld(int id) {
     Manager* manager = getInstance();
     dart::simulation::WorldPtr w = manager->worlds[id];
     manager->worlds.erase(id);
-    cout << " [pydart_api] worlds.size = " << manager->worlds.size() << endl;
+    MSG << " [pydart2_api] worlds.size = " << manager->worlds.size() << "\n";
     // w.reset();
-    cout << " [pydart_api] Destroy world OK: " << id << endl;
+    MSG << " [pydart2_api] Destroy world OK: " << id << "\n";
 }
 
 // class Manager
@@ -125,7 +135,8 @@ using namespace pydart;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Init Functions
-void init() {
+void init(bool verbose) {
+    setVerbose(verbose);
     if (Manager::getInstance()) {
         Manager::destroy();
     }
@@ -134,5 +145,116 @@ void init() {
 
 void destroy() {
     Manager::destroy();
+}
+
+void setVerbose(bool verbose) {
+    Manager::g_verbose = verbose;
+}
+
+bool getVerbose() {
+    return Manager::g_verbose;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// World 
+int createWorld(double timestep) {
+    return Manager::createWorld(timestep);
+}
+
+int createWorldFromSkel(const char* const path) {
+    int wid = Manager::createWorldFromSkel(path);
+    // MSG << " [pydart2_api] # Skeletons in " << path << " = " << numSkeletons(wid) << "\n";
+    return wid;
+}
+
+void destroyWorld(int wid) {
+    Manager::destroyWorld(wid);
+}
+
+int WORLD(addSkeleton)(int wid, const char* const path) {
+    using namespace dart::simulation;
+    using namespace dart::dynamics;
+    std::string strpath(path);
+    std::string ext = strpath.substr(strpath.length() - 4);
+    boost::algorithm::to_lower(ext);
+
+    SkeletonPtr skel = NULL;
+    if (ext == ".sdf") {
+        MSG << " [pydart_api] parse as SDF (ext: " << ext << ")" << endl;
+        skel = dart::utils::SdfParser::readSkeleton(path);
+    } else if (ext == "urdf") {
+        MSG << " [pydart_api] parse as URDF (ext: " << ext << ")" << endl;
+        dart::utils::DartLoader urdfLoader;
+        skel = urdfLoader.parseSkeleton(path);
+    } else if (ext == ".vsk") {
+        MSG << " [pydart_api] parse as VSK (ext: " << ext << ")" << endl;
+        skel = dart::utils::VskParser::readSkeleton(path);
+    } else {
+        ERR << " [pydart_api] bad extension (ext: " << ext << ")" << endl;
+        return -1;
+    }
+
+    MSG << " [pydart_api] skel [" << path << "]" << endl;
+    
+    dart::simulation::WorldPtr world = GET_WORLD(wid);
+    int id = world->getNumSkeletons();
+    world->addSkeleton(skel);
+    return id;
+}
+
+int WORLD(getNumSkeletons)(int wid) {
+    dart::simulation::WorldPtr world = GET_WORLD(wid);
+    return world->getNumSkeletons();
+}
+
+void WORLD(reset)(int wid) {
+    dart::simulation::WorldPtr world = GET_WORLD(wid);
+    world->reset();
+    for (size_t skid = 0; skid < world->getNumSkeletons(); skid++) {
+        dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+        skel->resetCommands();
+        skel->resetPositions();
+        skel->resetVelocities();
+        skel->resetAccelerations();
+        skel->resetGeneralizedForces();
+        skel->clearExternalForces();
+        skel->clearConstraintImpulses();
+    }
+}
+
+void WORLD(step)(int wid) {
+    dart::simulation::WorldPtr world = GET_WORLD(wid);
+    world->step();
+}
+
+void WORLD(render)(int wid) {
+    dart::simulation::WorldPtr world = GET_WORLD(wid);
+    dart::gui::RenderInterface* ri = Manager::getRI();
+    drawWorld(ri, world);
+}
+
+void WORLD(setTimeStep)(int wid, double _timeStep) {
+    dart::simulation::WorldPtr world = GET_WORLD(wid);
+    world->setTimeStep(_timeStep);
+}
+
+double WORLD(getTimeStep)(int wid) {
+    dart::simulation::WorldPtr world = GET_WORLD(wid);
+    return world->getTimeStep();
+}
+
+void WORLD(setTime)(int wid, double _time) {
+    dart::simulation::WorldPtr world = GET_WORLD(wid);
+    world->setTime(_time);
+}
+
+double WORLD(getTime)(int wid) {
+    dart::simulation::WorldPtr world = GET_WORLD(wid);
+    return world->getTime();
+}
+
+int WORLD(getIndex)(int wid, int _index) {
+    dart::simulation::WorldPtr world = GET_WORLD(wid);
+    return world->getIndex(_index);
 }
 

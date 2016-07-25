@@ -32,8 +32,10 @@ pydart2_api = Extension('_pydart2_api',
                         extra_compile_args=CXX_FLAGS.split(),
                         swig_opts=['-c++'],
                         sources=[DIR + 'pydart2_api.cpp',
+                                 DIR + 'pydart2_draw.cpp',
                                  DIR + 'pydart2_api.i'],
-                        depends=[DIR + 'pydart2_api.h', ])
+                        depends=[DIR + 'pydart2_api.h',
+                                 DIR + 'pydart2_draw.h'])
 
 
 setup(name='pydart2',

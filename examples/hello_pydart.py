@@ -12,8 +12,10 @@ if __name__ == '__main__':
     world = pydart.create_world(1.0 / 2000.0, data_dir + 'skel/cubes.skel')
     print('pydart create_world OK')
 
-    while world.t < 2.0:
-        # if world.nframes % 100 == 0:
-        #     print("%.4fs: The third cube pos = " % (world.t))
-        world.step()
-        print(str(world))
+    # while world.t < 2.0:
+    #     # if world.nframes % 100 == 0:
+    #     #     print("%.4fs: The third cube pos = " % (world.t))
+    #     world.step()
+    #     print(str(world))
+
+    pydart.gui.viewer.launch(world)

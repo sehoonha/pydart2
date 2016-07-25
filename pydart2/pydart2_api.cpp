@@ -114,6 +114,8 @@ int Manager::createWorldFromSkel(const char* const path) {
     manager->worlds[id] = w;
     // int id = manager->worlds.size();
     // manager->worlds.push_back(w);
+    MSG << " [pydart2_api] worlds.size = " << manager->worlds.size() << "\n";
+    MSG << " [pydart2_api] worlds.# skeletons = " << w->getNumSkeletons() << "\n";
     return id;
 }
 

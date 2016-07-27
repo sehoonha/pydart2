@@ -35,11 +35,12 @@ pydart2_api = Extension('_pydart2_api',
                                  DIR + 'pydart2_draw.cpp',
                                  DIR + 'pydart2_api.i'],
                         depends=[DIR + 'pydart2_api.h',
-                                 DIR + 'pydart2_draw.h'])
+                                 DIR + 'pydart2_draw.h',
+                                 DIR + 'numpy.i'])
 
 
 setup(name='pydart2',
-      version='0.3.4',
+      version='0.3.5',
       description='Python Interface for DART Simulator',
       url='https://github.com/sehoonha/pydart2',
       author='Sehoon Ha',

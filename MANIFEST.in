@@ -1,2 +1,3 @@
 include pydart2/pydart2_api.h
 include pydart2/pydart2_draw.h
+include pydart2/numpy.i

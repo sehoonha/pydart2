@@ -7,6 +7,7 @@
 
 import pydart2_api as papi
 import numpy as np
+from skeleton import Skeleton
 
 
 class World(object):
@@ -17,14 +18,14 @@ class World(object):
         BULLET_COLLISION_DETECTOR = range(NUM_COLLISION_DETECTOR_TYPES)
 
     def __init__(self, step, skel_path=None):
-        self.skels = []
+        self.skeletons = list()
         self.control_skel = None
         if skel_path is not None:
             self.id = papi.createWorldFromSkel(skel_path)
             self.set_time_step(step)
             nskels = self.num_skeletons()
             for i in range(nskels):
-                self.add_skeleton_from_id(i, (i == nskels - 1))
+                self.add_skeleton_from_id(i)
         else:
             self.id = papi.createWorld(step)
 
@@ -33,19 +34,17 @@ class World(object):
     def destroy(self):
         papi.destroyWorld(self.id)
 
-    def add_skeleton(self, filename, friction=1.0,
-                     control=True, traditional=False):
+    def add_skeleton(self, filename):
         # self.skels += [Skeleton(self, filename, friction,
         #                         _traditional=traditional)]
         # if control:
         #     self.control_skel = self.skels[-1]
         pass
 
-    def add_skeleton_from_id(self, _skel_id, control=True):
-        # self.skels += [Skeleton(self, None, None, _skel_id)]
-        # if control:
-        #     self.control_skel = self.skels[-1]
-        pass
+    def add_skeleton_from_id(self, _skel_id):
+        skel = Skeleton(_world=self, _id=_skel_id)
+        self.skeletons.append(skel)
+        return skel
 
     def num_skeletons(self):
         return papi.world__getNumSkeletons(self.id)
@@ -113,7 +112,7 @@ class World(object):
         self.contact_history.append([])  # For the initial frame
 
     def step(self):
-        for skel in self.skels:
+        for skel in self.skeletons:
             if skel.controller is not None:
                 skel.tau = skel.controller.compute()
 

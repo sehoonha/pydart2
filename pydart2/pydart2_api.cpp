@@ -255,8 +255,103 @@ double WORLD(getTime)(int wid) {
     return world->getTime();
 }
 
+int WORLD(getSimFrames)(int wid) {
+    dart::simulation::WorldPtr world = GET_WORLD(wid);
+    return world->getSimFrames();
+}
+
 int WORLD(getIndex)(int wid, int _index) {
     dart::simulation::WorldPtr world = GET_WORLD(wid);
     return world->getIndex(_index);
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// Skeleton
+void write(const Eigen::VectorXd& src, double* dst) {
+    for (int i = 0; i < src.size(); i++) {
+        dst[i] = src(i);
+    }
+}
+
+Eigen::VectorXd read(double* src, int n) {
+    Eigen::VectorXd dst(n);
+    for (int i =0; i < n; i++) {
+        dst(i) = src[i];
+    }
+    return dst;
+}
+
+
+void SKEL(render)(int wid, int skid) {
+    dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+    dart::gui::RenderInterface* ri = Manager::getRI();
+    drawSkeleton(ri, skel.get()); 
+}
+
+void SKEL(renderWithColor)(int wid, int skid, double inv4[4]) {
+    dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+    dart::gui::RenderInterface* ri = Manager::getRI();
+    Eigen::Vector4d color(inv4);
+    MSG << "color = " << color.transpose() << "\n";
+    drawSkeleton(ri, skel.get(), color, false); 
+}
+
+const char* SKEL(getName)(int wid, int skid) {
+    dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+    return skel->getName().c_str();
+}
+
+double SKEL(getMass)(int wid, int skid) {
+    dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+    return skel->getMass();
+}
+
+bool SKEL(isMobile)(int wid, int skid) {
+    dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+    return skel->isMobile();
+}
+
+void SKEL(setMobile)(int wid, int skid, bool mobile) {
+    dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+    skel->setMobile(mobile);
+}
+
+
+////////////////////////////////////////
+// Structure Information Functions
+int SKEL(getNumBodies)(int wid, int skid) {
+    dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+    return skel->getNumBodyNodes();
+}
+
+int SKEL(getNumDofs)(int wid, int skid) {
+    dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+    return skel->getNumDofs();
+}
+
+////////////////////////////////////////
+// Pose Functions
+void SKEL(getPositions)(int wid, int skid, double* outv, int ndofs) {
+    dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+    write(skel->getPositions(), outv);
+}
+
+void SKEL(setPositions)(int wid, int skid, double* inv, int ndofs) {
+    dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+    skel->setPositions(read(inv, ndofs));
+}
+
+void SKEL(getVelocities)(int wid, int skid, double* outv, int ndofs) {
+    dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+    write(skel->getVelocities(), outv);
+}
+
+void SKEL(setVelocities)(int wid, int skid, double* inv, int ndofs) {
+    dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+    skel->setVelocities(read(inv, ndofs));
+}
+
+void SKEL(setForces)(int wid, int skid, double* inv, int ndofs) {
+    dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+    skel->setForces(read(inv, ndofs));
+}

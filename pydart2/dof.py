@@ -25,4 +25,4 @@ class Dof(object):
         return self.skel.id
 
     def __repr__(self):
-        return '[Dof.%s(%d)]' % (self.name, self.id)
+        return '[Dof(%d): %s]' % (self.id, self.name)

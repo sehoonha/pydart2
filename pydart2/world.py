@@ -134,23 +134,37 @@ class World(object):
         # for skel in self.skels:
         #     skel.render_markers()
 
-    # def states(self):
-    #     return np.concatenate([skel.x for skel in self.skels])
+    def states(self):
+        return np.concatenate([skel.x for skel in self.skels])
 
-    # @property
-    # def x(self):
-    #     return self.states()
+    @property
+    def x(self):
+        return self.states()
 
-    # def set_states(self, _x):
-    #     lo = 0
-    #     for skel in self.skels:
-    #         hi = lo + 2 * skel.ndofs
-    #         skel.x = _x[lo:hi]
-    #         lo = hi
+    def set_states(self, _x):
+        lo = 0
+        for skel in self.skels:
+            hi = lo + 2 * skel.ndofs
+            skel.x = _x[lo:hi]
+            lo = hi
 
-    # @x.setter
-    # def x(self, _x):
-    #     self.set_states(_x)
+    @x.setter
+    def x(self, _x):
+        self.set_states(_x)
+
+    def gravity(self):
+        return papi.world__getGravity(self.id)
+
+    @property
+    def g(self):
+        return self.gravity()
+
+    def set_gravity(self, _g):
+        papi.world__setGravity(self.id, _g)
+
+    @g.setter
+    def g(self, _g):
+        self.set_gravity(_g)
 
     # def save(self, filename):
     #     return papi.saveWorldToFile(self.id, filename)

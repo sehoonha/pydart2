@@ -158,6 +158,33 @@ bool getVerbose() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// Helper functions 
+void write(const Eigen::VectorXd& src, double* dst) {
+    for (int i = 0; i < src.size(); i++) {
+        dst[i] = src(i);
+    }
+}
+
+void write_matrix(const Eigen::MatrixXd& src, double* dst) {
+    int ptr = 0;
+    for (int i = 0; i < src.rows(); i++) {
+        for (int j = 0; j < src.cols(); j++) {
+            dst[ptr++] = src(i, j);
+        }
+    }
+}
+
+Eigen::VectorXd read(double* src, int n) {
+    Eigen::VectorXd dst(n);
+    for (int i =0; i < n; i++) {
+        dst(i) = src[i];
+    }
+    return dst;
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////////
 // World 
 int createWorld(double timestep) {
     return Manager::createWorld(timestep);
@@ -235,6 +262,9 @@ void WORLD(render)(int wid) {
     drawWorld(ri, world);
 }
 
+////////////////////////////////////////
+// World::Time Functions
+
 void WORLD(setTimeStep)(int wid, double _timeStep) {
     dart::simulation::WorldPtr world = GET_WORLD(wid);
     world->setTimeStep(_timeStep);
@@ -265,32 +295,21 @@ int WORLD(getIndex)(int wid, int _index) {
     return world->getIndex(_index);
 }
 
+////////////////////////////////////////
+// World::Property Functions
+void WORLD(setGravity)(int wid, double inv3[3]) {
+    dart::simulation::WorldPtr world = GET_WORLD(wid);
+    world->setGravity(read(inv3, 3));
+}
+
+void WORLD(getGravity)(int wid, double outv3[3]) {
+    dart::simulation::WorldPtr world = GET_WORLD(wid);
+    write(world->getGravity(), outv3);
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // Skeleton
-void write(const Eigen::VectorXd& src, double* dst) {
-    for (int i = 0; i < src.size(); i++) {
-        dst[i] = src(i);
-    }
-}
-
-void write_matrix(const Eigen::MatrixXd& src, double* dst) {
-    int ptr = 0;
-    for (int i = 0; i < src.rows(); i++) {
-        for (int j = 0; j < src.cols(); j++) {
-            dst[ptr++] = src(i, j);
-        }
-    }
-}
-
-Eigen::VectorXd read(double* src, int n) {
-    Eigen::VectorXd dst(n);
-    for (int i =0; i < n; i++) {
-        dst(i) = src[i];
-    }
-    return dst;
-}
-
-
 void SKEL(render)(int wid, int skid) {
     dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
     dart::gui::RenderInterface* ri = Manager::getRI();
@@ -315,6 +334,8 @@ double SKEL(getMass)(int wid, int skid) {
     return skel->getMass();
 }
 
+////////////////////////////////////////
+// Skeleton::Property Functions
 bool SKEL(isMobile)(int wid, int skid) {
     dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
     return skel->isMobile();
@@ -325,10 +346,29 @@ void SKEL(setMobile)(int wid, int skid, bool mobile) {
     skel->setMobile(mobile);
 }
 
+bool SKEL(getSelfCollisionCheck)(int wid, int skid) {
+    dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+    return skel->getSelfCollisionCheck();
+}
+
+void SKEL(setSelfCollisionCheck)(int wid, int skid, int enable) {
+    dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+    skel->setSelfCollisionCheck(enable);
+}
+
+bool SKEL(getAdjacentBodyCheck)(int wid, int skid) {
+    dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+    return skel->getAdjacentBodyCheck();
+}
+
+void SKEL(setAdjacentBodyCheck)(int wid, int skid, int enable) {
+    dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+    skel->setAdjacentBodyCheck(enable);
+}
 
 ////////////////////////////////////////
-// Structure Information Functions
-int SKEL(getNumBodies)(int wid, int skid) {
+// Skeleton::Structure Information Functions
+int SKEL(getNumBodyNodes)(int wid, int skid) {
     dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
     return skel->getNumBodyNodes();
 }
@@ -339,7 +379,7 @@ int SKEL(getNumDofs)(int wid, int skid) {
 }
 
 ////////////////////////////////////////
-// Pose Functions
+// Skeleton::Pose Functions
 void SKEL(getPositions)(int wid, int skid, double* outv, int ndofs) {
     dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
     write(skel->getPositions(), outv);
@@ -366,7 +406,7 @@ void SKEL(setForces)(int wid, int skid, double* inv, int ndofs) {
 }
 
 ////////////////////////////////////////
-// Difference Functions
+// Skeleton::Difference Functions
 void SKEL(getPositionDifferences)(int wid, int skid,
                                   double* inv1, int indofs1,
                                   double* inv2, int indofs2,
@@ -389,9 +429,47 @@ void SKEL(getVelocityDifferences)(int wid, int skid,
     write(q_diff, outv);
 }
 
+////////////////////////////////////////
+// Skeleton::Limit Functions
+void SKEL(getPositionLowerLimits)(int wid, int skid, double* outv, int ndofs) {
+   dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+   write(skel->getPositionLowerLimits(), outv);
+}
+
+void SKEL(getPositionUpperLimits)(int wid, int skid, double* outv, int ndofs) {
+   dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+   write(skel->getPositionUpperLimits(), outv);
+}
+
+void SKEL(getForceLowerLimits)(int wid, int skid, double* outv, int ndofs) {
+   dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+   write(skel->getForceLowerLimits(), outv);
+}
+
+void SKEL(getForceUpperLimits)(int wid, int skid, double* outv, int ndofs) {
+   dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+   write(skel->getForceLowerLimits(), outv);
+}
 
 ////////////////////////////////////////
-// Lagrangian Functions
+// Skeleton::Momentum Functions
+void SKEL(getCOM)(int wid, int skid, double outv3[3]) {
+   dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+   write(skel->getCOM(), outv3);
+}
+
+void SKEL(getCOMLinearVelocity)(int wid, int skid, double outv3[3]) {
+   dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+   write(skel->getCOMLinearVelocity(), outv3);
+}
+
+void SKEL(getCOMLinearAcceleration)(int wid, int skid, double outv3[3]) {
+   dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+   write(skel->getCOMLinearAcceleration(), outv3);
+}
+
+////////////////////////////////////////
+// Skeleton::Lagrangian Functions
 void SKEL(getMassMatrix)(int wid, int skid, double* outm, int nrows, int ncols) {
     dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
     write_matrix(skel->getMassMatrix(), outm);
@@ -405,6 +483,13 @@ void SKEL(getCoriolisAndGravityForces)(int wid, int skid, double* outv, int ndof
 void SKEL(getConstraintForces)(int wid, int skid, double* outv, int ndofs) {
     dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
     write(skel->getConstraintForces(), outv);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// BodyNode
+const char* BODY(getName)(int wid, int skid, int bnid) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bnid);
+    return body->getName().c_str();
 }
 
 ////////////////////////////////////////////////////////////////////////////////

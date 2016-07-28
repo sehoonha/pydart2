@@ -14,6 +14,11 @@
 
 %apply (double IN_ARRAY1[ANY]) {(double inv3[3])};
 %apply (double IN_ARRAY1[ANY]) {(double inv4[4])};
+%apply (double IN_ARRAY1[ANY]) {(double inv6[6])};
+
+%apply (double ARGOUT_ARRAY1[ANY]) {(double outv3[3])};
+%apply (double ARGOUT_ARRAY1[ANY]) {(double outv4[4])};
+%apply (double ARGOUT_ARRAY1[ANY]) {(double outv6[6])};
 
 %apply (double* IN_ARRAY1, int DIM1) {(double* inv, int ndofs)};
 %apply (double* IN_ARRAY1, int DIM1) {(double* inv1, int indofs1)};

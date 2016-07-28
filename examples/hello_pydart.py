@@ -8,15 +8,15 @@ if __name__ == '__main__':
     world = pydart.World(1.0 / 2000.0, './data/skel/cubes.skel')
     print('pydart create_world OK')
 
-    for idx, skel in enumerate(world.skeletons):
-        print("%dth Skeleton: %s" % (idx, skel.name))
+    for skel in world.skeletons:
+        print("\t" + str(skel))
 
-    # while world.t < 2.0:
-    #     # if True:
-    #     if world.nframes % 100 == 0:
-    #         q = world.skeletons[2].q
-    #         print("%.4fs: The third cube pos = %s" % (world.t, str(q)))
-    #     world.step()
-    #     # print(str(world))
+    while world.t < 2.0:
+        # if True:
+        if world.nframes % 100 == 0:
+            skel = world.skeletons[-1]
+            print("%.4fs: The last cube COM = %s" % (world.t, str(skel.C)))
+        world.step()
+        # print(str(world))
 
     pydart.gui.viewer.launch(world)

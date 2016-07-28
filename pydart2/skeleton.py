@@ -9,7 +9,7 @@ import os.path
 import pydart2_api as papi
 import numpy as np
 from skel_vector import SkelVector
-# from body import Body
+from bodynode import BodyNode
 from dof import Dof
 # from marker import Marker
 
@@ -33,11 +33,10 @@ class Skeleton(object):
         self.dofs = [Dof(self, i) for i in range(_ndofs)]
         self.name_to_dof = {dof.name: dof for dof in self.dofs}
 
-        # # Initialize bodies
-        # _nbodies = papi.getSkeletonNumBodies(self.world.id, self.id)
-        # self.bodies = [Body(self, i) for i in range(_nbodies)]
-        # self.name_to_body = {body.name: body for body in self.bodies}
-        # self.controller = None
+        # Initialize bodynodes
+        _nbodynodes = papi.skeleton__getNumBodyNodes(self.world.id, self.id)
+        self.bodynodes = [BodyNode(self, i) for i in range(_nbodynodes)]
+        self.name_to_body = {body.name: body for body in self.bodynodes}
 
         # # Initialize markers
         # self.markers = list()
@@ -45,6 +44,8 @@ class Skeleton(object):
         #     for j in range(body.num_markers()):
         #         m = Marker(body, j)
         #         self.markers.append(m)
+
+        self.controller = None
 
     @property
     def name(self):
@@ -60,12 +61,12 @@ class Skeleton(object):
     def ndofs(self):
         return self.num_dofs()
 
-    # def num_bodies(self):
-    #     return len(self.bodies)
+    def num_bodynodes(self):
+        return len(self.bodynodes)
 
-    # @property
-    # def nbodies(self):
-    #     return self.num_bodies()
+    @property
+    def nbodies(self):
+        return self.num_bodynodes()
 
     def is_mobile(self):
         return papi.skeleton__isMobile(self.world.id, self.id)
@@ -171,11 +172,19 @@ class Skeleton(object):
     def c(self):
         return self.coriolis_and_gravity_forces()
 
-    # def set_self_collision(self, self_col, adj_col):
-    #     flag_self = 1 if self_col is True else 0
-    #     flag_adj = 1 if adj_col is True else 0
-    #     papi.setSkeletonSelfCollision(self.world.id, self.id,
-    #                                   flag_self, flag_adj)
+    def self_collision_check(self):
+        return papi.skeleton__selfCollisionCheck(self.world.id, self.id)
+
+    def set_self_collision_check(self, _enable):
+        papi.skeleton__setSelfCollisionCheck(self.world.id, self.id,
+                                             _enable)
+
+    def adjacent_body_check(self):
+        return papi.skeleton__adjacentBodyCheck(self.world.id, self.id)
+
+    def set_adjacent_body_check(self, _enable):
+        papi.skeleton__setAdjacentBodyCheck(self.world.id, self.id,
+                                            _enable)
 
     # def remove_all_collision_pairs(self):
     #     for b1 in self.bodies:
@@ -213,30 +222,33 @@ class Skeleton(object):
     def dof_indices(self, _names):
         return np.array([self.dof_index(n) for n in _names])
 
-    # def world_com(self):
-    #     return papi.getSkeletonWorldCOM(self.world.id, self.id)
+    def com(self):
+        return papi.skeleton__getCOM(self.world.id, self.id)
 
-    # @property
-    # def C(self):
-    #     return self.world_com()
+    @property
+    def C(self):
+        return self.com()
 
-    # @property
-    # def COM(self):
-    #     return self.world_com()
+    def com_velocity(self):
+        return papi.skeleton__getCOMLinearVelocity(self.world.id, self.id)
 
-    # def world_com_velocity(self):
-    #     return papi.getSkeletonWorldCOMVelocity(self.world.id, self.id)
+    @property
+    def dC(self):
+        return self.com_velocity()
 
-    # @property
-    # def Cdot(self):
-    #     return self.world_com_velocity()
+    def com_acceleration(self):
+        return papi.skeleton__getCOMLinearAcceleration(self.world.id, self.id)
 
-    # def linear_momentum(self):
-    #     return self.Cdot * self.m
+    @property
+    def ddC(self):
+        return self.com_acceleration()
 
-    # @property
-    # def P(self):
-    #     return self.linear_momentum()
+    def linear_momentum(self):
+        return self.Cdot * self.m
+
+    @property
+    def P(self):
+        return self.linear_momentum()
 
     # def forces(self):
     #     return self._tau
@@ -340,4 +352,4 @@ class Skeleton(object):
     #     papi.renderSkeletonMarkers(self.world.id, self.id)
 
     def __repr__(self):
-        return '[Skeleton.%d.%s]' % (self.id, os.path.basename(self.filename))
+        return '[Skeleton(%d): %s]' % (self.id, self.name)

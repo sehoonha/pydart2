@@ -58,4 +58,28 @@ void SKEL(getVelocities)(int wid, int skid, double* outv, int ndofs);
 void SKEL(setVelocities)(int wid, int skid, double* inv, int ndofs);
 void SKEL(setForces)(int wid, int skid, double* inv, int ndofs);
 
+////////////////////////////////////////
+// Difference Functions
+void SKEL(getPositionDifferences)(int wid, int skid,
+                                  double* inv1, int indofs1,
+                                  double* inv2, int indofs2,
+                                  double* outv, int ndofs);
+void SKEL(getVelocityDifferences)(int wid, int skid,
+                                  double* inv1, int indofs1,
+                                  double* inv2, int indofs2,
+                                  double* outv, int ndofs);
+
+////////////////////////////////////////
+// Lagrangian Functions
+void SKEL(getMassMatrix)(int wid, int skid, double* outm, int nrows, int ncols);
+void SKEL(getCoriolisAndGravityForces)(int wid, int skid, double* outv, int ndofs);
+void SKEL(getConstraintForces)(int wid, int skid, double* outv, int ndofs);
+
+////////////////////////////////////////////////////////////////////////////////
+// DegreeOfFreedom
+#define DOF(funcname) dof__##funcname
+#define GET_DOF(wid, skid, dofid) Manager::skeleton(wid, skid)->getDof(dofid)
+
+const char* DOF(getName)(int wid, int skid, int dofid);
+
 #endif // #ifndef PYDART2_PYDART2_API_H

@@ -195,5 +195,5 @@ class GLWidget(QGLWidget):
         dir = self.viewer.capture_dir
         filename = '%s/%s.%04d.png' % (dir, name, self.captureIndex)
         img.save(filename)
-        print 'Capture to ', filename
+        print('Capture to ', filename)
         self.captureIndex += 1

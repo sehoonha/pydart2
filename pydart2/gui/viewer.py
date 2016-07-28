@@ -255,7 +255,7 @@ class MyWindow(QtGui.QMainWindow):
 
     def keyPressEvent(self, event):
         if event.key() == QtCore.Qt.Key_Escape:
-            print 'Escape key pressed! Bye.'
+            print('Escape key pressed! Bye.')
             self.close()
         if 0 <= event.key() and event.key() < 256:  # If key is ascii
             key = chr(event.key())
@@ -300,7 +300,7 @@ class MyWindow(QtGui.QMainWindow):
         cmt_fmt += ' -i %s/%s.%%04d.png'
         cmt_fmt += ' -pix_fmt yuv420p'
         cmt_fmt += ' %s.mp4'
-        print self.capture_dir
+        print(self.capture_dir)
         cmd = cmt_fmt % (self.capture_dir, name, name)
         print('cmd = %s' % cmd)
         os.system(cmd)
@@ -360,10 +360,10 @@ class MyWindow(QtGui.QMainWindow):
                                      trans=[0.02, -0.06, -0.72])
 
     def printCamEvent(self):
-        print 'printCamEvent'
-        print '----'
-        print repr(self.glwidget.tb)
-        print '----'
+        print('printCamEvent')
+        print('----')
+        print(repr(self.glwidget.tb))
+        print('----')
 
 
 def launch(sim=None, title=None, callbacks=None):

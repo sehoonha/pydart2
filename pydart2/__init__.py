@@ -1,16 +1,19 @@
 import pydart2_api as papi
 import world
-import gui
+import os.path
+import sys
+try:
+    import gui
+except Exception:
+    e = sys.exc_info()[1]
+    print("-" * 40)
+    print("Error while importing pydart2.gui")
+    print(e)
+    print("-" * 40)
 
 
-def boo(x):
-    print("pydart2.boo is excuted")
-    return x * 2
+from world import World
 
 
-def init():
-    papi.init()
-
-
-def create_world(step, skel_path=None):
-    return world.World(step, skel_path)
+def init(verbose=True):
+    papi.init(verbose)

@@ -273,6 +273,15 @@ void write(const Eigen::VectorXd& src, double* dst) {
     }
 }
 
+void write_matrix(const Eigen::MatrixXd& src, double* dst) {
+    int ptr = 0;
+    for (int i = 0; i < src.rows(); i++) {
+        for (int j = 0; j < src.cols(); j++) {
+            dst[ptr++] = src(i, j);
+        }
+    }
+}
+
 Eigen::VectorXd read(double* src, int n) {
     Eigen::VectorXd dst(n);
     for (int i =0; i < n; i++) {
@@ -354,4 +363,53 @@ void SKEL(setVelocities)(int wid, int skid, double* inv, int ndofs) {
 void SKEL(setForces)(int wid, int skid, double* inv, int ndofs) {
     dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
     skel->setForces(read(inv, ndofs));
+}
+
+////////////////////////////////////////
+// Difference Functions
+void SKEL(getPositionDifferences)(int wid, int skid,
+                                  double* inv1, int indofs1,
+                                  double* inv2, int indofs2,
+                                  double* outv, int ndofs) {
+    dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+    Eigen::VectorXd dq1 = read(inv1, indofs1);
+    Eigen::VectorXd dq2 = read(inv2, indofs2);
+    Eigen::VectorXd dq_diff = skel->getVelocityDifferences(dq1, dq2);
+    write(dq_diff, outv);
+}
+
+void SKEL(getVelocityDifferences)(int wid, int skid,
+                                  double* inv1, int indofs1,
+                                  double* inv2, int indofs2,
+                                  double* outv, int ndofs) {
+    dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+    Eigen::VectorXd q1 = read(inv1, indofs1);
+    Eigen::VectorXd q2 = read(inv2, indofs2);
+    Eigen::VectorXd q_diff = skel->getPositionDifferences(q1, q2);
+    write(q_diff, outv);
+}
+
+
+////////////////////////////////////////
+// Lagrangian Functions
+void SKEL(getMassMatrix)(int wid, int skid, double* outm, int nrows, int ncols) {
+    dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+    write_matrix(skel->getMassMatrix(), outm);
+}
+
+void SKEL(getCoriolisAndGravityForces)(int wid, int skid, double* outv, int ndofs) {
+    dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+    write(skel->getCoriolisAndGravityForces(), outv);
+}
+
+void SKEL(getConstraintForces)(int wid, int skid, double* outv, int ndofs) {
+    dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+    write(skel->getConstraintForces(), outv);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// DegreeOfFreedom
+const char* DOF(getName)(int wid, int skid, int dofid) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    return dof->getName().c_str();
 }

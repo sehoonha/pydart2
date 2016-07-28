@@ -10,7 +10,7 @@ import pydart2_api as papi
 import numpy as np
 from skel_vector import SkelVector
 # from body import Body
-# from dof import Dof
+from dof import Dof
 # from marker import Marker
 
 
@@ -18,20 +18,20 @@ class Skeleton(object):
     def __init__(self, _world, _filename=None,
                  _id=None, _friction=None, ):
         self.world = _world
-        self.filename = _filename
         self.friction = _friction
-        if self.filename is not None:
-            self.id = papi.addSkeleton(self.world.id, _filename)
+        if _filename is not None:
+            self.filename = os.path.realpath(_filename)
+            self.id = papi.world__addSkeleton(self.world.id, self.filename)
         else:
+            self.filename = None
             self.id = _id
 
         self.controller = None
 
         # Initialize dofs
         _ndofs = papi.skeleton__getNumDofs(self.world.id, self.id)
-        self.dofs = ["DoF" for i in range(_ndofs)]
-        # self.dofs = [Dof(self, i) for i in range(_ndofs)]
-        # self.name_to_dof = {dof.name: dof for dof in self.dofs}
+        self.dofs = [Dof(self, i) for i in range(_ndofs)]
+        self.name_to_dof = {dof.name: dof for dof in self.dofs}
 
         # # Initialize bodies
         # _nbodies = papi.getSkeletonNumBodies(self.world.id, self.id)
@@ -67,6 +67,12 @@ class Skeleton(object):
     # def nbodies(self):
     #     return self.num_bodies()
 
+    def is_mobile(self):
+        return papi.skeleton__isMobile(self.world.id, self.id)
+
+    def set_mobile(self, mobile):
+        papi.skeleton__getMobile(self.world.id, self.id, mobile)
+
     def mass(self):
         return papi.skeleton__getMass(self.world.id, self.id)
 
@@ -74,19 +80,10 @@ class Skeleton(object):
     def m(self):
         return self.mass()
 
-    # def mass_matrix(self):
-    #     M = np.zeros((self.ndofs, self.ndofs))
-    #     papi.getSkeletonMassMatrix(self.world.id, self.id, M)
-    #     return M
-
-    # @property
-    # def M(self):
-    #     return self.mass_matrix()
-
     def positions(self):
         q = papi.skeleton__getPositions(self.world.id, self.id, self.ndofs)
-        return q
-        # return SkelVector(q, self)
+        # return q
+        return SkelVector(q, self)
 
     @property
     def q(self):
@@ -116,56 +113,63 @@ class Skeleton(object):
     # def q_hi(self):
     #     return self.position_upper_limit()
 
-    # def velocities(self):
-    #     qdot = papi.getSkeletonVelocities(self.world.id, self.id, self.ndofs)
-    #     return SkelVector(qdot, self)
+    def velocities(self):
+        qdot = papi.skeleton__getVelocities(self.world.id, self.id, self.ndofs)
+        return SkelVector(qdot, self)
 
-    # @property
-    # def qdot(self):
-    #     return self.velocities()
+    @property
+    def dq(self):
+        return self.velocities()
 
-    # def set_velocities(self, _qdot):
-    #     papi.setSkeletonVelocities(self.world.id, self.id, _qdot)
+    def set_velocities(self, _qdot):
+        papi.setSkeletonVelocities(self.world.id, self.id, _qdot)
 
-    # @qdot.setter
-    # def qdot(self, _qdot):
-    #     """ Setter also updates the internal skeleton kinematics """
-    #     self.set_velocities(_qdot)
+    @dq.setter
+    def dq(self, _qdot):
+        """ Setter also updates the internal skeleton kinematics """
+        self.set_velocities(_qdot)
 
-    # def states(self):
-    #     return np.concatenate((self.positions(), self.velocities()))
+    def states(self):
+        return np.concatenate((self.positions(), self.velocities()))
 
-    # def position_differences(self, q1, q2):
-    #     ret = papi.getSkeletonPositionDifferences(self.world.id, self.id,
-    #                                               q1, q2, self.ndofs)
-    #     return ret
+    @property
+    def x(self):
+        return np.concatenate((self.positions(), self.velocities()))
 
-    # def velocity_differences(self, q1, q2):
-    #     ret = papi.getSkeletonVelocityDifferences(self.world.id, self.id,
-    #                                               q1, q2, self.ndofs)
-    #     return ret
+    def set_states(self, _x):
+        self.set_positions(_x[:self.ndofs])
+        self.set_velocities(_x[self.ndofs:])
 
-    # @property
-    # def x(self):
-    #     return np.concatenate((self.positions(), self.velocities()))
+    @x.setter
+    def x(self, _x):
+        self.set_states(_x)
 
-    # def set_states(self, _x):
-    #     self.set_positions(_x[:self.ndofs])
-    #     self.set_velocities(_x[self.ndofs:])
+    def position_differences(self, q1, q2):
+        ret = papi.skeleton__getPositionDifferences(self.world.id, self.id,
+                                                    q1, q2, self.ndofs)
+        return ret
 
-    # @x.setter
-    # def x(self, _x):
-    #     self.set_states(_x)
+    def velocity_differences(self, dq1, dq2):
+        ret = papi.skeleton__getVelocityDifferences(self.world.id, self.id,
+                                                    dq1, dq2, self.ndofs)
+        return ret
 
-    # def coriolis_and_gravity_forces(self):
-    #     return papi.getSkeletonCoriolisAndGravityForces(self.world.id,
-    #                                                     self.id, self.ndofs)
+    def mass_matrix(self):
+        M = np.zeros((self.ndofs, self.ndofs))
+        papi.skeleton__getMassMatrix(self.world.id, self.id, M)
+        return M
 
-    def is_mobile(self):
-        return papi.skeleton__isMobile(self.world.id, self.id)
+    @property
+    def M(self):
+        return self.mass_matrix()
 
-    def set_mobile(self, mobile):
-        papi.skeleton__getMobile(self.world.id, self.id, mobile)
+    def coriolis_and_gravity_forces(self):
+        return papi.skeleton__getCoriolisAndGravityForces(self.world.id,
+                                                          self.id, self.ndofs)
+
+    @property
+    def c(self):
+        return self.coriolis_and_gravity_forces()
 
     # def set_self_collision(self, self_col, adj_col):
     #     flag_self = 1 if self_col is True else 0
@@ -178,13 +182,9 @@ class Skeleton(object):
     #         for b2 in self.bodies:
     #             self.world.set_collision_pair(b1, b2, False)
 
-    # @property
-    # def c(self):
-    #     return self.coriolis_and_gravity_forces()
-
-    # def constraint_forces(self):
-    #     return papi.getSkeletonConstraintForces(self.world.id,
-    #                                             self.id, self.ndofs)
+    def constraint_forces(self):
+        return papi.skeleton__getConstraintForces(self.world.id,
+                                                  self.id, self.ndofs)
 
     # def body(self, query):
     #     if isinstance(query, str):
@@ -198,20 +198,20 @@ class Skeleton(object):
     # def body_index(self, _name):
     #     return self.name_to_body[_name].id
 
-    # def dof(self, query):
-    #     if isinstance(query, str):
-    #         return self.name_to_dof[query]
-    #     elif isinstance(query, int):
-    #         return self.dofs[query]
-    #     else:
-    #         print 'No find...', query
-    #         return None
+    def dof(self, query):
+        if isinstance(query, str):
+            return self.name_to_dof[query]
+        elif isinstance(query, int):
+            return self.dofs[query]
+        else:
+            print 'No find...', query
+            return None
 
-    # def dof_index(self, _name):
-    #     return self.name_to_dof[_name].id
+    def dof_index(self, _name):
+        return self.name_to_dof[_name].id
 
-    # def dof_indices(self, _names):
-    #     return np.array([self.dof_index(n) for n in _names])
+    def dof_indices(self, _names):
+        return np.array([self.dof_index(n) for n in _names])
 
     # def world_com(self):
     #     return papi.getSkeletonWorldCOM(self.world.id, self.id)

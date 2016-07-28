@@ -5,22 +5,18 @@ if __name__ == '__main__':
     pydart.init()
     print('pydart initialization OK')
 
-    import os
-    data_dir = os.getcwd() + "/data/"
-    print('data_dir = ' + data_dir)
-
-    world = pydart.create_world(1.0 / 2000.0, data_dir + 'skel/cubes.skel')
+    world = pydart.World(1.0 / 2000.0, './data/skel/cubes.skel')
     print('pydart create_world OK')
 
-    for skel in world.skeletons:
-        print skel.name
+    for idx, skel in enumerate(world.skeletons):
+        print("%dth Skeleton: %s" % (idx, skel.name))
 
-    while world.t < 2.0:
-        # if True:
-        if world.nframes % 100 == 0:
-            q = world.skeletons[2].q
-            print("%.4fs: The third cube pos = %s" % (world.t, str(q)))
-        world.step()
-        # print(str(world))
+    # while world.t < 2.0:
+    #     # if True:
+    #     if world.nframes % 100 == 0:
+    #         q = world.skeletons[2].q
+    #         print("%.4fs: The third cube pos = %s" % (world.t, str(q)))
+    #     world.step()
+    #     # print(str(world))
 
-    # pydart.gui.viewer.launch(world)
+    pydart.gui.viewer.launch(world)

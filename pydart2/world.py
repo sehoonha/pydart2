@@ -5,9 +5,15 @@
 # Disney Research Robotics Group
 
 
-import pydart2_api as papi
+import os.path
 import numpy as np
+import pydart2_api as papi
 from skeleton import Skeleton
+
+
+def create_world(step, skel_path=None):
+    skel_path = os.path.realpath(skel_path)
+    return World(step, skel_path)
 
 
 class World(object):
@@ -21,6 +27,7 @@ class World(object):
         self.skeletons = list()
         self.control_skel = None
         if skel_path is not None:
+            skel_path = os.path.realpath(skel_path)
             self.id = papi.createWorldFromSkel(skel_path)
             self.set_time_step(step)
             nskels = self.num_skeletons()
@@ -35,11 +42,9 @@ class World(object):
         papi.destroyWorld(self.id)
 
     def add_skeleton(self, filename):
-        # self.skels += [Skeleton(self, filename, friction,
-        #                         _traditional=traditional)]
-        # if control:
-        #     self.control_skel = self.skels[-1]
-        pass
+        skel = Skeleton(self, _filename=filename)
+        self.skeletons.append(skel)
+        return skel
 
     def add_skeleton_from_id(self, _skel_id):
         skel = Skeleton(_world=self, _id=_skel_id)

@@ -58,6 +58,7 @@ bool SKEL(getSelfCollisionCheck)(int wid, int skid);
 void SKEL(setSelfCollisionCheck)(int wid, int skid, int enable);
 bool SKEL(getAdjacentBodyCheck)(int wid, int skid);
 void SKEL(setAdjacentBodyCheck)(int wid, int skid, int enable);
+void SKEL(setRootJointToTransAndEuler)(int wid, int skid);
 
 ////////////////////////////////////////
 // Skeleton::Structure Information Functions
@@ -105,9 +106,20 @@ void SKEL(getConstraintForces)(int wid, int skid, double* outv, int ndofs);
 ////////////////////////////////////////////////////////////////////////////////
 // BodyNode
 #define BODY(funcname) bodynode__##funcname
-#define GET_BODY(wid, skid, bnid) Manager::skeleton(wid, skid)->getBodyNode(bnid)
+#define GET_BODY(wid, skid, bid) Manager::skeleton(wid, skid)->getBodyNode(bid)
 
-const char* BODY(getName)(int wid, int skid, int bnid);
+const char* BODY(getName)(int wid, int skid, int bid);
+
+////////////////////////////////////////
+// BodyNode::Structure Functions
+int BODY(getParentBodyNode)(int wid, int skid, int bid);
+int BODY(getNumChildBodyNodes)(int wid, int skid, int bid);
+int BODY(getChildBodyNode)(int wid, int skid, int bid, int _index);
+
+////////////////////////////////////////
+// BodyNode::Property Functions
+double BODY(getMass)(int wid, int skid, int bid);
+void BODY(getInertia)(int wid, int skid, int bid, double outv33[3][3]);
 
 ////////////////////////////////////////////////////////////////////////////////
 // DegreeOfFreedom

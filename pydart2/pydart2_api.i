@@ -20,9 +20,13 @@
 %apply (double ARGOUT_ARRAY1[ANY]) {(double outv4[4])};
 %apply (double ARGOUT_ARRAY1[ANY]) {(double outv6[6])};
 
+%apply (double ARGOUT_ARRAY2[ANY][ANY]) {(double outv33[3][3])};
+%apply (double ARGOUT_ARRAY2[ANY][ANY]) {(double outv44[4][4])};
+
 %apply (double* IN_ARRAY1, int DIM1) {(double* inv, int ndofs)};
 %apply (double* IN_ARRAY1, int DIM1) {(double* inv1, int indofs1)};
 %apply (double* IN_ARRAY1, int DIM1) {(double* inv2, int indofs2)};
+
 %apply (double* ARGOUT_ARRAY1, int DIM1) {(double* outv, int ndofs)};
 %apply (double* ARGOUT_ARRAY1, int DIM1) {(double* outv1, int ondofs1)};
 %apply (double* ARGOUT_ARRAY1, int DIM1) {(double* outv2, int ondofs2)};

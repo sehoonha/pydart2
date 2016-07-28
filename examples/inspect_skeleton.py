@@ -28,8 +28,13 @@ if __name__ == '__main__':
     print('\t# DoFs = %s' % skel.ndofs)
 
     print('[BodyNode]')
+    print('root_bodynode[0] = ' + str(skel.root_bodynode(index=0)))
     for body in skel.bodynodes:
         print("\t" + str(body))
+        print("\t\tmass = %.4fKg" % body.m)
+        # print("\t\inertia = %s" % str(body.I))
+        print("\t\tparent = " + str(body.parent_bodynode))
+        print("\t\tchilds = " + str(body.child_bodynodes))
 
     print('[DegreeOfFreedom]')
     for dof in skel.dofs:
@@ -39,6 +44,12 @@ if __name__ == '__main__':
     print('\tpositions = %s' % str(skel.q))
     print('\tvelocities = %s' % str(skel.dq))
     print('\tstates = %s' % str(skel.x))
+
+    print('[Limits]')
+    print('\tposition_lower_limits = %s' % str(skel.q_lower))
+    print('\tposition_upper_limits = %s' % str(skel.q_upper))
+    print('\tforce_lower_limits = %s' % str(skel.tau_lower))
+    print('\tforce_upper_limits = %s' % str(skel.tau_upper))
 
     print('[Lagrangian]')
     print('\tmass matrix = %s' % str(skel.M))

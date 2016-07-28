@@ -366,6 +366,23 @@ void SKEL(setAdjacentBodyCheck)(int wid, int skid, int enable) {
     skel->setAdjacentBodyCheck(enable);
 }
 
+void SKEL(setRootJointToTransAndEuler)(int wid, int skid) {
+    dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+    // change the joint type to euler
+    dart::dynamics::BodyNode* oldRoot = skel->getRootBodyNode();
+    oldRoot->changeParentJointType<dart::dynamics::EulerJoint>();
+    oldRoot->getParentJoint()->setName("root_r");
+    // create a new root
+    std::pair<dart::dynamics::Joint*, dart::dynamics::BodyNode*> ret =
+        skel->createJointAndBodyNodePair
+        <dart::dynamics::TranslationalJoint, dart::dynamics::BodyNode>();
+    dart::dynamics::Joint* newJoint = ret.first;
+    newJoint->setName("root_t");
+    dart::dynamics::BodyNode* newBody = ret.second;
+    // rearrange the root joints
+    oldRoot->moveTo(newBody);
+}
+
 ////////////////////////////////////////
 // Skeleton::Structure Information Functions
 int SKEL(getNumBodyNodes)(int wid, int skid) {
@@ -448,7 +465,7 @@ void SKEL(getForceLowerLimits)(int wid, int skid, double* outv, int ndofs) {
 
 void SKEL(getForceUpperLimits)(int wid, int skid, double* outv, int ndofs) {
    dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
-   write(skel->getForceLowerLimits(), outv);
+   write(skel->getForceUpperLimits(), outv);
 }
 
 ////////////////////////////////////////
@@ -487,9 +504,53 @@ void SKEL(getConstraintForces)(int wid, int skid, double* outv, int ndofs) {
 
 ////////////////////////////////////////////////////////////////////////////////
 // BodyNode
-const char* BODY(getName)(int wid, int skid, int bnid) {
-    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bnid);
+const char* BODY(getName)(int wid, int skid, int bid) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
     return body->getName().c_str();
+}
+
+////////////////////////////////////////
+// BodyNode::Structure Functions
+int BODY(getParentBodyNode)(int wid, int skid, int bid) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
+    dart::dynamics::BodyNode* parent = body->getParentBodyNode();
+    if (parent == NULL) {
+        return -1;
+    } else {
+        return parent->getIndexInSkeleton();
+    }
+}
+
+int BODY(getNumChildBodyNodes)(int wid, int skid, int bid) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
+    return body->getNumChildBodyNodes(); 
+}
+
+int BODY(getChildBodyNode)(int wid, int skid, int bid, int _index) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
+    dart::dynamics::BodyNode* child = body->getChildBodyNode(_index);
+    if (child == NULL) {
+        return -1;
+    } else {
+        return child->getIndexInSkeleton();
+    }
+}
+
+////////////////////////////////////////
+// BodyNode::Property Functions
+double BODY(getMass)(int wid, int skid, int bid) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
+    return body->getMass();
+}
+
+void BODY(getInertia)(int wid, int skid, int bid, double outv33[3][3]) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
+    double Ixx, Iyy, Izz, Ixy, Ixz, Iyz;
+    body->getMomentOfInertia(Ixx, Iyy, Izz, Ixy, Ixz, Iyz);
+    outv33[0][0] = Ixx;    outv33[1][1] = Iyy;    outv33[2][2] = Izz;
+    outv33[0][1] = Ixy;    outv33[1][0] = Ixy; 
+    outv33[0][2] = Ixz;    outv33[2][0] = Ixz; 
+    outv33[1][2] = Iyz;    outv33[2][1] = Iyz; 
 }
 
 ////////////////////////////////////////////////////////////////////////////////

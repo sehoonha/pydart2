@@ -12,6 +12,28 @@ class BodyNode(object):
         self.skel = _skel
         self._id = _id
         self.name = papi.bodynode__getName(self.wid, self.sid, self.id)
+        self.parent_bodynode = None
+        self.child_bodynodes = list()
+
+    def build(self):
+        self.parent_bodynode = None
+        self.child_bodynodes = list()
+
+        ret_id = papi.bodynode__getParentBodyNode(self.wid, self.sid, self.id)
+        if ret_id >= 0:
+            self.parent_bodynode = self.skel.bodynodes[ret_id]
+
+        num = papi.bodynode__getNumChildBodyNodes(self.wid, self.sid, self.id)
+        for index in range(num):
+            ret_id = papi.bodynode__getChildBodyNode(self.wid,
+                                                     self.sid,
+                                                     self.id,
+                                                     index)
+            if ret_id >= 0:
+                self.child_bodynodes.append(self.skel.bodynodes[ret_id])
+
+    def num_child_bodynodes(self, ):
+        return len(self.child_bodynodes)
 
     @property
     def id(self):
@@ -33,19 +55,19 @@ class BodyNode(object):
     #     contacts = papi.getBodyNodeContacts(self.wid, self.sid, self.id, 7 * n)
     #     return [Contact(contacts[7 * i: 7 * (i + 1)]) for i in range(n)]
 
-    # def mass(self):
-    #     return papi.getBodyNodeMass(self.wid, self.sid, self.id)
+    def mass(self):
+        return papi.bodynode__getMass(self.wid, self.sid, self.id)
 
-    # @property
-    # def m(self):
-    #     return self.mass()
+    @property
+    def m(self):
+        return self.mass()
 
-    # def inertia(self):
-    #     return papi.getBodyNodeInertia(self.wid, self.sid, self.id)
+    def inertia(self):
+        return papi.bodynode__getInertia(self.wid, self.sid, self.id)
 
-    # @property
-    # def I(self):
-    #     return self.inertia()
+    @property
+    def I(self):
+        return self.inertia()
 
     # def local_com(self):
     #     return papi.getBodyNodeLocalCOM(self.wid, self.sid, self.id)

@@ -27,7 +27,9 @@ class Skeleton(object):
             self.id = _id
 
         self.controller = None
+        self.build()
 
+    def build(self, ):
         # Initialize dofs
         _ndofs = papi.skeleton__getNumDofs(self.world.id, self.id)
         self.dofs = [Dof(self, i) for i in range(_ndofs)]
@@ -38,6 +40,9 @@ class Skeleton(object):
         self.bodynodes = [BodyNode(self, i) for i in range(_nbodynodes)]
         self.name_to_body = {body.name: body for body in self.bodynodes}
 
+        for body in self.bodynodes:
+            body.build()
+
         # # Initialize markers
         # self.markers = list()
         # for body in self.bodies:
@@ -45,7 +50,10 @@ class Skeleton(object):
         #         m = Marker(body, j)
         #         self.markers.append(m)
 
-        self.controller = None
+    def set_root_joint_to_trans_and_euler(self, ):
+        papi.skeleton__setRootJointToTransAndEuler(self.world.id,
+                                                   self.id)
+        self.build()
 
     @property
     def name(self):
@@ -97,22 +105,6 @@ class Skeleton(object):
     def q(self, _q):
         """ Setter also updates the internal skeleton kinematics """
         self.set_positions(_q)
-
-    # def position_lower_limit(self):
-    #     return papi.getSkeletonPositionLowerLimit(self.world.id,
-    #                                               self.id, self.ndofs)
-
-    # def position_upper_limit(self):
-    #     return papi.getSkeletonPositionUpperLimit(self.world.id,
-    #                                               self.id, self.ndofs)
-
-    # @property
-    # def q_lo(self):
-    #     return self.position_lower_limit()
-
-    # @property
-    # def q_hi(self):
-    #     return self.position_upper_limit()
 
     def velocities(self):
         qdot = papi.skeleton__getVelocities(self.world.id, self.id, self.ndofs)
@@ -195,17 +187,24 @@ class Skeleton(object):
         return papi.skeleton__getConstraintForces(self.world.id,
                                                   self.id, self.ndofs)
 
-    # def body(self, query):
-    #     if isinstance(query, str):
-    #         return self.name_to_body[query]
-    #     elif isinstance(query, int):
-    #         return self.bodies[query]
-    #     else:
-    #         print 'No find...', query
-    #         return None
+    def bodynode(self, query):
+        if isinstance(query, str):
+            return self.name_to_body[query]
+        elif isinstance(query, int):
+            return self.bodies[query]
+        else:
+            print 'No find...', query
+            return None
 
-    # def body_index(self, _name):
-    #     return self.name_to_body[_name].id
+    def root_bodynodes(self, ):
+        return [body for body in self.bodynodes
+                if body.parent_bodynode is None]
+
+    def root_bodynode(self, index=0):
+        return self.root_bodynodes()[index]
+
+    def bodynode_index(self, _name):
+        return self.name_to_body[_name].id
 
     def dof(self, query):
         if isinstance(query, str):
@@ -265,21 +264,37 @@ class Skeleton(object):
     # def tau(self, _tau):
     #     self.set_forces(_tau)
 
-    # def force_lower_limit(self):
-    #     return papi.getSkeletonForceLowerLimit(self.world.id,
-    #                                            self.id, self.ndofs)
+    def position_lower_limits(self):
+        return papi.skeleton__getPositionLowerLimits(self.world.id,
+                                                     self.id, self.ndofs)
 
-    # def force_upper_limit(self):
-    #     return papi.getSkeletonForceUpperLimit(self.world.id,
-    #                                            self.id, self.ndofs)
+    def position_upper_limits(self):
+        return papi.skeleton__getPositionUpperLimits(self.world.id,
+                                                     self.id, self.ndofs)
 
-    # @property
-    # def tau_lo(self):
-    #     return self.force_lower_limit()
+    @property
+    def q_lower(self):
+        return self.position_lower_limits()
 
-    # @property
-    # def tau_hi(self):
-    #     return self.force_upper_limit()
+    @property
+    def q_upper(self):
+        return self.position_upper_limits()
+
+    def force_lower_limits(self):
+        return papi.skeleton__getForceLowerLimits(self.world.id,
+                                                  self.id, self.ndofs)
+
+    def force_upper_limits(self):
+        return papi.skeleton__getForceUpperLimits(self.world.id,
+                                                  self.id, self.ndofs)
+
+    @property
+    def tau_lower(self):
+        return self.force_lower_limits()
+
+    @property
+    def tau_upper(self):
+        return self.force_upper_limits()
 
     # def approx_inertia(self, axis):
     #     """Calculates the point-masses approximated inertia

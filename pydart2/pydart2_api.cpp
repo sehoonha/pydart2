@@ -174,6 +174,14 @@ void write_matrix(const Eigen::MatrixXd& src, double* dst) {
     }
 }
 
+void write_isometry(const Eigen::Isometry3d& src, double dst[4][4]) {
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            dst[i][j] = src(i, j);
+        }
+    }
+}
+
 Eigen::VectorXd read(double* src, int n) {
     Eigen::VectorXd dst(n);
     for (int i =0; i < n; i++) {
@@ -662,6 +670,49 @@ double BODY(getRestitutionCoeff)(int wid, int skid, int bid) {
     return body->getRestitutionCoeff();
 }
 
+
+////////////////////////////////////////
+// BodyNode::Transforms
+void BODY(getTransform)(int wid, int skid, int bid, double outv44[4][4]) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
+    write_isometry(body->getTransform(), outv44);
+}
+
+
+void BODY(getWorldTransform)(int wid, int skid, int bid, double outv44[4][4]) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
+    write_isometry(body->getWorldTransform(), outv44);
+}
+
+
+void BODY(getRelativeTransform)(int wid, int skid, int bid, double outv44[4][4]) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
+    write_isometry(body->getRelativeTransform(), outv44);
+}
+
+////////////////////////////////////////
+// BodyNode::Ext Force and Torque
+void BODY(addExtForce)(int wid, int skid, int bid, double inv3[3], double inv3_2[3], bool _isForceLocal, bool _isOffsetLocal) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
+    body->addExtForce(read(inv3, 3), read(inv3_2, 3), _isForceLocal, _isOffsetLocal);
+}
+
+void BODY(setExtForce)(int wid, int skid, int bid, double inv3[3], double inv3_2[3], bool _isForceLocal, bool _isOffsetLocal) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
+    body->setExtForce(read(inv3, 3), read(inv3_2, 3), _isForceLocal, _isOffsetLocal);
+}
+
+
+void BODY(addExtTorque)(int wid, int skid, int bid, double inv3[3], bool _isLocal) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
+    body->addExtTorque(read(inv3, 3), _isLocal);
+}
+
+
+void BODY(setExtTorque)(int wid, int skid, int bid, double inv3[3], bool _isLocal) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
+    body->setExtTorque(read(inv3, 3), _isLocal);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // DegreeOfFreedom

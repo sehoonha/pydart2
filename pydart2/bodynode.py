@@ -157,27 +157,36 @@ class BodyNode(object):
     def restitution_coeff(self, ):
         return papi.bodynode__getRestitutionCoeff(self.wid, self.skid, self.id)
 
+########################################
+# Transform Functions
+    def transform(self, ):
+        return papi.bodynode__getTransform(self.wid, self.skid, self.id)
+
+    @property
+    def T(self):
+        return self.transform()
+
+    def to_world(self, x):
+        x_ = np.append(x, [1.0])
+        return (self.T.dot(x_))[:3]
+
+    def to_local(self, x):
+        Tinv = np.linalg.inv(self.T)
+        x_ = np.append(x, [1.0])
+        return (Tinv.dot(x_))[:3]
+
+    def world_transform(self, ):
+        return papi.bodynode__getWorldTransform(self.wid, self.skid, self.id)
+
+    def relative_transform(self, ):
+        return papi.bodynode__getRelativeTransform(self.wid,
+                                                   self.skid,
+                                                   self.id)
+
     # def bounding_box_dims(self):
     #     return papi.getBodyNodeShapeBoundingBoxDim(self.wid,
     #                                                self.skid,
     #                                                self.id)
-
-    # def to_world(self, x):
-    #     x_ = np.append(x, [1.0])
-    #     return (self.T.dot(x_))[:3]
-
-    # def to_local(self, x):
-    #     Tinv = np.linalg.inv(self.T)
-    #     x_ = np.append(x, [1.0])
-    #     return (Tinv.dot(x_))[:3]
-
-    # def transformation(self):
-    #     return papi.getBodyNodeTransformation(self.wid, self.skid, self.id)
-
-    # @property
-    # def T(self):
-    #     return self.transformation()
-
     # def world_linear_jacobian(self, offset=None):
     #     if offset is None:
     #         offset = np.zeros(3)
@@ -190,14 +199,43 @@ class BodyNode(object):
     # def J(self, offset=None):
     #     return self.world_linear_jacobian(offset)
 
-    # def add_ext_force(self, f):
-    #     papi.addBodyNodeExtForce(self.wid, self.skid, self.id, f)
+    def add_ext_force(self,
+                      _force,
+                      _offset=None,
+                      _isForceLocal=False,
+                      _isOffsetLocal=True):
+        if _offset is None:
+            _offset = np.zeros(3)
+        papi.bodynode__addExtForce(self.wid,
+                                   self.skid,
+                                   self.id,
+                                   _force,
+                                   _offset,
+                                   _isForceLocal,
+                                   _isOffsetLocal)
 
-    # def add_ext_force_at(self, f, offset):
-    #     papi.addBodyNodeExtForceAt(self.wid, self.skid, self.id, f, offset)
+    def set_ext_force(self,
+                      _force,
+                      _offset=None,
+                      _isForceLocal=False,
+                      _isOffsetLocal=True):
+        if _offset is None:
+            _offset = np.zeros(3)
+        papi.bodynode__setExtForce(self.wid,
+                                   self.skid,
+                                   self.id,
+                                   _force,
+                                   _offset,
+                                   _isForceLocal,
+                                   _isOffsetLocal)
 
-    # def enable_collision(self, rhs_body):
-    #     self.skel.world.set_collision_pair(self, rhs_body, True)
+    def add_ext_torque(self, _torque, _isLocal=False):
+        papi.bodynode__addExtTorque(self.wid, self.skid, self.id,
+                                    _torque, _isLocal)
+
+    def set_ext_torque(self, _torque, _isLocal=False):
+        papi.bodynode__setExtTorque(self.wid, self.skid, self.id,
+                                    _torque, _isLocal)
 
     # def num_markers(self):
     #     return papi.getBodyNodeNumMarkers(self.wid, self.skid, self.id)

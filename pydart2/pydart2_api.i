@@ -13,6 +13,7 @@
 %}
 
 %apply (double IN_ARRAY1[ANY]) {(double inv3[3])};
+%apply (double IN_ARRAY1[ANY]) {(double inv3_2[3])};
 %apply (double IN_ARRAY1[ANY]) {(double inv4[4])};
 %apply (double IN_ARRAY1[ANY]) {(double inv6[6])};
 

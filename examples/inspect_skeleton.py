@@ -36,7 +36,6 @@ if __name__ == '__main__':
         print("\t\tparent = " + str(body.parent_bodynode))
         print("\t\tchilds = " + str(body.child_bodynodes))
         print("\t\tCOM = " + str(body.C))
-
     print('[DegreeOfFreedom]')
     for dof in skel.dofs:
         print("\t" + str(dof))

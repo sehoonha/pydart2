@@ -150,6 +150,19 @@ double BODY(getFrictionCoeff)(int wid, int skid, int bid);
 void BODY(setRestitutionCoeff)(int wid, int skid, int bid, double _coeff);
 double BODY(getRestitutionCoeff)(int wid, int skid, int bid);
 
+////////////////////////////////////////
+// BodyNode::Transforms
+void BODY(getTransform)(int wid, int skid, int bid, double outv44[4][4]);
+void BODY(getWorldTransform)(int wid, int skid, int bid, double outv44[4][4]);
+void BODY(getRelativeTransform)(int wid, int skid, int bid, double outv44[4][4]);
+
+////////////////////////////////////////
+// BodyNode::Ext Force and Torque
+void BODY(addExtForce)(int wid, int skid, int bid, double inv3[3], double inv3_2[3], bool _isForceLocal, bool _isOffsetLocal);
+void BODY(setExtForce)(int wid, int skid, int bid, double inv3[3], double inv3_2[3], bool _isForceLocal, bool _isOffsetLocal);
+void BODY(addExtTorque)(int wid, int skid, int bid, double inv3[3], bool _isLocal);
+void BODY(setExtTorque)(int wid, int skid, int bid, double inv3[3], bool _isLocal);
+
 ////////////////////////////////////////////////////////////////////////////////
 // DegreeOfFreedom
 #define DOF(funcname) dof__##funcname

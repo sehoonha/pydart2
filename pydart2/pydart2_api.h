@@ -117,9 +117,38 @@ int BODY(getNumChildBodyNodes)(int wid, int skid, int bid);
 int BODY(getChildBodyNode)(int wid, int skid, int bid, int _index);
 
 ////////////////////////////////////////
+// BodyNode::Index Functions
+int BODY(getIndexInSkeleton)(int wid, int skid, int bid);
+int BODY(getIndexInTree)(int wid, int skid, int bid);
+int BODY(getTreeIndex)(int wid, int skid, int bid);
+
+////////////////////////////////////////
 // BodyNode::Property Functions
+void BODY(setGravityMode)(int wid, int skid, int bid, bool _gravityMode);
+bool BODY(getGravityMode)(int wid, int skid, int bid);
+bool BODY(isCollidable)(int wid, int skid, int bid);
+void BODY(setCollidable)(int wid, int skid, int bid, bool _isCollidable);
+
+////////////////////////////////////////
+// BodyNode::Inertia Functions
 double BODY(getMass)(int wid, int skid, int bid);
 void BODY(getInertia)(int wid, int skid, int bid, double outv33[3][3]);
+
+////////////////////////////////////////
+// BodyNode::Momentum Functions
+void BODY(getLocalCOM)(int wid, int skid, int bid, double outv3[3]);
+void BODY(getCOM)(int wid, int skid, int bid, double outv3[3]);
+void BODY(getCOMLinearVelocity)(int wid, int skid, int bid, double outv3[3]);
+void BODY(getCOMSpatialVelocity)(int wid, int skid, int bid, double outv6[6]);
+void BODY(getCOMLinearAcceleration)(int wid, int skid, int bid, double outv3[3]);
+void BODY(getCOMSpatialAcceleration)(int wid, int skid, int bid, double outv6[6]);
+
+////////////////////////////////////////
+// BodyNode::Friction and Restitution Functions
+void BODY(setFrictionCoeff)(int wid, int skid, int bid, double _coeff);
+double BODY(getFrictionCoeff)(int wid, int skid, int bid);
+void BODY(setRestitutionCoeff)(int wid, int skid, int bid, double _coeff);
+double BODY(getRestitutionCoeff)(int wid, int skid, int bid);
 
 ////////////////////////////////////////////////////////////////////////////////
 // DegreeOfFreedom

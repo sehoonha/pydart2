@@ -49,5 +49,11 @@ setup(name='pydart2',
       install_requires=[
           'numpy', 'PyOpenGL', 'PyOpenGL_accelerate'
       ],
+      keywords=['physics', 'robotics', 'simulation'],
+      classifiers=['Development Status :: 2 - Pre-Alpha',
+                   'License :: OSI Approved :: BSD License',
+                   'Operating System :: POSIX :: Linux',
+                   'Programming Language :: Python :: 2 :: Only',
+                   'Topic :: Games/Entertainment :: Simulation'],
       packages=find_packages(),
       ext_modules=[pydart2_api])

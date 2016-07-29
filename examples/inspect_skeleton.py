@@ -35,6 +35,7 @@ if __name__ == '__main__':
         # print("\t\inertia = %s" % str(body.I))
         print("\t\tparent = " + str(body.parent_bodynode))
         print("\t\tchilds = " + str(body.child_bodynodes))
+        print("\t\tCOM = " + str(body.C))
 
     print('[DegreeOfFreedom]')
     for dof in skel.dofs:

@@ -190,6 +190,15 @@ Eigen::VectorXd read(double* src, int n) {
     return dst;
 }
 
+Eigen::Isometry3d read_isometry(double src[4][4]) {
+    Eigen::Isometry3d dst;
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            dst(i, j) = src[i][j];
+        }
+    }
+    return dst;
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -396,6 +405,11 @@ void SKEL(setRootJointToTransAndEuler)(int wid, int skid) {
 int SKEL(getNumBodyNodes)(int wid, int skid) {
     dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
     return skel->getNumBodyNodes();
+}
+
+int SKEL(getNumJoints)(int wid, int skid) {
+    dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+    return skel->getNumJoints();
 }
 
 int SKEL(getNumDofs)(int wid, int skid) {
@@ -719,4 +733,215 @@ void BODY(setExtTorque)(int wid, int skid, int bid, double inv3[3], bool _isLoca
 const char* DOF(getName)(int wid, int skid, int dofid) {
     dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
     return dof->getName().c_str();
+}
+
+////////////////////////////////////////
+// Dof::Index Functions
+int DOF(getIndexInSkeleton)(int wid, int skid, int dofid) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    return dof->getIndexInSkeleton();
+}
+
+
+int DOF(getIndexInTree)(int wid, int skid, int dofid) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    return dof->getIndexInTree();
+}
+
+
+int DOF(getIndexInJoint)(int wid, int skid, int dofid) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    return dof->getIndexInJoint();
+}
+
+
+int DOF(getTreeIndex)(int wid, int skid, int dofid) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    return dof->getTreeIndex();
+}
+
+////////////////////////////////////////
+// Dof::Position Functions
+double DOF(getPosition)(int wid, int skid, int dofid) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    return dof->getPosition();
+}
+
+
+void DOF(setPosition)(int wid, int skid, int dofid, double _position) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    dof->setPosition(_position);
+}
+
+
+double DOF(getInitialPosition)(int wid, int skid, int dofid) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    return dof->getInitialPosition();
+}
+
+
+void DOF(setInitialPosition)(int wid, int skid, int dofid, double _initial) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    dof->setInitialPosition(_initial);
+}
+
+
+bool DOF(hasPositionLimit)(int wid, int skid, int dofid) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    return dof->hasPositionLimit();
+}
+
+
+double DOF(getPositionLowerLimit)(int wid, int skid, int dofid) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    return dof->getPositionLowerLimit();
+}
+
+
+void DOF(setPositionLowerLimit)(int wid, int skid, int dofid, double _limit) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    dof->setPositionLowerLimit(_limit);
+}
+
+
+double DOF(getPositionUpperLimit)(int wid, int skid, int dofid) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    return dof->getPositionUpperLimit();
+}
+
+
+void DOF(setPositionUpperLimit)(int wid, int skid, int dofid, double _limit) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    dof->setPositionUpperLimit(_limit);
+}
+
+////////////////////////////////////////
+// Dof::Velocity Functions
+double DOF(getVelocity)(int wid, int skid, int dofid) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    return dof->getVelocity();
+}
+
+
+void DOF(setVelocity)(int wid, int skid, int dofid, double _velocity) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    dof->setVelocity(_velocity);
+}
+
+
+double DOF(getInitialVelocity)(int wid, int skid, int dofid) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    return dof->getInitialVelocity();
+}
+
+
+void DOF(setInitialVelocity)(int wid, int skid, int dofid, double _initial) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    dof->setInitialVelocity(_initial);
+}
+
+
+double DOF(getVelocityLowerLimit)(int wid, int skid, int dofid) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    return dof->getVelocityLowerLimit();
+}
+
+
+void DOF(setVelocityLowerLimit)(int wid, int skid, int dofid, double _limit) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    dof->setVelocityLowerLimit(_limit);
+}
+
+
+double DOF(getVelocityUpperLimit)(int wid, int skid, int dofid) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    return dof->getVelocityUpperLimit();
+}
+
+
+void DOF(setVelocityUpperLimit)(int wid, int skid, int dofid, double _limit) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    dof->setVelocityUpperLimit(_limit);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Joint
+
+////////////////////////////////////////
+// Joint::Property Functions
+const char* JOINT(getName)(int wid, int skid, int jid) {
+    dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+    return joint->getName().c_str();
+}
+
+
+const char* JOINT(setName)(int wid, int skid, int jid, const char* _name, bool _renameDofs) {
+    dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+    return joint->setName(_name, _renameDofs).c_str();
+}
+
+
+bool JOINT(isKinematic)(int wid, int skid, int jid) {
+    dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+    return joint->isKinematic();
+}
+
+
+bool JOINT(isDynamic)(int wid, int skid, int jid) {
+    dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+    return joint->isDynamic();
+}
+
+////////////////////////////////////////
+// Joint::Parent and child Functions
+int JOINT(getParentBodyNode)(int wid, int skid, int jid) {
+    dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+    if (joint->getParentBodyNode()) {
+        return joint->getParentBodyNode()->getIndexInSkeleton();
+    } else {
+        return -1;
+    }
+}
+
+
+int JOINT(getChildBodyNode)(int wid, int skid, int jid) {
+    dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+    return joint->getChildBodyNode()->getIndexInSkeleton();
+}
+
+
+void JOINT(setTransformFromParentBodyNode)(int wid, int skid, int jid, double inv44[4][4]) {
+    dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+    joint->setTransformFromParentBodyNode(read_isometry(inv44));
+}
+
+
+void JOINT(setTransformFromChildBodyNode)(int wid, int skid, int jid, double inv44[4][4]) {
+    dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+    joint->setTransformFromChildBodyNode(read_isometry(inv44));
+}
+
+
+void JOINT(getTransformFromParentBodyNode)(int wid, int skid, int jid, double outv44[4][4]) {
+    dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+    write_isometry(joint->getTransformFromParentBodyNode(), outv44);
+}
+
+
+void JOINT(getTransformFromChildBodyNode)(int wid, int skid, int jid, double outv44[4][4]) {
+    dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+    write_isometry(joint->getTransformFromChildBodyNode(), outv44);
+}
+
+////////////////////////////////////////
+// Joint::Dof Functions
+int JOINT(getDof)(int wid, int skid, int jid, int _index) {
+    dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+    return joint->getDof(_index)->getIndexInSkeleton();
+}
+
+
+int JOINT(getNumDofs)(int wid, int skid, int jid) {
+    dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+    return joint->getNumDofs();
 }

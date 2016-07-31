@@ -11,6 +11,7 @@ import numpy as np
 from skel_vector import SkelVector
 from bodynode import BodyNode
 from dof import Dof
+from joint import Joint
 # from marker import Marker
 
 
@@ -35,10 +36,18 @@ class Skeleton(object):
         self.dofs = [Dof(self, i) for i in range(_ndofs)]
         self.name_to_dof = {dof.name: dof for dof in self.dofs}
 
+        # Initialize joints
+        _njoints = papi.skeleton__getNumJoints(self.world.id, self.id)
+        self.joints = [Joint(self, i) for i in range(_njoints)]
+        self.name_to_joint = {joint.name: joint for joint in self.joints}
+
         # Initialize bodynodes
         _nbodynodes = papi.skeleton__getNumBodyNodes(self.world.id, self.id)
         self.bodynodes = [BodyNode(self, i) for i in range(_nbodynodes)]
         self.name_to_body = {body.name: body for body in self.bodynodes}
+
+        for joint in self.joints:
+            joint.build()
 
         for body in self.bodynodes:
             body.build()
@@ -59,15 +68,19 @@ class Skeleton(object):
     def name(self):
         return papi.skeleton__getName(self.world.id, self.id)
 
-    # def set_joint_damping(self, _damping):
-    #     papi.setSkeletonJointDamping(self.world.id, self.id, _damping)
-
     def num_dofs(self):
         return len(self.dofs)
 
     @property
     def ndofs(self):
         return self.num_dofs()
+
+    def num_joints(self):
+        return len(self.joints)
+
+    @property
+    def njoints(self):
+        return self.num_joints()
 
     def num_bodynodes(self):
         return len(self.bodynodes)
@@ -366,5 +379,5 @@ class Skeleton(object):
     # def render_markers(self):
     #     papi.renderSkeletonMarkers(self.world.id, self.id)
 
-    def __repr__(self):
+    def __str__(self):
         return '[Skeleton(%d): %s]' % (self.id, self.name)

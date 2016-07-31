@@ -36,9 +36,19 @@ if __name__ == '__main__':
         print("\t\tparent = " + str(body.parent_bodynode))
         print("\t\tchilds = " + str(body.child_bodynodes))
         print("\t\tCOM = " + str(body.C))
+
     print('[DegreeOfFreedom]')
     for dof in skel.dofs:
         print("\t" + str(dof))
+        print("\t\index in skeleton = " + str(dof.index_in_skeleton()))
+        print("\t\tposition = " + str(dof.position()))
+
+    print('[Joint]')
+    for joint in skel.joints:
+        print("\t" + str(joint))
+        print("\t\tparent = " + str(joint.parent_bodynode))
+        print("\t\tchild = " + str(joint.child_bodynode))
+        print("\t\tdofs = " + str(joint.dofs))
 
     print('[Position]')
     print('\tpositions = %s' % str(skel.q))

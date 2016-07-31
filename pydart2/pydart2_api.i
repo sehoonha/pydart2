@@ -21,6 +21,8 @@
 %apply (double ARGOUT_ARRAY1[ANY]) {(double outv4[4])};
 %apply (double ARGOUT_ARRAY1[ANY]) {(double outv6[6])};
 
+%apply (double IN_ARRAY2[ANY][ANY]) {(double inv33[3][3])};
+%apply (double IN_ARRAY2[ANY][ANY]) {(double inv44[4][4])};
 %apply (double ARGOUT_ARRAY2[ANY][ANY]) {(double outv33[3][3])};
 %apply (double ARGOUT_ARRAY2[ANY][ANY]) {(double outv44[4][4])};
 

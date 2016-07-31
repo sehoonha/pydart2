@@ -246,5 +246,5 @@ class BodyNode(object):
     # def get_marker_pos(self, mid):
     #     return papi.getMarkerPosition(self.wid, self.skid, self.id, mid)
 
-    def __repr__(self):
+    def __str__(self):
         return '[BodyNode(%d): %s]' % (self.id, self.name)

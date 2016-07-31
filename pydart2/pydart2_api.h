@@ -63,6 +63,7 @@ void SKEL(setRootJointToTransAndEuler)(int wid, int skid);
 ////////////////////////////////////////
 // Skeleton::Structure Information Functions
 int SKEL(getNumBodyNodes)(int wid, int skid);
+int SKEL(getNumJoints)(int wid, int skid);
 int SKEL(getNumDofs)(int wid, int skid);
 
 ////////////////////////////////////////
@@ -170,5 +171,60 @@ void BODY(setExtTorque)(int wid, int skid, int bid, double inv3[3], bool _isLoca
 
 const char* DOF(getName)(int wid, int skid, int dofid);
 
+////////////////////////////////////////
+// Dof::Index Functions
+int DOF(getIndexInSkeleton)(int wid, int skid, int dofid);
+int DOF(getIndexInTree)(int wid, int skid, int dofid);
+int DOF(getIndexInJoint)(int wid, int skid, int dofid);
+int DOF(getTreeIndex)(int wid, int skid, int dofid);
+
+////////////////////////////////////////
+// Dof::Position Functions
+double DOF(getPosition)(int wid, int skid, int dofid);
+void DOF(setPosition)(int wid, int skid, int dofid, double _position);
+double DOF(getInitialPosition)(int wid, int skid, int dofid);
+void DOF(setInitialPosition)(int wid, int skid, int dofid, double _initial);
+bool DOF(hasPositionLimit)(int wid, int skid, int dofid);
+double DOF(getPositionLowerLimit)(int wid, int skid, int dofid);
+void DOF(setPositionLowerLimit)(int wid, int skid, int dofid, double _limit);
+double DOF(getPositionUpperLimit)(int wid, int skid, int dofid);
+void DOF(setPositionUpperLimit)(int wid, int skid, int dofid, double _limit);
+
+////////////////////////////////////////
+// Dof::Velocity Functions
+double DOF(getVelocity)(int wid, int skid, int dofid);
+void DOF(setVelocity)(int wid, int skid, int dofid, double _velocity);
+double DOF(getInitialVelocity)(int wid, int skid, int dofid);
+void DOF(setInitialVelocity)(int wid, int skid, int dofid, double _initial);
+double DOF(getVelocityLowerLimit)(int wid, int skid, int dofid);
+void DOF(setVelocityLowerLimit)(int wid, int skid, int dofid, double _limit);
+double DOF(getVelocityUpperLimit)(int wid, int skid, int dofid);
+void DOF(setVelocityUpperLimit)(int wid, int skid, int dofid, double _limit);
+
+////////////////////////////////////////////////////////////////////////////////
+// Joint
+#define JOINT(funcname) joint__##funcname
+#define GET_JOINT(wid, skid, jid) Manager::skeleton(wid, skid)->getJoint(jid)
+
+////////////////////////////////////////
+// Joint::Property Functions
+const char* JOINT(getName)(int wid, int skid, int jid);
+const char* JOINT(setName)(int wid, int skid, int jid, const char* _name, bool _renameDofs);
+bool JOINT(isKinematic)(int wid, int skid, int jid);
+bool JOINT(isDynamic)(int wid, int skid, int jid);
+
+////////////////////////////////////////
+// Joint::Parent and child bodynode Functions
+int JOINT(getParentBodyNode)(int wid, int skid, int jid);
+int JOINT(getChildBodyNode)(int wid, int skid, int jid);
+void JOINT(setTransformFromParentBodyNode)(int wid, int skid, int jid, double inv44[4][4]);
+void JOINT(setTransformFromChildBodyNode)(int wid, int skid, int jid, double inv44[4][4]);
+void JOINT(getTransformFromParentBodyNode)(int wid, int skid, int jid, double outv44[4][4]);
+void JOINT(getTransformFromChildBodyNode)(int wid, int skid, int jid, double outv44[4][4]);
+
+////////////////////////////////////////
+// Joint::Dof Functions
+int JOINT(getDof)(int wid, int skid, int jid, int _index);
+int JOINT(getNumDofs)(int wid, int skid, int jid);
 
 #endif // #ifndef PYDART2_PYDART2_API_H

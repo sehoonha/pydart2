@@ -10,6 +10,14 @@ CXX_FLAGS += '-O3 -DNDEBUG -shared '
 CXX_FLAGS += '-g -fno-omit-frame-pointer -fno-inline-functions '
 CXX_FLAGS += '-fno-inline-functions-called-once -fno-optimize-sibling-calls '
 
+include_dirs = list()
+include_dirs += ['/usr/local/include']
+include_dirs += ['/usr/include/eigen3']
+include_dirs += ['/usr/include/python2.7']
+include_dirs += ['/usr/include/bullet']
+include_dirs += ['/usr/local/lib/python2.7/dist-packages/numpy/core/include/']
+include_dirs += ['/usr/lib/python2.7/dist-packages/numpy/core/include/']
+
 libraries = list()
 libraries += ['dart', 'dart-gui']
 libraries += ['dart-optimizer-ipopt', 'dart-optimizer-nlopt',
@@ -23,10 +31,7 @@ libraries += ['BulletDynamics', 'BulletCollision',
 pydart2_api = Extension('_pydart2_api',
                         define_macros=[('MAJOR_VERSION', '1'),
                                        ('MINOR_VERSION', '0')],
-                        include_dirs=['/usr/local/include',
-                                      '/usr/include/eigen3',
-                                      '/usr/include/python2.7',
-                                      '/usr/include/bullet' ],
+                        include_dirs=include_dirs,
                         libraries=libraries,
                         library_dirs=['/usr/local/lib'],
                         extra_compile_args=CXX_FLAGS.split(),
@@ -40,7 +45,7 @@ pydart2_api = Extension('_pydart2_api',
 
 
 setup(name='pydart2',
-      version='0.3.7',
+      version='0.3.8',
       description='Python Interface for DART Simulator',
       url='https://github.com/sehoonha/pydart2',
       author='Sehoon Ha',

@@ -417,6 +417,11 @@ int SKEL(getNumDofs)(int wid, int skid) {
     return skel->getNumDofs();
 }
 
+int SKEL(getNumMarkers)(int wid, int skid) {
+    dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+    return skel->getNumMarkers();
+}
+
 ////////////////////////////////////////
 // Skeleton::Pose Functions
 void SKEL(getPositions)(int wid, int skid, double* outv, int ndofs) {
@@ -980,4 +985,36 @@ int JOINT(getDof)(int wid, int skid, int jid, int _index) {
 int JOINT(getNumDofs)(int wid, int skid, int jid) {
     dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
     return joint->getNumDofs();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Marker
+
+int MARKER(getBodyNode)(int wid, int skid, int mid) {
+    dart::dynamics::Marker* marker = GET_MARKER(wid, skid, mid);
+    return marker->getBodyNodePtr()->getIndexInSkeleton();
+}
+
+
+void MARKER(getLocalPosition)(int wid, int skid, int mid, double outv3[3]) {
+    dart::dynamics::Marker* marker = GET_MARKER(wid, skid, mid);
+    write(marker->getLocalPosition(), outv3);
+}
+
+
+void MARKER(setLocalPosition)(int wid, int skid, int mid, double inv3[3]) {
+    dart::dynamics::Marker* marker = GET_MARKER(wid, skid, mid);
+    marker->setLocalPosition(read(inv3, 3));
+}
+
+
+void MARKER(getWorldPosition)(int wid, int skid, int mid, double outv3[3]) {
+    dart::dynamics::Marker* marker = GET_MARKER(wid, skid, mid);
+    write(marker->getWorldPosition(), outv3);
+}
+
+void MARKER(render)(int wid, int skid, int mid) {
+    dart::dynamics::Marker* marker = GET_MARKER(wid, skid, mid);
+    dart::gui::RenderInterface* ri = Manager::getRI();
+    drawMarker(ri, marker);
 }

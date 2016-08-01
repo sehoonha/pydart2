@@ -282,7 +282,8 @@ void drawMarker(
     }
 
     ri->pushMatrix();
-    ri->translate(marker->getLocalPosition());
+    // ri->translate(marker->getLocalPosition());
+    ri->translate(marker->getWorldPosition());
     ri->drawEllipsoid(Eigen::Vector3d::Constant(0.01));
     ri->popMatrix();
 

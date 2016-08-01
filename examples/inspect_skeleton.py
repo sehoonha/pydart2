@@ -36,12 +36,13 @@ if __name__ == '__main__':
         print("\t\tchilds = " + str(body.child_bodynodes))
         print("\t\tCOM = " + str(body.C))
         print("\t\t# dependent dofs = %d" % len(body.dependent_dofs))
+        print("\t\t# markers = %d" % len(body.markers))
 
     print('[DegreeOfFreedom]')
     for dof in skel.dofs:
-        print("\t" + str(dof))
-        print("\t\tindex in skeleton = " + str(dof.index_in_skeleton()))
-        print("\t\tposition = " + str(dof.position()))
+        print("\t" + str(dof) + " belongs to " + str(dof.joint))
+        # print("\t\tindex in skeleton = " + str(dof.index_in_skeleton()))
+        # print("\t\tposition = " + str(dof.position()))
 
     print('[Joint]')
     for joint in skel.joints:
@@ -49,6 +50,11 @@ if __name__ == '__main__':
         print("\t\tparent = " + str(joint.parent_bodynode))
         print("\t\tchild = " + str(joint.child_bodynode))
         print("\t\tdofs = " + str(joint.dofs))
+
+    print('[Markers]')
+    for marker in skel.markers:
+        print("\t" + str(marker) + " attached to " + str(marker.bodynode))
+        print("\t\t" + str(marker.world_position()))
 
     print('[Position]')
     print('\tpositions = %s' % str(skel.q))

@@ -51,6 +51,7 @@ class Joint(object):
         for i in range(_ndofs):
             id = papi.joint__getDof(self.wid, self.skid, self.id, i)
             self.dofs.append(skel.dofs[id])
+            skel.dofs[id].joint = self
 
 ########################################
 # Joint::Property Functions

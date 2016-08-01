@@ -9,10 +9,11 @@ import os.path
 import pydart2_api as papi
 import numpy as np
 from skel_vector import SkelVector
+
 from bodynode import BodyNode
 from dof import Dof
 from joint import Joint
-# from marker import Marker
+from marker import Marker
 
 
 class Skeleton(object):
@@ -46,18 +47,18 @@ class Skeleton(object):
         self.bodynodes = [BodyNode(self, i) for i in range(_nbodynodes)]
         self.name_to_body = {body.name: body for body in self.bodynodes}
 
+        # Initialize markers
+        _nmarkers = papi.skeleton__getNumMarkers(self.world.id, self.id)
+        self.markers = [Marker(self, i) for i in range(_nmarkers)]
+
         for joint in self.joints:
             joint.build()
 
         for body in self.bodynodes:
             body.build()
 
-        # # Initialize markers
-        # self.markers = list()
-        # for body in self.bodies:
-        #     for j in range(body.num_markers()):
-        #         m = Marker(body, j)
-        #         self.markers.append(m)
+        for marker in self.markers:
+            marker.build()
 
     def set_root_joint_to_trans_and_euler(self, ):
         papi.skeleton__setRootJointToTransAndEuler(self.world.id,

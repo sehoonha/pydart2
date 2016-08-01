@@ -19,6 +19,7 @@ class BodyNode(object):
         self.child_joints = list()
 
         self.dependent_dofs = list()
+        self.markers = list()  # Built by markers
 
     def build(self):
         # Build Body Nodes
@@ -65,6 +66,9 @@ class BodyNode(object):
             if ret_id >= 0:
                 self.dependent_dofs.append(self.skel.dofs[ret_id])
 
+        # Build markers (by other class)
+        self.markers = list()
+
     def num_child_bodynodes(self, ):
         return len(self.child_bodynodes)
 
@@ -73,6 +77,9 @@ class BodyNode(object):
 
     def num_child_joints(self, ):
         return len(self.child_joints)
+
+    def num_markers(self, ):
+        return len(self.markers)
 
     @property
     def id(self):

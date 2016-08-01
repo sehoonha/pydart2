@@ -65,6 +65,7 @@ void SKEL(setRootJointToTransAndEuler)(int wid, int skid);
 int SKEL(getNumBodyNodes)(int wid, int skid);
 int SKEL(getNumJoints)(int wid, int skid);
 int SKEL(getNumDofs)(int wid, int skid);
+int SKEL(getNumMarkers)(int wid, int skid);
 
 ////////////////////////////////////////
 // Skeleton::Pose Functions
@@ -234,5 +235,16 @@ void JOINT(getTransformFromChildBodyNode)(int wid, int skid, int jid, double out
 // Joint::Dof Functions
 int JOINT(getDof)(int wid, int skid, int jid, int _index);
 int JOINT(getNumDofs)(int wid, int skid, int jid);
+
+////////////////////////////////////////////////////////////////////////////////
+// Marker
+#define MARKER(funcname) marker__##funcname
+#define GET_MARKER(wid, skid, mid) Manager::skeleton(wid, skid)->getMarker(mid)
+
+int MARKER(getBodyNode)(int wid, int skid, int mid);
+void MARKER(getLocalPosition)(int wid, int skid, int mid, double outv3[3]);
+void MARKER(setLocalPosition)(int wid, int skid, int mid, double inv3[3]);
+void MARKER(getWorldPosition)(int wid, int skid, int mid, double outv3[3]);
+void MARKER(render)(int wid, int skid, int mid);
 
 #endif // #ifndef PYDART2_PYDART2_API_H

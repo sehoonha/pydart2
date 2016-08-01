@@ -129,10 +129,12 @@ class World(object):
     #     self._frame = i
     #     papi.setWorldSimFrame(self.id, i)
 
-    def render(self):
+    def render(self, render_markers=True):
         papi.world__render(self.id)
-        # for skel in self.skels:
-        #     skel.render_markers()
+        if render_markers:
+            for skel in self.skeletons:
+                for marker in skel.markers:
+                    marker.render()
 
     def states(self):
         return np.concatenate([skel.x for skel in self.skels])

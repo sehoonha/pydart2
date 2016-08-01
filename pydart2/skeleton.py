@@ -379,5 +379,5 @@ class Skeleton(object):
     # def render_markers(self):
     #     papi.renderSkeletonMarkers(self.world.id, self.id)
 
-    def __str__(self):
+    def __repr__(self):
         return '[Skeleton(%d): %s]' % (self.id, self.name)

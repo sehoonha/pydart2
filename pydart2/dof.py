@@ -103,5 +103,5 @@ class Dof(object):
     def set_velocity_upper_limit(self, _limit):
         papi.dof__setVelocityUpperLimit(self.wid, self.skid, self.id, _limit)
 
-    def __str__(self):
+    def __repr__(self):
         return '[Dof(%d): %s]' % (self.id, self.name)

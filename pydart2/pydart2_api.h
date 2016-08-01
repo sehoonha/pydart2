@@ -118,6 +118,14 @@ int BODY(getNumChildBodyNodes)(int wid, int skid, int bid);
 int BODY(getChildBodyNode)(int wid, int skid, int bid, int _index);
 
 ////////////////////////////////////////
+// BodyNode::Joint and Dof Functions
+int BODY(getParentJoint)(int wid, int skid, int bid);
+int BODY(getNumChildJoints)(int wid, int skid, int bid);
+int BODY(getChildJoint)(int wid, int skid, int bid, int _index);
+int BODY(getNumDependentDofs)(int wid, int skid, int bid);
+int BODY(getDependentDof)(int wid, int skid, int bid, int _index);
+
+////////////////////////////////////////
 // BodyNode::Index Functions
 int BODY(getIndexInSkeleton)(int wid, int skid, int bid);
 int BODY(getIndexInTree)(int wid, int skid, int bid);

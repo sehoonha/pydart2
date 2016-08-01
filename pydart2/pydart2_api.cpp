@@ -559,6 +559,42 @@ int BODY(getChildBodyNode)(int wid, int skid, int bid, int _index) {
 }
 
 ////////////////////////////////////////
+// BodyNode::Joint and Dof Functions
+int BODY(getParentJoint)(int wid, int skid, int bid) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
+    if (body->getParentJoint()) {
+        return body->getParentJoint()->getJointIndexInSkeleton();
+    } else {
+        return -1;
+    }
+}
+
+
+int BODY(getNumChildJoints)(int wid, int skid, int bid) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
+    return body->getNumChildJoints();
+}
+
+
+int BODY(getChildJoint)(int wid, int skid, int bid, int _index) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
+    return body->getChildJoint(_index)->getJointIndexInSkeleton();
+}
+
+
+int BODY(getNumDependentDofs)(int wid, int skid, int bid) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
+    return body->getNumDependentDofs();
+}
+
+
+int BODY(getDependentDof)(int wid, int skid, int bid, int _index) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
+    return body->getDependentDof(_index)->getIndexInSkeleton();
+}
+
+
+////////////////////////////////////////
 // BodyNode::Index Functions
 int BODY(getIndexInSkeleton)(int wid, int skid, int bid) {
     dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);

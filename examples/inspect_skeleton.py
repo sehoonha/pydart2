@@ -32,15 +32,15 @@ if __name__ == '__main__':
     for body in skel.bodynodes:
         print("\t" + str(body))
         print("\t\tmass = %.4fKg" % body.m)
-        # print("\t\inertia = %s" % str(body.I))
         print("\t\tparent = " + str(body.parent_bodynode))
         print("\t\tchilds = " + str(body.child_bodynodes))
         print("\t\tCOM = " + str(body.C))
+        print("\t\t# dependent dofs = %d" % len(body.dependent_dofs))
 
     print('[DegreeOfFreedom]')
     for dof in skel.dofs:
         print("\t" + str(dof))
-        print("\t\index in skeleton = " + str(dof.index_in_skeleton()))
+        print("\t\tindex in skeleton = " + str(dof.index_in_skeleton()))
         print("\t\tposition = " + str(dof.position()))
 
     print('[Joint]')

@@ -15,7 +15,13 @@ class BodyNode(object):
         self.parent_bodynode = None
         self.child_bodynodes = list()
 
+        self.parent_joint = None
+        self.child_joints = list()
+
+        self.dependent_dofs = list()
+
     def build(self):
+        # Build Body Nodes
         self.parent_bodynode = None
         self.child_bodynodes = list()
 
@@ -32,8 +38,41 @@ class BodyNode(object):
             if ret_id >= 0:
                 self.child_bodynodes.append(self.skel.bodynodes[ret_id])
 
+        # Build Joints
+        self.parent_joint = None
+        self.child_joints = list()
+        ret_id = papi.bodynode__getParentJoint(self.wid, self.skid, self.id)
+        if ret_id >= 0:
+            self.parent_joint = self.skel.joints[ret_id]
+
+        num = papi.bodynode__getNumChildJoints(self.wid, self.skid, self.id)
+        for index in range(num):
+            ret_id = papi.bodynode__getChildJoint(self.wid,
+                                                  self.skid,
+                                                  self.id,
+                                                  index)
+            if ret_id >= 0:
+                self.child_joints.append(self.skel.joints[ret_id])
+
+        # Build dependent_dofs
+        self.dependent_dofs = list()
+        num = papi.bodynode__getNumDependentDofs(self.wid, self.skid, self.id)
+        for index in range(num):
+            ret_id = papi.bodynode__getDependentDof(self.wid,
+                                                    self.skid,
+                                                    self.id,
+                                                    index)
+            if ret_id >= 0:
+                self.dependent_dofs.append(self.skel.dofs[ret_id])
+
     def num_child_bodynodes(self, ):
         return len(self.child_bodynodes)
+
+    def num_dependent_dofs(self, ):
+        return len(self.dependent_dofs)
+
+    def num_child_joints(self, ):
+        return len(self.child_joints)
 
     @property
     def id(self):
@@ -246,5 +285,5 @@ class BodyNode(object):
     # def get_marker_pos(self, mid):
     #     return papi.getMarkerPosition(self.wid, self.skid, self.id, mid)
 
-    def __str__(self):
+    def __repr__(self):
         return '[BodyNode(%d): %s]' % (self.id, self.name)

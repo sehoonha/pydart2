@@ -102,5 +102,5 @@ class Joint(object):
     def num_dofs(self, ):
         return len(self.dofs)
 
-    def __str__(self):
+    def __repr__(self):
         return '[Joint(%d): %s]' % (self.id, self.name)

@@ -1,6 +1,7 @@
 from setuptools import setup
 from setuptools import find_packages
 from distutils.core import Extension
+from sys import platform as _platform
 
 
 DIR = 'pydart2/'
@@ -11,19 +12,27 @@ CXX_FLAGS += '-g -fno-omit-frame-pointer -fno-inline-functions '
 CXX_FLAGS += '-fno-inline-functions-called-once -fno-optimize-sibling-calls '
 
 include_dirs = list()
-include_dirs += ['/usr/local/include']
+include_dirs += ['/usr/include']
 include_dirs += ['/usr/include/eigen3']
 include_dirs += ['/usr/include/python2.7']
 include_dirs += ['/usr/include/bullet']
+include_dirs += ['/usr/local/include']
+include_dirs += ['/usr/local/include/eigen3']
+include_dirs += ['/usr/local/include/python2.7']
+include_dirs += ['/usr/local/include/bullet']
 include_dirs += ['/usr/local/lib/python2.7/dist-packages/numpy/core/include/']
 include_dirs += ['/usr/lib/python2.7/dist-packages/numpy/core/include/']
+include_dirs += ['/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include/']
 
 libraries = list()
 libraries += ['dart', 'dart-gui']
 libraries += ['dart-optimizer-ipopt', 'dart-optimizer-nlopt',
               'dart-planning', 'dart-utils', 'dart-utils-urdf']
 libraries += ['python2.7']
-libraries += ['GL', 'glut', 'Xmu', 'Xi']
+if _platform == "linux" or _platform == "linux2":
+    libraries += ['GL', 'glut', 'Xmu', 'Xi']
+elif _platform == "darwin":
+    libraries += ['GLUT', 'Cocoa', 'OpenGL']
 libraries += ['BulletDynamics', 'BulletCollision',
               'LinearMath', 'BulletSoftBody']
 
@@ -45,7 +54,7 @@ pydart2_api = Extension('_pydart2_api',
 
 
 setup(name='pydart2',
-      version='0.3.8',
+      version='0.3.10',
       description='Python Interface for DART Simulator',
       url='https://github.com/sehoonha/pydart2',
       author='Sehoon Ha',

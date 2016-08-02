@@ -127,6 +127,10 @@ int BODY(getNumDependentDofs)(int wid, int skid, int bid);
 int BODY(getDependentDof)(int wid, int skid, int bid, int _index);
 
 ////////////////////////////////////////
+// BodyNode::Shape
+int BODY(getNumShapeNodes)(int wid, int skid, int bid);
+
+////////////////////////////////////////
 // BodyNode::Index Functions
 int BODY(getIndexInSkeleton)(int wid, int skid, int bid);
 int BODY(getIndexInTree)(int wid, int skid, int bid);
@@ -246,5 +250,30 @@ void MARKER(getLocalPosition)(int wid, int skid, int mid, double outv3[3]);
 void MARKER(setLocalPosition)(int wid, int skid, int mid, double inv3[3]);
 void MARKER(getWorldPosition)(int wid, int skid, int mid, double outv3[3]);
 void MARKER(render)(int wid, int skid, int mid);
+
+////////////////////////////////////////////////////////////////////////////////
+// ShapeNode and Shape
+#define SHAPENODE(funcname) shapenode__##funcname
+#define GET_SHAPENODE(wid, skid, bid, sid) (Manager::skeleton(wid, skid)->getBodyNode(bid)->getShapeNodes()[sid]);
+#define SHAPE(funcname) shape__##funcname
+#define GET_SHAPE(wid, skid, bid, sid) (Manager::skeleton(wid, skid)->getBodyNode(bid)->getShapeNodes()[sid])->getShape().get();
+
+////////////////////////////////////////
+// ShapeNode Functions
+void SHAPENODE(getOffset)(int wid, int skid, int bid, int sid, double outv3[3]);
+void SHAPENODE(setOffset)(int wid, int skid, int bid, int sid, double inv3[3]);
+void SHAPENODE(getRelativeTransform)(int wid, int skid, int bid, int sid, double outv44[4][4]);
+void SHAPENODE(setRelativeTransform)(int wid, int skid, int bid, int sid, double inv44[4][4]);
+
+bool SHAPENODE(hasVisualAspect)(int wid, int skid, int bid, int sid);
+bool SHAPENODE(hasCollisionAspect)(int wid, int skid, int bid, int sid);
+
+////////////////////////////////////////
+// Shape Functions
+double SHAPE(getVolume)(int wid, int skid, int bid, int sid);
+int SHAPE(getShapeType)(int wid, int skid, int bid, int sid);
+void SHAPE(render)(int wid, int skid, int bid, int sid);
+void SHAPE(getBoundingBoxMin)(int wid, int skid, int bid, int sid, double outv3[3]);
+void SHAPE(getBoundingBoxMax)(int wid, int skid, int bid, int sid, double outv3[3]);
 
 #endif // #ifndef PYDART2_PYDART2_API_H

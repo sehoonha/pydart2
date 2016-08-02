@@ -36,6 +36,7 @@ if __name__ == '__main__':
         print("\t\tchilds = " + str(body.child_bodynodes))
         print("\t\tCOM = " + str(body.C))
         print("\t\t# dependent dofs = %d" % len(body.dependent_dofs))
+        print("\t\t# shapenodes = %s" % str(body.shapenodes))
         print("\t\t# markers = %d" % len(body.markers))
 
     print('[DegreeOfFreedom]')

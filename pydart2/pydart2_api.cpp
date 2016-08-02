@@ -598,6 +598,13 @@ int BODY(getDependentDof)(int wid, int skid, int bid, int _index) {
     return body->getDependentDof(_index)->getIndexInSkeleton();
 }
 
+////////////////////////////////////////
+// BodyNode::Shape
+int BODY(getNumShapeNodes)(int wid, int skid, int bid) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
+    // dart::dynamics::ShapePtr shape = body->getVisualizationShape(0);
+    return body->getShapeNodes().size();
+}
 
 ////////////////////////////////////////
 // BodyNode::Index Functions
@@ -1017,4 +1024,68 @@ void MARKER(render)(int wid, int skid, int mid) {
     dart::dynamics::Marker* marker = GET_MARKER(wid, skid, mid);
     dart::gui::RenderInterface* ri = Manager::getRI();
     drawMarker(ri, marker);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// ShapeNode and Shape
+void SHAPENODE(getOffset)(int wid, int skid, int bid, int sid, double outv3[3]) {
+    dart::dynamics::ShapeNode* shapenode = GET_SHAPENODE(wid, skid, bid, sid);
+    write(shapenode->getOffset(), outv3);
+}
+
+
+void SHAPENODE(setOffset)(int wid, int skid, int bid, int sid, double inv3[3]) {
+    dart::dynamics::ShapeNode* shapenode = GET_SHAPENODE(wid, skid, bid, sid);
+    shapenode->setOffset(read(inv3, 3));
+}
+
+
+void SHAPENODE(getRelativeTransform)(int wid, int skid, int bid, int sid, double outv44[4][4]) {
+    dart::dynamics::ShapeNode* shapenode = GET_SHAPENODE(wid, skid, bid, sid);
+    write_isometry(shapenode->getRelativeTransform(), outv44);
+}
+
+
+void SHAPENODE(setRelativeTransform)(int wid, int skid, int bid, int sid, double inv44[4][4]) {
+    dart::dynamics::ShapeNode* shapenode = GET_SHAPENODE(wid, skid, bid, sid);
+    shapenode->setRelativeTransform(read_isometry(inv44));
+}
+
+bool SHAPENODE(hasVisualAspect)(int wid, int skid, int bid, int sid) {
+    dart::dynamics::ShapeNode* shapenode = GET_SHAPENODE(wid, skid, bid, sid);
+    return shapenode->has<dart::dynamics::VisualAspect>();
+}
+
+bool SHAPENODE(hasCollisionAspect)(int wid, int skid, int bid, int sid) {
+    dart::dynamics::ShapeNode* shapenode = GET_SHAPENODE(wid, skid, bid, sid);
+    return shapenode->has<dart::dynamics::CollisionAspect>();
+}
+
+////////////////////////////////////////
+// Shape Functions
+
+double SHAPE(getVolume)(int wid, int skid, int bid, int sid) {
+    dart::dynamics::Shape* shape = GET_SHAPE(wid, skid, bid, sid);
+    return shape->getVolume();
+}
+
+int SHAPE(getShapeType)(int wid, int skid, int bid, int sid) {
+    dart::dynamics::Shape* shape = GET_SHAPE(wid, skid, bid, sid);
+    return (int)shape->getShapeType();
+}
+
+void SHAPE(render)(int wid, int skid, int bid, int sid) {
+    dart::dynamics::Shape* shape = GET_SHAPE(wid, skid, bid, sid);
+    dart::gui::RenderInterface* ri = Manager::getRI();
+    drawShape(ri, shape);
+}
+
+void SHAPE(getBoundingBoxMin)(int wid, int skid, int bid, int sid, double outv3[3]) {
+    dart::dynamics::Shape* shape = GET_SHAPE(wid, skid, bid, sid);
+    write(shape->getBoundingBox().getMin(), outv3);
+}
+
+void SHAPE(getBoundingBoxMax)(int wid, int skid, int bid, int sid, double outv3[3]) {
+    dart::dynamics::Shape* shape = GET_SHAPE(wid, skid, bid, sid);
+    write(shape->getBoundingBox().getMax(), outv3);
 }

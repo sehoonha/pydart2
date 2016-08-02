@@ -5,11 +5,12 @@
 # Disney Research Robotics Group
 import pydart2_api as papi
 import numpy as np
+from shapenode import ShapeNode
 
 
 class BodyNode(object):
     def __init__(self, _skel, _id):
-        self.skel = _skel
+        self.skeleton = _skel
         self._id = _id
         self.name = papi.bodynode__getName(self.wid, self.skid, self.id)
         self.parent_bodynode = None
@@ -20,6 +21,8 @@ class BodyNode(object):
 
         self.dependent_dofs = list()
         self.markers = list()  # Built by markers
+
+        self.shapenodes = list()
 
     def build(self):
         # Build Body Nodes
@@ -66,6 +69,12 @@ class BodyNode(object):
             if ret_id >= 0:
                 self.dependent_dofs.append(self.skel.dofs[ret_id])
 
+        # Build shapenodes
+        self.shapenodes = list()
+        num = papi.bodynode__getNumShapeNodes(self.wid, self.skid, self.id)
+        for index in range(num):
+            self.shapenodes.append(ShapeNode(self, index))
+
         # Build markers (by other class)
         self.markers = list()
 
@@ -81,6 +90,9 @@ class BodyNode(object):
     def num_markers(self, ):
         return len(self.markers)
 
+    def num_shapenodes(self, ):
+        return len(self.shapenodes)
+
     @property
     def id(self):
         return self._id
@@ -88,6 +100,10 @@ class BodyNode(object):
     @property
     def wid(self):
         return self.skel.world.id
+
+    @property
+    def skel(self):
+        return self.skeleton
 
     @property
     def skid(self):

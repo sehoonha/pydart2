@@ -22,7 +22,6 @@ include_dirs += ['/usr/local/include/python2.7']
 include_dirs += ['/usr/local/include/bullet']
 include_dirs += ['/usr/local/lib/python2.7/dist-packages/numpy/core/include/']
 include_dirs += ['/usr/lib/python2.7/dist-packages/numpy/core/include/']
-include_dirs += ['/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include/']
 
 libraries = list()
 libraries += ['dart', 'dart-gui']

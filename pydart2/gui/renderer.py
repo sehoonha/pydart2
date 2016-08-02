@@ -49,11 +49,17 @@ class Renderer(object):
     def pop(self):
         glPopMatrix()
 
+    def parse_flag(self, x):
+        if x == "COLOR_MATERIAL":
+            return GL_COLOR_MATERIAL
+        else:
+            return x
+
     def enable(self, x):
-        glEnable(x)
+        glEnable(self.parse_flag(x))
 
     def disable(self, x):
-        glDisable(x)
+        glDisable(self.parse_flag(x))
 
     def translate(self, x, y, z=0.0):
         glTranslate(x, y, z)
@@ -311,7 +317,7 @@ class Renderer(object):
         gluCylinder(m_quadric, r_base, r_base, arrow_len, 10, 10)
         glPopMatrix()
 
-        # glColor(1.0, 0.0, 0.0)
+        glColor(1.0, 0.0, 0.0)
         glPushMatrix()
         glMultMatrixd(m)
         glutSolidCone(head_width, head_len, 10, 3)

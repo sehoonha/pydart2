@@ -20,7 +20,7 @@ class GLWidget(QGLWidget):
         super(GLWidget, self).__init__(parent)
         fmt = QGLFormat()
         fmt.setSampleBuffers(True)
-        fmt.setSamples(8)
+        fmt.setSamples(4)
         # print fmt.samples()
         # exit(0)
 
@@ -51,15 +51,16 @@ class GLWidget(QGLWidget):
         glTranslate(*self.tb.trans)
         glMultMatrixf(self.tb.matrix)
 
-        if self.sim is not None and hasattr(self.sim, "render_with_ri"):
-            self.sim.render_with_ri(self.renderer, opts)
-
         if self.sim is not None and hasattr(self.sim, "render"):
             self.sim.render()
 
+        self.renderer.enable("COLOR_MATERIAL")
+        if self.sim is not None and hasattr(self.sim, "render_with_ri"):
+            self.sim.render_with_ri(self.renderer)
+
         self.enable2D()
         if self.sim is not None and hasattr(self.sim, "draw_with_ri"):
-            self.sim.draw_with_ri(self.renderer, opts)
+            self.sim.draw_with_ri(self.renderer)
         self.disable2D()
 
     def resizeGL(self, w, h):

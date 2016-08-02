@@ -1,10 +1,9 @@
 if __name__ == '__main__':
     import sys
     import pydart2 as pydart
-    print('Hello, PyDART!')
 
     if len(sys.argv) != 2:
-        print("Usage: inspect_skeleton.py [path_to_skeleton]")
+        print("Usage: inspect_skeleton.py [*.urdf/*.sdf]")
         exit(0)
 
     skel_path = sys.argv[1]
@@ -73,5 +72,3 @@ if __name__ == '__main__':
     print('\tcoriolis_and_gravity_forces = %s' % str(skel.c))
     print('\tconstraint_forces = %s' % str(skel.constraint_forces()))
     print('----------------------------------------')
-
-    pydart.gui.viewer.launch(world)

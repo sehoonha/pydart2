@@ -28,14 +28,6 @@ def signal_handler(signal, frame):
 signal.signal(signal.SIGINT, signal_handler)
 
 
-def S(x):
-    ret = "["
-    tokens = ["%.6f" % v for v in x]
-    ret += ", ".join(tokens)
-    ret += "]"
-    return ret
-
-
 class MyWindow(QtGui.QMainWindow):
     def __init__(self, sim=None, callbacks=None):
         super(MyWindow, self).__init__()
@@ -68,7 +60,6 @@ class MyWindow(QtGui.QMainWindow):
         self.after_reset = True
 
         self.input_keys = list()
-        self.onInit()
         self.topLeft()
 
     def topLeft(self):
@@ -122,9 +113,6 @@ class MyWindow(QtGui.QMainWindow):
         self.animAction = QtGui.QAction('Anim', self)
         self.animAction.setCheckable(True)
 
-        self.optAction = QtGui.QAction('Opt', self)
-        self.optAction.triggered.connect(self.optEvent)
-
         self.captureAction = QtGui.QAction('Capture', self)
         self.captureAction.setCheckable(True)
 
@@ -136,9 +124,6 @@ class MyWindow(QtGui.QMainWindow):
 
         self.screenshotAction = QtGui.QAction('Screenshot', self)
         self.screenshotAction.triggered.connect(self.screenshotEvent)
-
-        self.exportAction = QtGui.QAction('Export BVH', self)
-        self.exportAction.triggered.connect(self.exportEvent)
 
         # Camera Menu
         self.cam0Action = QtGui.QAction('Camera0', self)
@@ -171,14 +156,11 @@ class MyWindow(QtGui.QMainWindow):
         self.toolbar.addAction(self.resetAction)
         self.toolbar.addAction(self.playAction)
         self.toolbar.addAction(self.animAction)
-        self.toolbar.addAction(self.optAction)
         self.toolbar.addSeparator()
         self.toolbar.addAction(self.screenshotAction)
         self.toolbar.addAction(self.captureAction)
         self.toolbar.addAction(self.emptyAction)
         self.toolbar.addAction(self.movieAction)
-        self.toolbar.addSeparator()
-        self.toolbar.addAction(self.exportAction)
 
         self.rangeSlider = QtGui.QSlider(QtCore.Qt.Horizontal, self)
         self.rangeSlider.valueChanged[int].connect(self.rangeSliderEvent)
@@ -207,15 +189,6 @@ class MyWindow(QtGui.QMainWindow):
         recordingMenu.addSeparator()
         recordingMenu.addAction(self.captureAction)
         recordingMenu.addAction(self.movieAction)
-        recordingMenu.addSeparator()
-        recordingMenu.addAction(self.exportAction)
-
-    def onInit(self):
-        funcname = inspect.stack()[0][3]
-        print('[%s] check the callbacak' % funcname)
-        if funcname in self.callbacks:
-            print('[%s] detect the function in callback' % funcname)
-            self.callbacks[funcname](self)
 
     def idleTimerEvent(self):
         doCapture = True
@@ -232,6 +205,8 @@ class MyWindow(QtGui.QMainWindow):
 
         # Do play
         elif self.playAction.isChecked():
+            if hasattr(self.sim, "on_step_event"):
+                self.sim.on_step_event()
             if hasattr(self.sim, 'step'):
                 self.sim.step()
             # capture_rate = 10
@@ -259,17 +234,8 @@ class MyWindow(QtGui.QMainWindow):
             self.close()
         if 0 <= event.key() and event.key() < 256:  # If key is ascii
             key = chr(event.key())
-            print('key = %s' % key)
-            self.input_keys.append(key)
-
-    def clear_key_events(self):
-        self.input_keys = list()
-
-    def pop_key_event(self):
-        if len(self.input_keys) > 0:
-            return self.input_keys.pop(0)
-        else:
-            return None
+            if hasattr(self.sim, "on_key_event"):
+                self.sim.on_key_event(key)
 
     def rangeSliderEvent(self, value):
         if hasattr(self.sim, 'set_frame'):
@@ -277,9 +243,6 @@ class MyWindow(QtGui.QMainWindow):
 
     def screenshotEvent(self):
         self.glwidget.capture("%s_frame" % self.prob_name())
-
-    def exportEvent(self):
-        self.sim.export()
 
     def autoEvent(self):
         print('auto start!')
@@ -311,50 +274,36 @@ class MyWindow(QtGui.QMainWindow):
         if hasattr(self.sim, 'reset'):
             self.sim.reset()
 
-    def optEvent(self):
-        funcname = inspect.stack()[0][3]
-        print('[%s] check the callbacak' % funcname)
-        if funcname in self.callbacks:
-            print('[%s] detect the function in callback' % funcname)
-            self.callbacks[funcname](self)
-
     def cam0Event(self):
-        print('cam0Event')
         self.glwidget.tb = Trackball(rot=[-0.152, 0.045, -0.002, 0.987],
                                      trans=[0.050, 0.210, -0.910])
 
     def cam1Event(self):
-        print('cam1Event')
         self.glwidget.tb = Trackball(phi=-0.1, theta=-18.9, zoom=1.0,
                                      rot=[-0.00, -0.99, -0.16, -0.00],
                                      trans=[0.01, 0.57, -1.59])
 
     def cam2Event(self):
-        print('cam2Event')
         self.glwidget.tb = Trackball(phi=1.5, theta=-22.2, zoom=1.0,
                                      rot=[0.19, -0.19, -0.05, -0.96],
                                      trans=[0.03, -0.03, -0.26])
 
     def cam3Event(self):
-        print('cam3Event')
         self.glwidget.tb = Trackball(phi=1.2, theta=-22.4, zoom=1.0,
                                      rot=[0.19, -0.19, -0.05, -0.96],
                                      trans=[-0.01, -0.02, -0.26])
 
     def cam4Event(self):
-        print('cam4Event')
         self.glwidget.tb = Trackball(phi=2.6, theta=-27.6, zoom=1.0,
                                      rot=[0.14, -0.83, -0.22, -0.48],
                                      trans=[0.02, -0.06, -0.61])
 
     def cam5Event(self):
-        print('cam5Event')
         self.glwidget.tb = Trackball(phi=-2.7, theta=-21.9, zoom=1.0,
                                      rot=[0.14, -0.55, -0.08, -0.81],
                                      trans=[0.02, -0.06, -0.69])
 
     def cam6Event(self):
-        print('cam6Event')
         self.glwidget.tb = Trackball(phi=-0.3, theta=-11.2, zoom=1.0,
                                      rot=[0.10, -0.05, -0.00, -0.99],
                                      trans=[0.02, -0.06, -0.72])
@@ -370,7 +319,7 @@ def launch(sim=None, title=None, callbacks=None):
     glutInit(sys.argv)
     if title is None:
         title = "Simulation Viewer"
-    print("title = %s" % title)
+    # print("title = %s" % title)
     app = QtGui.QApplication([title])
     w = MyWindow(sim, callbacks)
     w.show()

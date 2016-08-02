@@ -220,6 +220,15 @@ class Skeleton(object):
     def bodynode_index(self, _name):
         return self.name_to_body[_name].id
 
+    def body(self, query):
+        if isinstance(query, str):
+            return self.name_to_body[query]
+        elif isinstance(query, int):
+            return self.bodies[query]
+        else:
+            print('Cannot find body. query = %s' % str(query))
+            return None
+
     def dof(self, query):
         if isinstance(query, str):
             return self.name_to_dof[query]
@@ -263,20 +272,20 @@ class Skeleton(object):
     def P(self):
         return self.linear_momentum()
 
-    # def forces(self):
-    #     return self._tau
+    def forces(self):
+        return self._tau
 
-    # @property
-    # def tau(self):
-    #     return self.forces()
+    @property
+    def tau(self):
+        return self.forces()
 
-    # def set_forces(self, _tau):
-    #     self._tau = _tau
-    #     papi.setSkeletonForces(self.world.id, self.id, _tau)
+    def set_forces(self, _tau):
+        self._tau = _tau
+        papi.skeleton__setForces(self.world.id, self.id, _tau)
 
-    # @tau.setter
-    # def tau(self, _tau):
-    #     self.set_forces(_tau)
+    @tau.setter
+    def tau(self, _tau):
+        self.set_forces(_tau)
 
     def position_lower_limits(self):
         return papi.skeleton__getPositionLowerLimits(self.world.id,

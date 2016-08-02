@@ -65,6 +65,9 @@ class Skeleton(object):
                                                    self.id)
         self.build()
 
+    def set_controller(self, _controller):
+        self.controller = _controller
+
     @property
     def name(self):
         return papi.skeleton__getName(self.world.id, self.id)

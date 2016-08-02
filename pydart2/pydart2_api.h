@@ -177,6 +177,15 @@ void BODY(setExtForce)(int wid, int skid, int bid, double inv3[3], double inv3_2
 void BODY(addExtTorque)(int wid, int skid, int bid, double inv3[3], bool _isLocal);
 void BODY(setExtTorque)(int wid, int skid, int bid, double inv3[3], bool _isLocal);
 
+////////////////////////////////////////
+// BodyNode::Jacobian Functions
+void BODY(getJacobian)(int wid, int skid, int bid, double inv3[3], double* outm, int nrows, int ncols);
+void BODY(getLinearJacobian)(int wid, int skid, int bid, double inv3[3], double* outm, int nrows, int ncols);
+void BODY(getAngularJacobian)(int wid, int skid, int bid, double* outm, int nrows, int ncols);
+void BODY(getWorldJacobian)(int wid, int skid, int bid, double inv3[3], double* outm, int nrows, int ncols);
+void BODY(getLinearJacobianDeriv)(int wid, int skid, int bid, double inv3[3], double* outm, int nrows, int ncols);
+void BODY(getAngularJacobianDeriv)(int wid, int skid, int bid, double* outm, int nrows, int ncols);
+
 ////////////////////////////////////////////////////////////////////////////////
 // DegreeOfFreedom
 #define DOF(funcname) dof__##funcname

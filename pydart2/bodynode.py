@@ -245,22 +245,8 @@ class BodyNode(object):
                                                    self.skid,
                                                    self.id)
 
-    # def bounding_box_dims(self):
-    #     return papi.getBodyNodeShapeBoundingBoxDim(self.wid,
-    #                                                self.skid,
-    #                                                self.id)
-    # def world_linear_jacobian(self, offset=None):
-    #     if offset is None:
-    #         offset = np.zeros(3)
-    #     J = np.zeros((3, self.skel.ndofs))
-    #     papi.getBodyNodeWorldLinearJacobian(self.wid, self.skid,
-    #                                         self.id, offset, J)
-    #     return J
-
-    # @property
-    # def J(self, offset=None):
-    #     return self.world_linear_jacobian(offset)
-
+########################################
+# Torque Functions
     def add_ext_force(self,
                       _force,
                       _offset=None,
@@ -299,14 +285,72 @@ class BodyNode(object):
         papi.bodynode__setExtTorque(self.wid, self.skid, self.id,
                                     _torque, _isLocal)
 
-    # def num_markers(self):
-    #     return papi.getBodyNodeNumMarkers(self.wid, self.skid, self.id)
+########################################
+# Jacobian Functions
+    def jacobian(self, offset=None, full=True):
+        offset = np.zeros(3) if offset is None else offset
+        J = np.zeros((6, len(self.dependent_dofs)))
+        papi.bodynode__getJacobian(self.wid,
+                                   self.skid,
+                                   self.id,
+                                   offset,
+                                   J)
+        return self.expand_jacobian(J) if full else J
 
-    # def get_marker_local_pos(self, mid):
-    #     return papi.getMarkerLocalPosition(self.wid, self.skid, self.id, mid)
+    def linear_jacobian(self, offset=None, full=True):
+        offset = np.zeros(3) if offset is None else offset
+        J = np.zeros((3, len(self.dependent_dofs)))
+        papi.bodynode__getLinearJacobian(self.wid,
+                                         self.skid,
+                                         self.id,
+                                         offset,
+                                         J)
+        return self.expand_jacobian(J) if full else J
 
-    # def get_marker_pos(self, mid):
-    #     return papi.getMarkerPosition(self.wid, self.skid, self.id, mid)
+    def angular_jacobian(self, full=True):
+        J = np.zeros((3, len(self.dependent_dofs)))
+        papi.bodynode__getAngularJacobian(self.wid, self.skid, self.id, J)
+        return self.expand_jacobian(J) if full else J
+
+    def world_jacobian(self, offset=None, full=True):
+        offset = np.zeros(3) if offset is None else offset
+        J = np.zeros((6, len(self.dependent_dofs)))
+        papi.bodynode__getWorldJacobian(self.wid,
+                                        self.skid,
+                                        self.id,
+                                        offset,
+                                        J)
+        return self.expand_jacobian(J) if full else J
+
+    def linear_jacobian_deriv(self, offset=None, full=True):
+        offset = np.zeros(3) if offset is None else offset
+        J = np.zeros((6, len(self.dependent_dofs)))
+        papi.bodynode__getLinearJacobianDeriv(self.wid,
+                                              self.skid,
+                                              self.id,
+                                              offset,
+                                              J)
+        return self.expand_jacobian(J) if full else J
+
+    def angular_jacobian_deriv(self, full=True):
+        J = np.zeros((3, len(self.dependent_dofs)))
+        papi.bodynode__getAngularJacobianDeriv(self.wid, self.skid, self.id, J)
+        return self.expand_jacobian(J) if full else J
+
+    def expand_jacobian(self, jacobian):
+        J = jacobian
+        F = np.zeros((J.shape[0], self.skel.ndofs))
+        I = np.array([dof.index for dof in self.dependent_dofs])
+        F[:, I] = J
+        return F
+
+    @property
+    def J(self, ):
+        return self.linear_jacobian()
+
+    @property
+    def dJ(self, ):
+        return self.linear_jacobian_deriv()
 
     def __repr__(self):
         return '[BodyNode(%d): %s]' % (self.id, self.name)

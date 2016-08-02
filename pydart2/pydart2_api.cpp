@@ -776,6 +776,43 @@ void BODY(setExtTorque)(int wid, int skid, int bid, double inv3[3], bool _isLoca
     body->setExtTorque(read(inv3, 3), _isLocal);
 }
 
+////////////////////////////////////////
+// BodyNode::Jacobian Functions
+void BODY(getJacobian)(int wid, int skid, int bid, double inv3[3], double* outm, int nrows, int ncols) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
+    write_matrix(body->getJacobian(read(inv3, 3)), outm);
+}
+
+void BODY(getLinearJacobian)(int wid, int skid, int bid, double inv3[3], double* outm, int nrows, int ncols) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
+    write_matrix(body->getLinearJacobian(read(inv3, 3)), outm);
+}
+
+
+void BODY(getAngularJacobian)(int wid, int skid, int bid, double* outm, int nrows, int ncols) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
+    write_matrix(body->getAngularJacobian(), outm);
+}
+
+
+void BODY(getWorldJacobian)(int wid, int skid, int bid, double inv3[3], double* outm, int nrows, int ncols) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
+    write_matrix(body->getWorldJacobian(read(inv3, 3)), outm);
+}
+
+
+void BODY(getLinearJacobianDeriv)(int wid, int skid, int bid, double inv3[3], double* outm, int nrows, int ncols) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
+    write_matrix(body->getLinearJacobianDeriv(read(inv3, 3)), outm);
+}
+
+
+void BODY(getAngularJacobianDeriv)(int wid, int skid, int bid, double* outm, int nrows, int ncols) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
+    write_matrix(body->getAngularJacobianDeriv(), outm);
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // DegreeOfFreedom
 const char* DOF(getName)(int wid, int skid, int dofid) {

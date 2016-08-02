@@ -37,6 +37,7 @@ if __name__ == '__main__':
         print("\t\t# dependent dofs = %d" % len(body.dependent_dofs))
         print("\t\t# shapenodes = %s" % str(body.shapenodes))
         print("\t\t# markers = %d" % len(body.markers))
+        print("J = %s" % str(body.J))
 
     print('[DegreeOfFreedom]')
     for dof in skel.dofs:

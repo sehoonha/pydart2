@@ -107,7 +107,7 @@ if __name__ == '__main__':
     print('skeleton position OK')
 
     # Initialize the controller
-    skel.controller = Controller(skel, world.dt)
+    skel.set_controller(Controller(skel, world.dt))
     print('create controller OK')
 
     print("'1'--'2': programmed interaction")

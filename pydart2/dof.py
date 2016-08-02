@@ -15,6 +15,7 @@ class Dof(object):
         self.skeleton = _skeleton
         self.id = _id
         self.name = papi.dof__getName(self.wid, self.skid, self.id)
+        self.index = self.index_in_skeleton()
         self.joint = None
 
     @property

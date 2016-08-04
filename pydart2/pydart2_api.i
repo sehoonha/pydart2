@@ -12,6 +12,13 @@
   import_array();
 %}
 
+%include "std_vector.i"
+
+/* SWIG template for get_rand_list(int length) C++ routine */
+namespace std {
+  %template(IntVector) vector<int>;
+}
+
 %apply (double IN_ARRAY1[ANY]) {(double inv3[3])};
 %apply (double IN_ARRAY1[ANY]) {(double inv3_2[3])};
 %apply (double IN_ARRAY1[ANY]) {(double inv4[4])};
@@ -33,6 +40,7 @@
 %apply (double* ARGOUT_ARRAY1, int DIM1) {(double* outv, int ndofs)};
 %apply (double* ARGOUT_ARRAY1, int DIM1) {(double* outv1, int ondofs1)};
 %apply (double* ARGOUT_ARRAY1, int DIM1) {(double* outv2, int ondofs2)};
+%apply (double* ARGOUT_ARRAY1, int DIM1) {(double* outv, int nout)};
 %apply (double* INPLACE_ARRAY2, int DIM1, int DIM2) {(double* outm, int nrows, int ncols)};
 
 %include "pydart2_api.h"

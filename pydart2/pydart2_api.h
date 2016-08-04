@@ -1,6 +1,8 @@
 #ifndef PYDART2_PYDART2_API_H
 #define PYDART2_PYDART2_API_H
 
+#include <vector>
+
 ////////////////////////////////////////////////////////////////////////////////
 // Init Functions
 void init(bool verbose=true);
@@ -284,5 +286,15 @@ int SHAPE(getShapeType)(int wid, int skid, int bid, int sid);
 void SHAPE(render)(int wid, int skid, int bid, int sid);
 void SHAPE(getBoundingBoxMin)(int wid, int skid, int bid, int sid, double outv3[3]);
 void SHAPE(getBoundingBoxMax)(int wid, int skid, int bid, int sid, double outv3[3]);
+
+////////////////////////////////////////////////////////////////////////////////
+// Contacts
+#define COLLISION_RESULT(funcname) collisionresult__##funcname
+#define GET_COLLISION_RESULT(wid) Manager::world(wid)->getConstraintSolver()->getLastCollisionResult();
+
+int COLLISION_RESULT(getNumContacts)(int wid);
+void COLLISION_RESULT(getContacts)(int wid, double* outv, int nout);
+std::vector<int> COLLISION_RESULT(getCollidingBodyNodes)(int wid);
+void COLLISION_RESULT(renderContact)(double inv6[6], double size, double scale);
 
 #endif // #ifndef PYDART2_PYDART2_API_H

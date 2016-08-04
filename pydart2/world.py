@@ -9,6 +9,7 @@ import os.path
 import numpy as np
 import pydart2_api as papi
 from skeleton import Skeleton
+from collision_result import CollisionResult
 
 
 def create_world(step, skel_path=None):
@@ -91,30 +92,10 @@ class World(object):
     def nframes(self):
         return self.num_frames()
 
-    # def set_collision_detector(self, detector_type):
-    #     papi.setCollisionDetector(self.id, detector_type)
-
-    # def print_collision_detector(self):
-    #     papi.printCollisionDetector(self.id)
-
-    # def check_collision(self, checkAll=1):
-    #     papi.checkCollisionWorld(self.id, checkAll)
-
-    # def generated_contacts(self):
-    #     n = papi.getWorldNumContacts(self.id)
-    #     contacts = papi.getWorldContacts(self.id, 7 * n)
-    #     return [Contact(contacts[7 * i: 7 * (i + 1)]) for i in range(n)]
-
-    # def contacts(self):
-    #     if self.frame < 0 or self.frame >= len(self.contact_history):
-    #         return []
-    #     return self.contact_history[self._frame]
-
     def reset(self):
         papi.world__reset(self.id)
         self._frame = 0
-        self.contact_history = []
-        self.contact_history.append([])  # For the initial frame
+        self.collision_result = CollisionResult(self)
 
     def step(self):
         for skel in self.skeletons:
@@ -123,18 +104,23 @@ class World(object):
 
         papi.world__step(self.id)
         self._frame += 1
-        # self.contact_history.append(self.generated_contacts())
+        self.collision_result.update()
 
-    # def set_frame(self, i):
-    #     self._frame = i
-    #     papi.setWorldSimFrame(self.id, i)
-
-    def render(self, render_markers=True):
+    def render(self,
+               render_markers=True,
+               render_contacts=True,
+               render_contact_size=0.01,
+               render_contact_force_scale=-0.005):
         papi.world__render(self.id)
         if render_markers:
             for skel in self.skeletons:
                 for marker in skel.markers:
                     marker.render()
+        if render_contacts:
+            for contact in self.collision_result.contacts:
+                contact.render(size=render_contact_size,
+                               scale=render_contact_force_scale)
+                print contact
 
     def states(self):
         return np.concatenate([skel.x for skel in self.skels])
@@ -167,9 +153,6 @@ class World(object):
     @g.setter
     def g(self, _g):
         self.set_gravity(_g)
-
-    # def save(self, filename):
-    #     return papi.saveWorldToFile(self.id, filename)
 
     # def set_collision_pair(self, body1, body2, is_enable):
     #     flag_enable = 1 if is_enable else 0

@@ -1,4 +1,3 @@
-#include "pydart2_api.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -9,6 +8,8 @@ using std::endl;
 
 // Boost headers
 #include <boost/algorithm/string.hpp>    
+
+#include "pydart2_api.h"
 
 // Dart headers
 #include "dart/dart.hpp"
@@ -1125,4 +1126,46 @@ void SHAPE(getBoundingBoxMin)(int wid, int skid, int bid, int sid, double outv3[
 void SHAPE(getBoundingBoxMax)(int wid, int skid, int bid, int sid, double outv3[3]) {
     dart::dynamics::Shape* shape = GET_SHAPE(wid, skid, bid, sid);
     write(shape->getBoundingBox().getMax(), outv3);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Collision Result
+int COLLISION_RESULT(getNumContacts)(int wid) {
+    const auto result = GET_COLLISION_RESULT(wid);
+    return result.getNumContacts();
+}
+
+void COLLISION_RESULT(getContacts)(int wid, double* outv, int nout) {
+    const auto result = GET_COLLISION_RESULT(wid);
+    const auto nContacts = static_cast<int>(result.getNumContacts());
+
+    Eigen::VectorXd state(6 * nContacts);
+    for (auto i = 0; i < nContacts; ++i) {
+        auto begin = i * 6;
+        state.segment(begin, 3)     = result.getContact(i).point;
+        state.segment(begin + 3, 3) = result.getContact(i).force;
+    }
+    write(state, outv);
+}
+
+std::vector<int> COLLISION_RESULT(getCollidingBodyNodes)(int wid) {
+    const auto result = GET_COLLISION_RESULT(wid);
+    const auto bodynodes = result.getCollidingBodyNodes();
+    std::vector<int> ret;
+    std::map<const dart::dynamics::Skeleton*, int> indices;
+    dart::simulation::WorldPtr world = GET_WORLD(wid);
+    for (size_t i = 0; i < world->getNumSkeletons(); ++i) {
+        indices[world->getSkeleton(i).get()] = i;
+    }
+
+    for (auto b: bodynodes) {
+        ret.push_back(indices[b->getSkeleton().get()]);
+        ret.push_back(b->getIndexInSkeleton());
+    }
+    return ret;
+}
+
+void COLLISION_RESULT(renderContact)(double inv6[6], double size, double scale) {
+    dart::gui::RenderInterface* ri = Manager::getRI();
+    drawContact(ri, read(inv6, 6), size, scale);
 }

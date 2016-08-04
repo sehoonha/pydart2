@@ -72,4 +72,10 @@ void drawMarker(
     const Eigen::Vector4d& color = Eigen::Vector4d::Constant(0.5),
     bool useDefaultColor = true);
 
+void drawContact(
+    dart::gui::RenderInterface* ri,
+    const Eigen::Vector6d& state,
+    double size,
+    double scale);
+
 #endif // #ifndef PYDART2_PYDART2_DRAW_H

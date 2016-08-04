@@ -289,3 +289,28 @@ void drawMarker(
 
     ri->popName();
 }
+
+void drawContact(
+    dart::gui::RenderInterface* ri,
+    const Eigen::Vector6d& state,
+    double size,
+    double scale) {
+    glEnable(GL_COLOR_MATERIAL);
+
+    ri->setPenColor(Eigen::Vector4d(1.0, 0.0, 0.0, 1.0));
+    Eigen::Vector3d p = state.head<3>();
+    Eigen::Vector3d f = state.tail<3>();
+    Eigen::Vector3d p2 = p + scale * f;
+    std::vector<Eigen::Vector3d> verts;
+    verts.push_back(p);
+    verts.push_back(p2);
+    Eigen::aligned_vector<Eigen::Vector2i> conn;
+    conn.push_back(Eigen::Vector2i(0, 1));
+
+    
+    ri->pushMatrix();
+    ri->translate(p);
+    ri->drawEllipsoid(Eigen::Vector3d::Constant(0.01));
+    ri->popMatrix();
+    ri->drawLineSegments(verts, conn);
+}

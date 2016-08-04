@@ -950,6 +950,56 @@ void DOF(setVelocityUpperLimit)(int wid, int skid, int dofid, double _limit) {
     dof->setVelocityUpperLimit(_limit);
 }
 
+////////////////////////////////////////
+// Dof::Passive Force Functions
+double DOF(getSpringStiffness)(int wid, int skid, int dofid) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    return dof->getSpringStiffness();
+}
+
+
+void DOF(setSpringStiffness)(int wid, int skid, int dofid, double _k) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    dof->setSpringStiffness(_k);
+}
+
+
+double DOF(getRestPosition)(int wid, int skid, int dofid) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    return dof->getRestPosition();
+}
+
+
+void DOF(setRestPosition)(int wid, int skid, int dofid, double _q0) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    dof->setRestPosition(_q0);
+}
+
+
+double DOF(getDampingCoefficient)(int wid, int skid, int dofid) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    return dof->getDampingCoefficient();
+}
+
+
+void DOF(setDampingCoefficient)(int wid, int skid, int dofid, double _coeff) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    dof->setDampingCoefficient(_coeff);
+}
+
+
+double DOF(getCoulombFriction)(int wid, int skid, int dofid) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    return dof->getCoulombFriction();
+}
+
+
+void DOF(setCoulombFriction)(int wid, int skid, int dofid, double _friction) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    dof->setCoulombFriction(_friction);
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // Joint
 
@@ -1031,6 +1081,56 @@ int JOINT(getNumDofs)(int wid, int skid, int jid) {
     dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
     return joint->getNumDofs();
 }
+
+////////////////////////////////////////
+// Joint::Passive Force Functions
+double JOINT(getSpringStiffness)(int wid, int skid, int jid, int _index) {
+    dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+    return joint->getSpringStiffness(_index);
+}
+
+
+void JOINT(setSpringStiffness)(int wid, int skid, int jid, int _index, double _k) {
+    dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+    joint->setSpringStiffness(_index, _k);
+}
+
+
+double JOINT(getRestPosition)(int wid, int skid, int jid, int _index) {
+    dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+    return joint->getRestPosition(_index);
+}
+
+
+void JOINT(setRestPosition)(int wid, int skid, int jid, int _index, double _q0) {
+    dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+    joint->setRestPosition(_index, _q0);
+}
+
+
+double JOINT(getDampingCoefficient)(int wid, int skid, int jid, int _index) {
+    dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+    return joint->getDampingCoefficient(_index);
+}
+
+
+void JOINT(setDampingCoefficient)(int wid, int skid, int jid, int _index, double _coeff) {
+    dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+    joint->setDampingCoefficient(_index, _coeff);
+}
+
+
+double JOINT(getCoulombFriction)(int wid, int skid, int jid, int _index) {
+    dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+    return joint->getCoulombFriction(_index);
+}
+
+
+void JOINT(setCoulombFriction)(int wid, int skid, int jid, int _index, double _friction) {
+    dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+    joint->setCoulombFriction(_index, _friction);
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Marker

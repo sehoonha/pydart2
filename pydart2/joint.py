@@ -103,5 +103,57 @@ class Joint(object):
     def num_dofs(self, ):
         return len(self.dofs)
 
+########################################
+# Joint::Passive Force functions
+    def spring_stiffness(self, _index):
+        return papi.joint__getSpringStiffness(self.wid,
+                                              self.skid,
+                                              self.id,
+                                              _index)
+
+    def set_spring_stiffness(self, _index, _k):
+        papi.joint__setSpringStiffness(self.wid,
+                                       self.skid,
+                                       self.id,
+                                       _index,
+                                       _k)
+
+    def rest_position(self, _index):
+        return papi.joint__getRestPosition(self.wid,
+                                           self.skid,
+                                           self.id,
+                                           _index)
+
+    def set_rest_position(self, _index, _q0):
+        papi.joint__setRestPosition(self.wid, self.skid, self.id,
+                                    _index,
+                                    _q0)
+
+    def damping_coefficient(self, _index):
+        return papi.joint__getDampingCoefficient(self.wid,
+                                                 self.skid,
+                                                 self.id,
+                                                 _index)
+
+    def set_damping_coefficient(self, _index, _coeff):
+        papi.joint__setDampingCoefficient(self.wid,
+                                          self.skid,
+                                          self.id,
+                                          _index,
+                                          _coeff)
+
+    def coulomb_friction(self, _index):
+        return papi.joint__getCoulombFriction(self.wid,
+                                              self.skid,
+                                              self.id,
+                                              _index)
+
+    def set_coulomb_friction(self, _index, _friction):
+        papi.joint__setCoulombFriction(self.wid,
+                                       self.skid,
+                                       self.id,
+                                       _index,
+                                       _friction)
+
     def __repr__(self):
         return '[Joint(%d): %s]' % (self.id, self.name)

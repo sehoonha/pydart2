@@ -105,5 +105,31 @@ class Dof(object):
     def set_velocity_upper_limit(self, _limit):
         papi.dof__setVelocityUpperLimit(self.wid, self.skid, self.id, _limit)
 
+########################################
+# Dof::Passive Force functions
+    def spring_stiffness(self, ):
+        return papi.dof__getSpringStiffness(self.wid, self.skid, self.id)
+
+    def set_spring_stiffness(self, _k):
+        papi.dof__setSpringStiffness(self.wid, self.skid, self.id, _k)
+
+    def rest_position(self, ):
+        return papi.dof__getRestPosition(self.wid, self.skid, self.id)
+
+    def set_rest_position(self, _q0):
+        papi.dof__setRestPosition(self.wid, self.skid, self.id, _q0)
+
+    def damping_coefficient(self, ):
+        return papi.dof__getDampingCoefficient(self.wid, self.skid, self.id)
+
+    def set_damping_coefficient(self, _coeff):
+        papi.dof__setDampingCoefficient(self.wid, self.skid, self.id, _coeff)
+
+    def coulomb_friction(self, ):
+        return papi.dof__getCoulombFriction(self.wid, self.skid, self.id)
+
+    def set_coulomb_friction(self, _friction):
+        papi.dof__setCoulombFriction(self.wid, self.skid, self.id, _friction)
+
     def __repr__(self):
         return '[Dof(%d): %s]' % (self.id, self.name)

@@ -29,12 +29,11 @@ signal.signal(signal.SIGINT, signal_handler)
 
 
 class MyWindow(QtGui.QMainWindow):
-    def __init__(self, sim=None, callbacks=None):
+    def __init__(self, sim=None):
         super(MyWindow, self).__init__()
         # setup_logger()
         self.logger = logging.getLogger(__name__)
         self.sim = sim
-        self.callbacks = callbacks if callbacks is not None else dict()
         self.logger.info('sim = [%s]' % str(self.sim))
 
         # Check and create captures directory
@@ -276,12 +275,11 @@ class MyWindow(QtGui.QMainWindow):
 
     def cam0Event(self):
         self.glwidget.tb = Trackball(rot=[-0.152, 0.045, -0.002, 0.987],
-                                     trans=[0.050, 0.210, -0.910])
+                                     trans=[0.050, 0.210, -2.500])
 
     def cam1Event(self):
-        self.glwidget.tb = Trackball(phi=-0.1, theta=-18.9, zoom=1.0,
-                                     rot=[-0.00, -0.99, -0.16, -0.00],
-                                     trans=[0.01, 0.57, -1.59])
+        self.glwidget.tb = Trackball(rot=[0.535, 0.284, 0.376, 0.701],
+                                     trans=[0.100, 0.020, -2.770])
 
     def cam2Event(self):
         self.glwidget.tb = Trackball(phi=1.5, theta=-22.2, zoom=1.0,
@@ -315,12 +313,14 @@ class MyWindow(QtGui.QMainWindow):
         print('----')
 
 
-def launch(sim=None, title=None, callbacks=None):
+def launch(sim=None, title=None, default_camera=0):
     glutInit(sys.argv)
     if title is None:
         title = "Simulation Viewer"
     # print("title = %s" % title)
     app = QtGui.QApplication([title])
-    w = MyWindow(sim, callbacks)
+    w = MyWindow(sim)
+    if default_camera is not None:
+        eval("w.cam%dEvent()" % default_camera)
     w.show()
     app.exec_()

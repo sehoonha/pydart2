@@ -225,6 +225,17 @@ void DOF(setVelocityLowerLimit)(int wid, int skid, int dofid, double _limit);
 double DOF(getVelocityUpperLimit)(int wid, int skid, int dofid);
 void DOF(setVelocityUpperLimit)(int wid, int skid, int dofid, double _limit);
 
+////////////////////////////////////////
+// Dof::Passive Force Functions
+double DOF(getSpringStiffness)(int wid, int skid, int dofid);
+void DOF(setSpringStiffness)(int wid, int skid, int dofid, double _k);
+double DOF(getRestPosition)(int wid, int skid, int dofid);
+void DOF(setRestPosition)(int wid, int skid, int dofid, double _q0);
+double DOF(getDampingCoefficient)(int wid, int skid, int dofid);
+void DOF(setDampingCoefficient)(int wid, int skid, int dofid, double _coeff);
+double DOF(getCoulombFriction)(int wid, int skid, int dofid);
+void DOF(setCoulombFriction)(int wid, int skid, int dofid, double _friction);
+
 ////////////////////////////////////////////////////////////////////////////////
 // Joint
 #define JOINT(funcname) joint__##funcname
@@ -250,6 +261,17 @@ void JOINT(getTransformFromChildBodyNode)(int wid, int skid, int jid, double out
 // Joint::Dof Functions
 int JOINT(getDof)(int wid, int skid, int jid, int _index);
 int JOINT(getNumDofs)(int wid, int skid, int jid);
+
+////////////////////////////////////////
+// Joint::Passive Force Functions
+double JOINT(getSpringStiffness)(int wid, int skid, int jid, int _index);
+void JOINT(setSpringStiffness)(int wid, int skid, int jid, int _index, double _k);
+double JOINT(getRestPosition)(int wid, int skid, int jid, int _index);
+void JOINT(setRestPosition)(int wid, int skid, int jid, int _index, double _q0);
+double JOINT(getDampingCoefficient)(int wid, int skid, int jid, int _index);
+void JOINT(setDampingCoefficient)(int wid, int skid, int jid, int _index, double _coeff);
+double JOINT(getCoulombFriction)(int wid, int skid, int jid, int _index);
+void JOINT(setCoulombFriction)(int wid, int skid, int jid, int _index, double _friction);
 
 ////////////////////////////////////////////////////////////////////////////////
 // Marker

@@ -120,7 +120,6 @@ class World(object):
             for contact in self.collision_result.contacts:
                 contact.render(size=render_contact_size,
                                scale=render_contact_force_scale)
-                print contact
 
     def states(self):
         return np.concatenate([skel.x for skel in self.skels])

@@ -19,7 +19,7 @@ class Controller:
 
 
 if __name__ == '__main__':
-    print('Example: bipedStand')
+    print('Example: Simple Tracking')
 
     pydart.init()
     print('pydart initialization OK')

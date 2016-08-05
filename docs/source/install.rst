@@ -1,19 +1,19 @@
 Installation Guide
 ===================================
 
-Easy install with pip
-============================
+Install with pip (easy)
+----------------------------------
 In Ubuntu, PyDART2 can be easily installed using PyPI - the Python Package
 Index.
 
-The first step is to install DART 6.0.1.
-For example, you can use apt-get to install DART.
+The first step is to install DART 6.0.1 (You can skip this if you already have it!).
+Please use your favorite method to install DART, such as, ..
 
 .. code-block:: bash
 
-   > sudo apt-add-repository ppa:dartsim
-   > sudo apt-get update
-   > sudo apt-get install libdart6-all-dev
+   sudo apt-add-repository ppa:dartsim
+   sudo apt-get update
+   sudo apt-get install libdart6-all-dev
 
 
 Please refer the official DART installation document
@@ -36,8 +36,8 @@ The final step is to install PyDART2 using pip.
 
 All done! Please enjoy the simulation.
 
-Install from source code using setup.py
-=======================================
+Install from source code 
+----------------------------------
 Sometimes, you want to edit source codes by yourself.
 For the following steps, I assumed that you already installed the required
 packages - swig, pip, PyQt4, and so on.
@@ -62,7 +62,7 @@ The final step is to install the python package as a development.
     python setup.py develop
 
 
-Old-style install using CMake
-=======================================
+Install using CMake (Old-style)
+----------------------------------
 I also wrote CMakeLists.txt, which is an old-style cross compilation system
 used in the original PyDART.

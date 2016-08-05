@@ -1,5 +1,6 @@
+import pydart2 as pydart
+
 if __name__ == '__main__':
-    import pydart2 as pydart
     print('Hello, PyDART!')
 
     pydart.init()
@@ -13,5 +14,3 @@ if __name__ == '__main__':
             skel = world.skeletons[-1]
             print("%.4fs: The last cube COM = %s" % (world.t, str(skel.C)))
         world.step()
-
-    pydart.gui.viewer.launch(world)

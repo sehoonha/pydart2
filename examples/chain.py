@@ -13,8 +13,7 @@ class DampingController:
 
     def compute(self):
         damping = -0.01 * self.skel.dq
-        for i in range(1, self.skel.ndofs, 3):
-            damping[i] *= 0.1
+        damping[1::3] *= 0.1
         return damping
 
 

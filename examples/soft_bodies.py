@@ -3,7 +3,7 @@
 #
 # Author(s): Sehoon Ha <sehoon.ha@disneyresearch.com>
 # Disney Research Robotics Group
-import pydart
+import pydart2 as pydart
 if __name__ == '__main__':
     pydart.init()
     print('pydart initialization OK')

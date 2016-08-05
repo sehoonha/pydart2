@@ -30,7 +30,7 @@ Environment
 ==================
 * Ubuntu 16.04
 * Python 2.7
-* DART 6.0.1 (or higher)
+* DART 6.0.1 (or higher): https://github.com/dartsim/dart/
 
 Contact
 ==================

@@ -19,7 +19,7 @@ Code
 
 .. code-block:: python
    :linenos:
-<
+
     if __name__ == '__main__':
         import sys
         import pydart2 as pydart

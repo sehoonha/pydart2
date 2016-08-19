@@ -76,6 +76,11 @@ class PydartWindow(QtGui.QMainWindow):
         self.show()
         self.app.exec_()
 
+    def closeEvent(self, event):
+        if hasattr(self.sim, "on_close"):
+            self.sim.on_close()
+        super(PydartWindow, self).closeEvent(event)
+
     def topLeft(self):
         frameGm = self.frameGeometry()
         desktop = QtGui.QApplication.desktop()
@@ -215,8 +220,6 @@ class PydartWindow(QtGui.QMainWindow):
 
         # Do play
         elif self.playAction.isChecked():
-            if hasattr(self.sim, "on_step_event"):
-                self.sim.on_step_event()
             if hasattr(self.sim, 'step'):
                 self.sim.step()
             # capture_rate = 10
@@ -253,10 +256,6 @@ class PydartWindow(QtGui.QMainWindow):
 
     def screenshotEvent(self):
         self.glwidget.capture("%s_frame" % self.prob_name())
-
-    def autoEvent(self):
-        print('auto start!')
-        self.auto_counter = 0
 
     def prob_name(self):
         return "robot"

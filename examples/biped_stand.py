@@ -63,10 +63,11 @@ class MyWorld(pydart.World):
         self.force = None
         self.duration = 0
 
-    def on_step_event(self, ):
+    def step(self, ):
         if self.force is not None and self.duration >= 0:
             self.duration -= 1
             self.skeletons[1].body('h_spine').add_ext_force(self.force)
+        super(MyWorld, self).step()
 
     def on_key_event(self, key):
         if key == '1':

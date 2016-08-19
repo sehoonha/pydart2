@@ -32,3 +32,8 @@ if __name__ == '__main__':
     skel.controller = DampingController(skel)
 
     pydart.gui.viewer.launch(world)
+
+    # # Or, you can manually create the window...
+    # win = pydart.gui.viewer.PydartWindow(world)
+    # win.camera_event(1)
+    # win.run_application()

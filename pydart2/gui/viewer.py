@@ -28,9 +28,19 @@ def signal_handler(signal, frame):
 signal.signal(signal.SIGINT, signal_handler)
 
 
-class MyWindow(QtGui.QMainWindow):
-    def __init__(self, sim=None):
-        super(MyWindow, self).__init__()
+class PydartWindow(QtGui.QMainWindow):
+    GLUT_INITED = False
+
+    def __init__(self, sim=None, title=None):
+        if not PydartWindow.GLUT_INITED:
+            glutInit(sys.argv)
+
+        if title is None:
+            title = "Simulation Viewer"
+        self.app = QtGui.QApplication([title])
+
+        super(PydartWindow, self).__init__()
+
         # setup_logger()
         self.logger = logging.getLogger(__name__)
         self.sim = sim
@@ -45,6 +55,7 @@ class MyWindow(QtGui.QMainWindow):
         self.initActions()
         self.initToolbar()
         self.initMenu()
+        self.init_cameras()
 
         self.idleTimer = QtCore.QTimer()
         self.idleTimer.timeout.connect(self.idleTimerEvent)
@@ -54,12 +65,16 @@ class MyWindow(QtGui.QMainWindow):
         self.renderTimer.timeout.connect(self.renderTimerEvent)
         self.renderTimer.start(80)
 
-        self.cam0Event()
+        self.camera_event(0)
 
         self.after_reset = True
 
         self.input_keys = list()
         self.topLeft()
+
+    def run_application(self, ):
+        self.show()
+        self.app.exec_()
 
     def topLeft(self):
         frameGm = self.frameGeometry()
@@ -100,6 +115,31 @@ class MyWindow(QtGui.QMainWindow):
         self.hbox.addWidget(self.glwidget)
         self.ui.setLayout(self.hbox)
 
+    def init_cameras(self, ):
+        self.cameras = list()
+        self.add_camera(Trackball(rot=[-0.152, 0.045, -0.002, 0.987],
+                                  trans=[0.050, 0.210, -2.500]), "Camera Y up")
+        self.add_camera(Trackball(rot=[0.535, 0.284, 0.376, 0.701],
+                                  trans=[0.100, 0.020, -2.770]), "Camera Z up")
+
+    def num_cameras(self, ):
+        return len(self.cameras)
+
+    def replace_camera(self, idx, trackball):
+        if idx >= self.num_cameras():
+            return False
+        self.cameras[idx] = trackball
+        return True
+
+    def add_camera(self, trackball, name=None):
+        self.cameras.append(trackball)
+        cam_id = len(self.cameras) - 1
+        if name is None:
+            name = 'Camera %d' % cam_id
+        action = QtGui.QAction(name, self)
+        action.triggered.connect(lambda: self.camera_event(cam_id))
+        self.cameraMenu.addAction(action)
+
     def initActions(self):
         # Create actions
         self.resetAction = QtGui.QAction('Reset', self)
@@ -123,28 +163,6 @@ class MyWindow(QtGui.QMainWindow):
 
         self.screenshotAction = QtGui.QAction('Screenshot', self)
         self.screenshotAction.triggered.connect(self.screenshotEvent)
-
-        # Camera Menu
-        self.cam0Action = QtGui.QAction('Camera0', self)
-        self.cam0Action.triggered.connect(self.cam0Event)
-
-        self.cam1Action = QtGui.QAction('Camera1', self)
-        self.cam1Action.triggered.connect(self.cam1Event)
-
-        self.cam2Action = QtGui.QAction('Camera2', self)
-        self.cam2Action.triggered.connect(self.cam2Event)
-
-        self.cam3Action = QtGui.QAction('Camera3', self)
-        self.cam3Action.triggered.connect(self.cam3Event)
-
-        self.cam4Action = QtGui.QAction('Camera4', self)
-        self.cam4Action.triggered.connect(self.cam4Event)
-
-        self.cam5Action = QtGui.QAction('Camera5', self)
-        self.cam5Action.triggered.connect(self.cam5Event)
-
-        self.cam6Action = QtGui.QAction('Camera6', self)
-        self.cam6Action.triggered.connect(self.cam6Event)
 
         self.printCamAction = QtGui.QAction('Print Camera', self)
         self.printCamAction.triggered.connect(self.printCamEvent)
@@ -171,16 +189,9 @@ class MyWindow(QtGui.QMainWindow):
         fileMenu.addSeparator()
 
         # Camera menu
-        cameraMenu = menubar.addMenu('&Camera')
-        cameraMenu.addAction(self.cam0Action)
-        cameraMenu.addAction(self.cam1Action)
-        cameraMenu.addAction(self.cam2Action)
-        cameraMenu.addAction(self.cam3Action)
-        cameraMenu.addAction(self.cam4Action)
-        cameraMenu.addAction(self.cam5Action)
-        cameraMenu.addAction(self.cam6Action)
-        cameraMenu.addSeparator()
-        cameraMenu.addAction(self.printCamAction)
+        self.cameraMenu = menubar.addMenu('&Camera')
+        self.cameraMenu.addAction(self.printCamAction)
+        self.cameraMenu.addSeparator()
 
         # Recording menu
         recordingMenu = menubar.addMenu('&Recording')
@@ -273,38 +284,9 @@ class MyWindow(QtGui.QMainWindow):
         if hasattr(self.sim, 'reset'):
             self.sim.reset()
 
-    def cam0Event(self):
-        self.glwidget.tb = Trackball(rot=[-0.152, 0.045, -0.002, 0.987],
-                                     trans=[0.050, 0.210, -2.500])
-
-    def cam1Event(self):
-        self.glwidget.tb = Trackball(rot=[0.535, 0.284, 0.376, 0.701],
-                                     trans=[0.100, 0.020, -2.770])
-
-    def cam2Event(self):
-        self.glwidget.tb = Trackball(phi=1.5, theta=-22.2, zoom=1.0,
-                                     rot=[0.19, -0.19, -0.05, -0.96],
-                                     trans=[0.03, -0.03, -0.26])
-
-    def cam3Event(self):
-        self.glwidget.tb = Trackball(phi=1.2, theta=-22.4, zoom=1.0,
-                                     rot=[0.19, -0.19, -0.05, -0.96],
-                                     trans=[-0.01, -0.02, -0.26])
-
-    def cam4Event(self):
-        self.glwidget.tb = Trackball(phi=2.6, theta=-27.6, zoom=1.0,
-                                     rot=[0.14, -0.83, -0.22, -0.48],
-                                     trans=[0.02, -0.06, -0.61])
-
-    def cam5Event(self):
-        self.glwidget.tb = Trackball(phi=-2.7, theta=-21.9, zoom=1.0,
-                                     rot=[0.14, -0.55, -0.08, -0.81],
-                                     trans=[0.02, -0.06, -0.69])
-
-    def cam6Event(self):
-        self.glwidget.tb = Trackball(phi=-0.3, theta=-11.2, zoom=1.0,
-                                     rot=[0.10, -0.05, -0.00, -0.99],
-                                     trans=[0.02, -0.06, -0.72])
+    def camera_event(self, cam_id):
+        print("camera_event: %d" % cam_id)
+        self.glwidget.tb = self.cameras[cam_id]
 
     def printCamEvent(self):
         print('printCamEvent')
@@ -313,14 +295,9 @@ class MyWindow(QtGui.QMainWindow):
         print('----')
 
 
-def launch(sim=None, title=None, default_camera=0):
-    glutInit(sys.argv)
-    if title is None:
-        title = "Simulation Viewer"
-    # print("title = %s" % title)
-    app = QtGui.QApplication([title])
-    w = MyWindow(sim)
+def launch(sim, title=None, default_camera=None):
+    # glutInit(sys.argv)
+    win = PydartWindow(sim, title)
     if default_camera is not None:
-        eval("w.cam%dEvent()" % default_camera)
-    w.show()
-    app.exec_()
+        win.camera_event(default_camera)
+    win.run_application()

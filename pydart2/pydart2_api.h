@@ -329,4 +329,10 @@ void COLLISION_RESULT(getContacts)(int wid, double* outv, int nout);
 std::vector<int> COLLISION_RESULT(getCollidingBodyNodes)(int wid);
 void COLLISION_RESULT(renderContact)(double inv6[6], double size, double scale);
 
+////////////////////////////////////////////////////////////////////////////////
+// Constraints
+int addBallJointConstraint(int wid, int skid1, int bid1, int skid2, int bid2,
+                           double inv3[3]);
+                       
+
 #endif // #ifndef PYDART2_PYDART2_API_H

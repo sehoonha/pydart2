@@ -1,5 +1,6 @@
 import pydart2_api as papi
 import world
+import constraints
 import os.path
 import sys
 try:

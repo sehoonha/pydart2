@@ -1312,3 +1312,20 @@ void COLLISION_RESULT(renderContact)(double inv6[6], double size, double scale) 
     dart::gui::RenderInterface* ri = Manager::getRI();
     drawContact(ri, read(inv6, 6), size, scale);
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Constraints
+int addBallJointConstraint(int wid, int skid1, int bid1, int skid2, int bid2,
+                           double inv3[3]) {
+    dart::simulation::WorldPtr world = GET_WORLD(wid);
+    dart::dynamics::BodyNodePtr bd1 = GET_BODY(wid, skid1, bid1);
+    dart::dynamics::BodyNodePtr bd2 = GET_BODY(wid, skid2, bid2);
+    Eigen::Vector3d jointPos = read(inv3, 3);
+    // MSG << bd1->getName() << "\n";
+    // MSG << bd2->getName() << "\n";
+    // MSG << jointPos << "\n";
+    dart::constraint::BallJointConstraintPtr cl =
+        std::make_shared<dart::constraint::BallJointConstraint>(bd1, bd2, jointPos);
+    world->getConstraintSolver()->addConstraint(cl);
+    return 0;
+}

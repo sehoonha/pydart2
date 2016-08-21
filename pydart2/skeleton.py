@@ -232,13 +232,22 @@ class Skeleton(object):
             print('Cannot find body. query = %s' % str(query))
             return None
 
+    def joint(self, query):
+        if isinstance(query, str):
+            return self.name_to_joint[query]
+        elif isinstance(query, int):
+            return self.joints[query]
+        else:
+            print('Cannot find joint. query = %s' % str(query))
+            return None
+
     def dof(self, query):
         if isinstance(query, str):
             return self.name_to_dof[query]
         elif isinstance(query, int):
             return self.dofs[query]
         else:
-            print 'No find...', query
+            print('Cannot find dof. query = %s' % str(query))
             return None
 
     def dof_index(self, _name):

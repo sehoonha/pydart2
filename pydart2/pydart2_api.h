@@ -258,6 +258,16 @@ void JOINT(getTransformFromParentBodyNode)(int wid, int skid, int jid, double ou
 void JOINT(getTransformFromChildBodyNode)(int wid, int skid, int jid, double outv44[4][4]);
 
 ////////////////////////////////////////
+// Joint::Limit Functions
+void JOINT(setPositionLimitEnforced)(int wid, int skid, int jid, bool _isPositionLimitEnforced);
+bool JOINT(isPositionLimitEnforced)(int wid, int skid, int jid);
+bool JOINT(hasPositionLimit)(int wid, int skid, int jid, int _index);
+double JOINT(getPositionLowerLimit)(int wid, int skid, int jid, int _index);
+void JOINT(setPositionLowerLimit)(int wid, int skid, int jid, int _index, double _position);
+double JOINT(getPositionUpperLimit)(int wid, int skid, int jid, int _index);
+void JOINT(setPositionUpperLimit)(int wid, int skid, int jid, int _index, double _position);
+
+////////////////////////////////////////
 // Joint::Dof Functions
 int JOINT(getDof)(int wid, int skid, int jid, int _index);
 int JOINT(getNumDofs)(int wid, int skid, int jid);

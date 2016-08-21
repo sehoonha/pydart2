@@ -1070,6 +1070,49 @@ void JOINT(getTransformFromChildBodyNode)(int wid, int skid, int jid, double out
 }
 
 ////////////////////////////////////////
+// Joint::Limit Functions
+void JOINT(setPositionLimitEnforced)(int wid, int skid, int jid, bool _isPositionLimitEnforced) {
+    dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+    joint->setPositionLimitEnforced(_isPositionLimitEnforced);
+}
+
+
+bool JOINT(isPositionLimitEnforced)(int wid, int skid, int jid) {
+    dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+    return joint->isPositionLimitEnforced();
+}
+
+
+bool JOINT(hasPositionLimit)(int wid, int skid, int jid, int _index) {
+    dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+    return joint->hasPositionLimit(_index);
+}
+
+
+double JOINT(getPositionLowerLimit)(int wid, int skid, int jid, int _index) {
+    dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+    return joint->getPositionLowerLimit(_index);
+}
+
+
+void JOINT(setPositionLowerLimit)(int wid, int skid, int jid, int _index, double _position) {
+    dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+    joint->setPositionLowerLimit(_index, _position);
+}
+
+
+double JOINT(getPositionUpperLimit)(int wid, int skid, int jid, int _index) {
+    dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+    return joint->getPositionUpperLimit(_index);
+}
+
+
+void JOINT(setPositionUpperLimit)(int wid, int skid, int jid, int _index, double _position) {
+    dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+    joint->setPositionUpperLimit(_index, _position);
+}
+
+////////////////////////////////////////
 // Joint::Dof Functions
 int JOINT(getDof)(int wid, int skid, int jid, int _index) {
     dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);

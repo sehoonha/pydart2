@@ -98,6 +98,52 @@ class Joint(object):
                                                          self.skid,
                                                          self.id)
 
+
+########################################
+# Joint::Limit functions
+    def set_position_limit_enforced(self, _isPositionLimitEnforced=True):
+        papi.joint__setPositionLimitEnforced(self.wid,
+                                             self.skid,
+                                             self.id,
+                                             _isPositionLimitEnforced)
+
+    def is_position_limit_enforced(self, ):
+        return papi.joint__isPositionLimitEnforced(self.wid,
+                                                   self.skid,
+                                                   self.id)
+
+    def has_position_limit(self, _index):
+        return papi.joint__hasPositionLimit(self.wid,
+                                            self.skid,
+                                            self.id,
+                                            _index)
+
+    def position_lower_limit(self, _index):
+        return papi.joint__getPositionLowerLimit(self.wid,
+                                                 self.skid,
+                                                 self.id,
+                                                 _index)
+
+    def set_position_lower_limit(self, _index, _position):
+        papi.joint__setPositionLowerLimit(self.wid,
+                                          self.skid,
+                                          self.id,
+                                          _index,
+                                          _position)
+
+    def position_upper_limit(self, _index):
+        return papi.joint__getPositionUpperLimit(self.wid,
+                                                 self.skid,
+                                                 self.id,
+                                                 _index)
+
+    def set_position_upper_limit(self, _index, _position):
+        papi.joint__setPositionUpperLimit(self.wid,
+                                          self.skid,
+                                          self.id,
+                                          _index,
+                                          _position)
+
 ########################################
 # Joint::Dof functions
     def num_dofs(self, ):

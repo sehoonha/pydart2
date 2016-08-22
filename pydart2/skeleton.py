@@ -97,7 +97,7 @@ class Skeleton(object):
         return papi.skeleton__isMobile(self.world.id, self.id)
 
     def set_mobile(self, mobile):
-        papi.skeleton__getMobile(self.world.id, self.id, mobile)
+        papi.skeleton__setMobile(self.world.id, self.id, mobile)
 
     def mass(self):
         return papi.skeleton__getMass(self.world.id, self.id)

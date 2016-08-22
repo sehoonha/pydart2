@@ -14,6 +14,7 @@ except Exception:
 
 import utils
 from world import World
+from skel_vector import SkelVector
 
 
 def init(verbose=True):

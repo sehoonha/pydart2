@@ -391,12 +391,12 @@ class Skeleton(object):
     #     return [body.name for body in self.contacted_bodies()]
 
     def render(self):
-        papi.renderSkeleton(self.world.id, self.id)
+        papi.skeleton__render(self.world.id, self.id)
 
     def render_with_color(self, color):
         if len(color) == 3:
             color = np.concatenate([color, [1.0]])
-        papi.renderSkeletonWithColor(self.world.id, self.id, color)
+        papi.skeleton__renderWithColor(self.world.id, self.id, color)
 
     # def render_markers(self):
     #     papi.renderSkeletonMarkers(self.world.id, self.id)

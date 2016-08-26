@@ -237,8 +237,8 @@ class PydartWindow(QtGui.QMainWindow):
         else:
             self.statusBar().showMessage(str(self.sim))
 
-        if hasattr(self.sim, 'get_num_frames'):
-            n = self.sim.get_num_frames()
+        if hasattr(self.sim, 'num_frames'):
+            n = self.sim.num_frames()
             self.rangeSlider.setRange(0, n - 1)
 
     def keyPressEvent(self, event):

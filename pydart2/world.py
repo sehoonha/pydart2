@@ -113,13 +113,23 @@ class World(object):
                render_contact_force_scale=-0.005):
         papi.world__render(self.id)
         if render_markers:
-            for skel in self.skeletons:
-                for marker in skel.markers:
-                    marker.render()
+            self.render_markers()
+
         if render_contacts:
-            for contact in self.collision_result.contacts:
-                contact.render(size=render_contact_size,
-                               scale=render_contact_force_scale)
+            self.render_contacts(render_contact_size,
+                                 render_contact_force_scale)
+
+    def render_markers(self, ):
+        for skel in self.skeletons:
+            for marker in skel.markers:
+                marker.render()
+
+    def render_contacts(self,
+                        render_contact_size=0.01,
+                        render_contact_force_scale=-0.005):
+        for contact in self.collision_result.contacts:
+            contact.render(size=render_contact_size,
+                           scale=render_contact_force_scale)
 
     def states(self):
         return np.concatenate([skel.x for skel in self.skels])

@@ -228,7 +228,9 @@ class BodyNode(object):
     def T(self):
         return self.transform()
 
-    def to_world(self, x):
+    def to_world(self, x=None):
+        if x is None:
+            x = [0.0, 0.0, 0.0]
         x_ = np.append(x, [1.0])
         return (self.T.dot(x_))[:3]
 

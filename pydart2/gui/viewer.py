@@ -68,6 +68,7 @@ class PydartWindow(QtGui.QMainWindow):
         self.camera_event(0)
 
         self.after_reset = True
+        self.set_capture_rate (100)
 
         self.input_keys = list()
         self.topLeft()
@@ -97,6 +98,12 @@ class PydartWindow(QtGui.QMainWindow):
     def set_simulation(self, sim):
         self.sim = sim
         self.glwidget.sim = sim
+
+    def capture_rate(self, ):
+        return self._capture_rate
+
+    def set_capture_rate(self, _capture_rate):
+        self._capture_rate = _capture_rate
 
     def initUI(self):
         TOOLBOX_HEIGHT = 30
@@ -206,7 +213,7 @@ class PydartWindow(QtGui.QMainWindow):
         recordingMenu.addAction(self.movieAction)
 
     def idleTimerEvent(self):
-        doCapture = True
+        doCapture = False
 
         # Do animation
         if self.animAction.isChecked():
@@ -221,10 +228,13 @@ class PydartWindow(QtGui.QMainWindow):
         # Do play
         elif self.playAction.isChecked():
             if hasattr(self.sim, 'step'):
-                self.sim.step()
+                bIsDone = self.sim.step()
+                if bIsDone is False:
+                    print("step() returns False: stop...")
+                    self.playAction.setChecked(False)
             # capture_rate = 10
-            # doCapture = (self.world.frame() % capture_rate == 1)
-            doCapture = False
+            doCapture = (self.sim.frame % self.capture_rate() == 0)
+            # doCapture = True
 
         if self.captureAction.isChecked() and doCapture:
             self.glwidget.capture(self.prob_name())
@@ -268,7 +278,7 @@ class PydartWindow(QtGui.QMainWindow):
     def movieEvent(self):
         name = self.prob_name()
         # yuv420p for compatibility for outdated codecs
-        cmt_fmt = 'avconv -r 60'
+        cmt_fmt = 'avconv -r 100'
         cmt_fmt += ' -i %s/%s.%%04d.png'
         cmt_fmt += ' -pix_fmt yuv420p'
         cmt_fmt += ' %s.mp4'

@@ -338,7 +338,7 @@ void SKEL(renderWithColor)(int wid, int skid, double inv4[4]) {
     dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
     dart::gui::RenderInterface* ri = Manager::getRI();
     Eigen::Vector4d color(inv4);
-    MSG << "color = " << color.transpose() << "\n";
+    // MSG << "color = " << color.transpose() << "\n";
     drawSkeleton(ri, skel.get(), color, false);
 }
 

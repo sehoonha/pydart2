@@ -179,7 +179,7 @@ void drawShape(
         {
             const auto& mesh = static_cast<const MeshShape*>(shape);
 
-            glDisable(GL_COLOR_MATERIAL); // Use mesh colors to draw
+            // glDisable(GL_COLOR_MATERIAL); // Use mesh colors to draw
 
             if (mesh->getDisplayList())
                 ri->drawList(mesh->getDisplayList());
@@ -307,7 +307,7 @@ void drawContact(
     Eigen::aligned_vector<Eigen::Vector2i> conn;
     conn.push_back(Eigen::Vector2i(0, 1));
 
-    
+
     ri->pushMatrix();
     ri->translate(p);
     ri->drawEllipsoid(Eigen::Vector3d::Constant(0.01));

@@ -7,7 +7,7 @@ using std::cerr;
 using std::endl;
 
 // Boost headers
-#include <boost/algorithm/string.hpp>    
+#include <boost/algorithm/string.hpp>
 
 #include "pydart2_api.h"
 
@@ -100,7 +100,7 @@ int Manager::createWorld(double timestep) {
     w->setGravity(Eigen::Vector3d(0.0, -9.81, 0.0));
     // int id = manager->worlds.size();
     // manager->worlds.push_back(w);
-    int id = manager->next_id++; 
+    int id = manager->next_id++;
     manager->worlds[id] = w;
     return id;
 }
@@ -159,7 +159,7 @@ bool getVerbose() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// Helper functions 
+// Helper functions
 void write(const Eigen::VectorXd& src, double* dst) {
     for (int i = 0; i < src.size(); i++) {
         dst[i] = src(i);
@@ -203,7 +203,7 @@ Eigen::Isometry3d read_isometry(double src[4][4]) {
 
 
 ////////////////////////////////////////////////////////////////////////////////
-// World 
+// World
 int createWorld(double timestep) {
     return Manager::createWorld(timestep);
 }
@@ -242,7 +242,7 @@ int WORLD(addSkeleton)(int wid, const char* const path) {
     }
 
     MSG << " [pydart_api] skel [" << path << "]" << endl;
-    
+
     dart::simulation::WorldPtr world = GET_WORLD(wid);
     int id = world->getNumSkeletons();
     world->addSkeleton(skel);
@@ -331,7 +331,7 @@ void WORLD(getGravity)(int wid, double outv3[3]) {
 void SKEL(render)(int wid, int skid) {
     dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
     dart::gui::RenderInterface* ri = Manager::getRI();
-    drawSkeleton(ri, skel.get()); 
+    drawSkeleton(ri, skel.get());
 }
 
 void SKEL(renderWithColor)(int wid, int skid, double inv4[4]) {
@@ -339,7 +339,7 @@ void SKEL(renderWithColor)(int wid, int skid, double inv4[4]) {
     dart::gui::RenderInterface* ri = Manager::getRI();
     Eigen::Vector4d color(inv4);
     MSG << "color = " << color.transpose() << "\n";
-    drawSkeleton(ri, skel.get(), color, false); 
+    drawSkeleton(ri, skel.get(), color, false);
 }
 
 const char* SKEL(getName)(int wid, int skid) {
@@ -551,7 +551,7 @@ int BODY(getParentBodyNode)(int wid, int skid, int bid) {
 
 int BODY(getNumChildBodyNodes)(int wid, int skid, int bid) {
     dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
-    return body->getNumChildBodyNodes(); 
+    return body->getNumChildBodyNodes();
 }
 
 int BODY(getChildBodyNode)(int wid, int skid, int bid, int _index) {
@@ -666,9 +666,9 @@ void BODY(getInertia)(int wid, int skid, int bid, double outv33[3][3]) {
     double Ixx, Iyy, Izz, Ixy, Ixz, Iyz;
     body->getMomentOfInertia(Ixx, Iyy, Izz, Ixy, Ixz, Iyz);
     outv33[0][0] = Ixx;    outv33[1][1] = Iyy;    outv33[2][2] = Izz;
-    outv33[0][1] = Ixy;    outv33[1][0] = Ixy; 
-    outv33[0][2] = Ixz;    outv33[2][0] = Ixz; 
-    outv33[1][2] = Iyz;    outv33[2][1] = Iyz; 
+    outv33[0][1] = Ixy;    outv33[1][0] = Ixy;
+    outv33[0][2] = Ixz;    outv33[2][0] = Ixz;
+    outv33[1][2] = Iyz;    outv33[2][1] = Iyz;
 }
 
 ////////////////////////////////////////

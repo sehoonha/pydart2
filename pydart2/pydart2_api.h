@@ -236,6 +236,13 @@ void DOF(setDampingCoefficient)(int wid, int skid, int dofid, double _coeff);
 double DOF(getCoulombFriction)(int wid, int skid, int dofid);
 void DOF(setCoulombFriction)(int wid, int skid, int dofid, double _friction);
 
+////////////////////////////////////////
+// Dof::Constraint Force Functions
+double DOF(getConstraintImpulse)(int wid, int skid, int dofid);
+void DOF(setConstraintImpulse)(int wid, int skid, int dofid, double _impulse);
+
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // Joint
 #define JOINT(funcname) joint__##funcname
@@ -282,6 +289,7 @@ double JOINT(getDampingCoefficient)(int wid, int skid, int jid, int _index);
 void JOINT(setDampingCoefficient)(int wid, int skid, int jid, int _index, double _coeff);
 double JOINT(getCoulombFriction)(int wid, int skid, int jid, int _index);
 void JOINT(setCoulombFriction)(int wid, int skid, int jid, int _index, double _friction);
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Marker
@@ -333,6 +341,6 @@ void COLLISION_RESULT(renderContact)(double inv6[6], double size, double scale);
 // Constraints
 int addBallJointConstraint(int wid, int skid1, int bid1, int skid2, int bid2,
                            double inv3[3]);
-                       
+
 
 #endif // #ifndef PYDART2_PYDART2_API_H

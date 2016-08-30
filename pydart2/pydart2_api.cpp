@@ -1000,6 +1000,20 @@ void DOF(setCoulombFriction)(int wid, int skid, int dofid, double _friction) {
 }
 
 
+////////////////////////////////////////
+// Dof::Passive Force Functions
+double DOF(getConstraintImpulse)(int wid, int skid, int dofid) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    return dof->getConstraintImpulse();
+}
+
+
+void DOF(setConstraintImpulse)(int wid, int skid, int dofid, double _impulse) {
+    dart::dynamics::DegreeOfFreedom* dof = GET_DOF(wid, skid, dofid);
+    return dof->setConstraintImpulse(_impulse);
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // Joint
 

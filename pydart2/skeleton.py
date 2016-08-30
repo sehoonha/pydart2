@@ -132,7 +132,7 @@ class Skeleton(object):
         return self.velocities()
 
     def set_velocities(self, _qdot):
-        papi.setSkeletonVelocities(self.world.id, self.id, _qdot)
+        papi.skeleton__setVelocities(self.world.id, self.id, _qdot)
 
     @dq.setter
     def dq(self, _qdot):

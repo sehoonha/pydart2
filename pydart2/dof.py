@@ -131,5 +131,13 @@ class Dof(object):
     def set_coulomb_friction(self, _friction):
         papi.dof__setCoulombFriction(self.wid, self.skid, self.id, _friction)
 
+########################################
+# Dof::Constraint Impulse functions
+    def constraint_impulse(self, ):
+        return papi.dof__getConstraintImpulse(self.wid, self.skid, self.id)
+
+    def set_constraint_impulse(self, _friction):
+        papi.dof__setConstraintImpulse(self.wid, self.skid, self.id, _friction)
+
     def __repr__(self):
         return '[Dof(%d): %s]' % (self.id, self.name)

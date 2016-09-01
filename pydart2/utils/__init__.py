@@ -5,3 +5,4 @@
 # Disney Research Robotics Group
 import transformations
 import misc
+import log

@@ -157,6 +157,9 @@ class PydartWindow(QtGui.QMainWindow):
         self.resetAction = QtGui.QAction('Reset', self)
         self.resetAction.triggered.connect(self.resetEvent)
 
+        self.stepAction = QtGui.QAction('Step', self)
+        self.stepAction.triggered.connect(self.stepEvent)
+
         self.playAction = QtGui.QAction('Play', self)
         self.playAction.setCheckable(True)
         self.playAction.setShortcut('Space')
@@ -183,6 +186,7 @@ class PydartWindow(QtGui.QMainWindow):
         # Create a toolbar
         self.toolbar = self.addToolBar('Control')
         self.toolbar.addAction(self.resetAction)
+        self.toolbar.addAction(self.stepAction)
         self.toolbar.addAction(self.playAction)
         self.toolbar.addAction(self.animAction)
         self.toolbar.addSeparator()
@@ -292,6 +296,10 @@ class PydartWindow(QtGui.QMainWindow):
         self.rangeSlider.setValue(0)
         if hasattr(self.sim, 'reset'):
             self.sim.reset()
+
+    def stepEvent(self):
+        if hasattr(self.sim, 'step'):
+            self.sim.step()
 
     def camera_event(self, cam_id):
         print("camera_event: %d" % cam_id)

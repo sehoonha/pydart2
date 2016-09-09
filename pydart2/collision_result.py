@@ -32,9 +32,10 @@ class CollisionResult(object):
 
         # contacts
         n = papi.collisionresult__getNumContacts(self.id)
-        v = papi.collisionresult__getContacts(self.id, n * 6)
+        v = papi.collisionresult__getContacts(self.id, n * 10)
         if n > 0:
-            self.contacts = [Contact(v_i) for v_i in np.split(v, n)]
+            self.contacts = [Contact(self.world, v_i)
+                             for v_i in np.split(v, n)]
 
         # contacted_bodies
         ids = np.array(papi.collisionresult__getCollidingBodyNodes(self.id))

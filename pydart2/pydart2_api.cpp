@@ -276,7 +276,8 @@ void WORLD(step)(int wid) {
 
 void WORLD(checkCollision)(int wid) {
     dart::simulation::WorldPtr world = GET_WORLD(wid);
-    world->checkCollision(true);
+    // world->checkCollision();
+    world->getConstraintSolver()->solve();
 }
 
 void WORLD(render)(int wid) {
@@ -1301,11 +1302,38 @@ void COLLISION_RESULT(getContacts)(int wid, double* outv, int nout) {
     const auto result = GET_COLLISION_RESULT(wid);
     const auto nContacts = static_cast<int>(result.getNumContacts());
 
-    Eigen::VectorXd state(6 * nContacts);
+    // Construct the skeleton index map
+    std::map<const dart::dynamics::Skeleton*, int> indices;
+    dart::simulation::WorldPtr world = GET_WORLD(wid);
+    for (size_t i = 0; i < world->getNumSkeletons(); ++i) {
+        indices[world->getSkeleton(i).get()] = i;
+    }
+
+    Eigen::VectorXd state(10 * nContacts);
     for (auto i = 0; i < nContacts; ++i) {
-        auto begin = i * 6;
-        state.segment(begin, 3)     = result.getContact(i).point;
-        state.segment(begin + 3, 3) = result.getContact(i).force;
+        auto begin = i * 10;
+        auto contact = result.getContact(i);
+
+        state.segment(begin, 3)     = contact.point;
+        state.segment(begin + 3, 3) = contact.force;
+        state(begin + 6) = -1;
+        state(begin + 7) = -1;
+        state(begin + 8) = -1;
+        state(begin + 9) = -1;
+
+        auto shapeNode1 = contact.collisionObject1->getShapeFrame()->asShapeNode();
+        if (shapeNode1) {
+            auto b = shapeNode1->getBodyNodePtr();
+            state(begin + 6) = indices[b->getSkeleton().get()];
+            state(begin + 7) = b->getIndexInSkeleton();
+        }
+
+        auto shapeNode2 = contact.collisionObject2->getShapeFrame()->asShapeNode();
+        if (shapeNode2) {
+            auto b = shapeNode2->getBodyNodePtr();
+            state(begin + 8) = indices[b->getSkeleton().get()];
+            state(begin + 9) = b->getIndexInSkeleton();
+        }
     }
     write(state, outv);
 }

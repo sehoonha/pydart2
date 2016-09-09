@@ -20,13 +20,13 @@ class CollisionResult(object):
         self.contacts = list()
         self.contacted_bodies = list()
 
-    def num_contacts(self, ):
+    def num_contacts(self,):
         return len(self.contacts)
 
-    def num_contacted_bodies(self, ):
+    def num_contacted_bodies(self,):
         return len(self.contacted_bodies)
 
-    def update(self, ):
+    def update(self,):
         self.contacts = list()
         self.contacted_bodies = list()
 
@@ -42,3 +42,8 @@ class CollisionResult(object):
         if n > 0:
             self.contacted_bodies = [self.world.skeletons[i].bodynodes[j]
                                      for i, j in np.split(ids, n)]
+
+    def __repr__(self,):
+        ret = "[CollisionResult: %d contacts %d contacted bodies]" % (
+            self.num_contacts(), self.num_contacted_bodies())
+        return ret

@@ -106,6 +106,10 @@ class World(object):
         self._frame += 1
         self.collision_result.update()
 
+    def check_collision(self, ):
+        papi.world__checkCollision(self.id)
+        self.collision_result.update()
+
     def render(self,
                render_markers=True,
                render_contacts=True,

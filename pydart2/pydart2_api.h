@@ -26,6 +26,7 @@ int WORLD(getNumSkeletons)(int wid);
 
 void WORLD(reset)(int wid);
 void WORLD(step)(int wid);
+void WORLD(checkCollision)(int wid);
 void WORLD(render)(int wid);
 
 ////////////////////////////////////////

@@ -274,6 +274,11 @@ void WORLD(step)(int wid) {
     world->step();
 }
 
+void WORLD(checkCollision)(int wid) {
+    dart::simulation::WorldPtr world = GET_WORLD(wid);
+    world->checkCollision(true);
+}
+
 void WORLD(render)(int wid) {
     dart::simulation::WorldPtr world = GET_WORLD(wid);
     dart::gui::RenderInterface* ri = Manager::getRI();

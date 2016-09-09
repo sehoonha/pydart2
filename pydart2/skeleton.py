@@ -182,14 +182,14 @@ class Skeleton(object):
         return self.coriolis_and_gravity_forces()
 
     def self_collision_check(self):
-        return papi.skeleton__selfCollisionCheck(self.world.id, self.id)
+        return papi.skeleton__getSelfCollisionCheck(self.world.id, self.id)
 
     def set_self_collision_check(self, _enable):
         papi.skeleton__setSelfCollisionCheck(self.world.id, self.id,
                                              _enable)
 
     def adjacent_body_check(self):
-        return papi.skeleton__adjacentBodyCheck(self.world.id, self.id)
+        return papi.skeleton__getAdjacentBodyCheck(self.world.id, self.id)
 
     def set_adjacent_body_check(self, _enable):
         papi.skeleton__setAdjacentBodyCheck(self.world.id, self.id,

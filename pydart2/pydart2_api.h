@@ -43,6 +43,10 @@ int WORLD(getIndex)(int wid, int _index);
 void WORLD(setGravity)(int wid, double inv3[3]);
 void WORLD(getGravity)(int wid, double outv3[3]);
 
+////////////////////////////////////////
+// World::Constraint Functions
+void WORLD(removeAllConstraints)(int wid);
+
 ////////////////////////////////////////////////////////////////////////////////
 // Skeleton
 #define SKEL(funcname) skeleton__##funcname

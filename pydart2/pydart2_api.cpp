@@ -331,6 +331,12 @@ void WORLD(getGravity)(int wid, double outv3[3]) {
     write(world->getGravity(), outv3);
 }
 
+////////////////////////////////////////
+// World::Constraint Functions
+void WORLD(removeAllConstraints)(int wid) {
+    dart::simulation::WorldPtr world = GET_WORLD(wid);
+    world->getConstraintSolver()->removeAllConstraints();
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Skeleton

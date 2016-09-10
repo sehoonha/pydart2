@@ -167,6 +167,9 @@ class World(object):
     def g(self, _g):
         self.set_gravity(_g)
 
+    def remove_all_constraints(self, ):
+        papi.world__removeAllConstraints(self.id)
+
     # def set_collision_pair(self, body1, body2, is_enable):
     #     flag_enable = 1 if is_enable else 0
     #     papi.setWorldCollisionPair(self.id,

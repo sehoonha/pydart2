@@ -1,3 +1,7 @@
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
+from past.utils import old_div
 # Copyright (c) 2015, Disney Research
 # All rights reserved.
 #
@@ -9,9 +13,9 @@ from OpenGL.GLUT import *
 from PyQt4 import QtGui
 from PyQt4 import QtCore
 from PyQt4.QtOpenGL import *
-import trackball
+from . import trackball
 import time
-from renderer import Renderer
+from .renderer import Renderer
 from numpy.linalg import norm
 
 
@@ -69,7 +73,7 @@ class GLWidget(QGLWidget):
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
 
-        gluPerspective(45.0, float(w) / float(h), 0.01, 100.0)
+        gluPerspective(45.0, old_div(float(w), float(h)), 0.01, 100.0)
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
 
@@ -160,7 +164,7 @@ class GLWidget(QGLWidget):
 
         glEnable(GL_DEPTH_TEST | GL_LIGHTING)
         glDepthMask(1)
-        gluPerspective(45.0, float(w) / float(h), 0.01, 100.0)
+        gluPerspective(45.0, old_div(float(w), float(h)), 0.01, 100.0)
 
         glViewport(0, 0, w, h)
         glMatrixMode(GL_MODELVIEW)
@@ -196,5 +200,5 @@ class GLWidget(QGLWidget):
         dir = self.viewer.capture_dir
         filename = '%s/%s.%04d.png' % (dir, name, self.captureIndex)
         img.save(filename)
-        print('Capture to ', filename)
+        print(('Capture to ', filename))
         self.captureIndex += 1

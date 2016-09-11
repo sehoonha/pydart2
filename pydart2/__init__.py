@@ -1,10 +1,12 @@
-import pydart2_api as papi
-import world
-import constraints
+from __future__ import print_function
+from __future__ import absolute_import
+from . import pydart2_api as papi
+from . import world
+from . import constraints
 import os.path
 import sys
 try:
-    import gui
+    from . import gui
 except Exception:
     e = sys.exc_info()[1]
     print("-" * 40)
@@ -12,9 +14,9 @@ except Exception:
     print(e)
     print("-" * 40)
 
-import utils
-from world import World
-from skel_vector import SkelVector
+from . import utils
+from .world import World
+from .skel_vector import SkelVector
 
 
 def init(verbose=True):

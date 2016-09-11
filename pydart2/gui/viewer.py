@@ -1,3 +1,7 @@
+from __future__ import print_function
+from __future__ import absolute_import
+from builtins import chr
+from builtins import str
 #!/usr/bin/env python
 
 # Copyright (c) 2015, Disney Research
@@ -18,8 +22,8 @@ import logging
 from OpenGL.GLUT import *
 from PyQt4 import QtGui
 from PyQt4 import QtCore
-from glwidget import GLWidget
-from trackball import Trackball
+from .glwidget import GLWidget
+from .trackball import Trackball
 
 
 def signal_handler(signal, frame):

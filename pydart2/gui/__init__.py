@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 # Copyright (c) 2015, Disney Research
 # All rights reserved.
 #
@@ -5,4 +6,4 @@
 # Disney Research Robotics Group
 
 
-import viewer
+from . import viewer

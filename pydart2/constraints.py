@@ -1,9 +1,11 @@
+from __future__ import absolute_import
+from builtins import object
 # Copyright (c) 2015, Disney Research
 # All rights reserved.
 #
 # Author(s): Sehoon Ha <sehoon.ha@disneyresearch.com>
 # Disney Research Robotics Group
-import pydart2_api as papi
+from . import pydart2_api as papi
 
 
 class BallJointConstraint(object):

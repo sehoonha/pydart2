@@ -1,3 +1,7 @@
+from __future__ import division
+from builtins import range
+from builtins import object
+from past.utils import old_div
 # Copyright (c) 2015, Disney Research
 # All rights reserved.
 #
@@ -16,7 +20,7 @@ def norm(v):
 
 
 def normalize(v):
-    return v / np.linalg.norm(v)
+    return old_div(v, np.linalg.norm(v))
 
 
 def rot2d(v, theta):
@@ -27,7 +31,7 @@ def rot2d(v, theta):
 
 
 def rad_to_deg(th):
-    return (180.0 / math.pi) * th
+    return (old_div(180.0, math.pi)) * th
 
 
 class Renderer(object):
@@ -252,7 +256,7 @@ class Renderer(object):
 
     def render_chessboard(self, sz, n=10, color1=None, color2=None):
         glDisable(GL_LIGHTING)
-        step = sz / float(n)
+        step = old_div(sz, float(n))
         if color1 is None:
             color1 = np.array([0.95, 0.95, 0.95])
         if color2 is None:

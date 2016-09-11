@@ -1,11 +1,15 @@
+from __future__ import division
+from __future__ import absolute_import
+from builtins import object
+from past.utils import old_div
 # Copyright (c) 2015, Disney Research
 # All rights reserved.
 #
 # Author(s): Sehoon Ha <sehoon.ha@disneyresearch.com>
 # Disney Research Robotics Group
 import numpy as np
-import pydart2_api as papi
-from contact import Contact
+from . import pydart2_api as papi
+from .contact import Contact
 
 
 class CollisionResult(object):
@@ -39,7 +43,7 @@ class CollisionResult(object):
 
         # contacted_bodies
         ids = np.array(papi.collisionresult__getCollidingBodyNodes(self.id))
-        n = len(ids) / 2
+        n = old_div(len(ids), 2)
         if n > 0:
             self.contacted_bodies = [self.world.skeletons[i].bodynodes[j]
                                      for i, j in np.split(ids, n)]

@@ -1,3 +1,8 @@
+from __future__ import print_function
+from __future__ import absolute_import
+from builtins import str
+from builtins import range
+from builtins import object
 # Copyright (c) 2015, Disney Research
 # All rights reserved.
 #
@@ -6,14 +11,14 @@
 
 
 import os.path
-import pydart2_api as papi
+from . import pydart2_api as papi
 import numpy as np
-from skel_vector import SkelVector
+from .skel_vector import SkelVector
 
-from bodynode import BodyNode
-from dof import Dof
-from joint import Joint
-from marker import Marker
+from .bodynode import BodyNode
+from .dof import Dof
+from .joint import Joint
+from .marker import Marker
 
 
 class Skeleton(object):
@@ -210,7 +215,7 @@ class Skeleton(object):
         elif isinstance(query, int):
             return self.bodies[query]
         else:
-            print 'No find...', query
+            print('Cannot find body. query = %s' % str(query))
             return None
 
     def root_bodynodes(self, ):

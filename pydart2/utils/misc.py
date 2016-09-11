@@ -1,3 +1,6 @@
+from __future__ import division
+from builtins import range
+from past.utils import old_div
 # Copyright (c) 2015, Disney Research
 # All rights reserved.
 #
@@ -46,18 +49,18 @@ def confine(x, lo, hi):
 
 def vel(h, x0, x1, x2):
     if x0 is not None and x2 is not None:
-        return (x2 - x0) / (2 * h)
+        return old_div((x2 - x0), (2 * h))
     elif x0 is not None and x2 is None:
-        return (x1 - x0) / h
+        return old_div((x1 - x0), h)
     elif x0 is None and x2 is not None:
-        return (x2 - x1) / h
+        return old_div((x2 - x1), h)
     else:
         return np.zeros(x1.shape)
 
 
 def acc(h, x0, x1, x2):
     if x0 is not None and x2 is not None:
-        return (x2 - 2 * x1 + x0) / (h * h)
+        return old_div((x2 - 2 * x1 + x0), (h * h))
     else:
         return np.zeros(x1.shape)
 
@@ -70,7 +73,7 @@ def grad(fun, x, h):
         dx[i] = h
         f1 = fun(x - dx)
         f2 = fun(x + dx)
-        g[i] = (0.5 * f2 - 0.5 * f1) / h
+        g[i] = old_div((0.5 * f2 - 0.5 * f1), h)
     return g
 
 
@@ -84,8 +87,8 @@ def grad4(fun, x, h):
         f1 = fun(x - 1.0 * dx)
         f2 = fun(x + 1.0 * dx)
         f3 = fun(x + 2.0 * dx)
-        g[i] = (1.0 / 12.0 * f0 - 2.0 / 3.0 * f1 +
-                2.0 / 3.0 * f2 - 1.0 / 12.0 * f3) / (h)
+        g[i] = old_div((1.0 / 12.0 * f0 - 2.0 / 3.0 * f1 +
+                2.0 / 3.0 * f2 - 1.0 / 12.0 * f3), (h))
     return g
 
 

@@ -77,6 +77,10 @@ expressed in degrees. Theta relates to the rotation angle around X axis while
 phi relates to the rotation angle around Z axis.
 
 '''
+from __future__ import division
+from builtins import str
+from builtins import object
+from past.utils import old_div
 __docformat__ = 'restructuredtext'
 __version__ = '1.0'
 
@@ -102,7 +106,7 @@ def _v_cross(v1, v2):
 def _v_length(v):
     return math.sqrt(_v_dot(v,v))
 def _v_normalize(v):
-    try:                      return _v_mul(v,1.0/_v_length(v))
+    try:                      return _v_mul(v,old_div(1.0,_v_length(v)))
     except ZeroDivisionError: return v
 
 # Some useful functions on quaternions
@@ -122,11 +126,11 @@ def _q_dot(q1, q2):
 def _q_length(q):
     return math.sqrt(_q_dot(q,q))
 def _q_normalize(q):
-    try:                      return _q_mul(q,1.0/_q_length(q))
+    try:                      return _q_mul(q,old_div(1.0,_q_length(q)))
     except ZeroDivisionError: return q
 def _q_from_axis_angle(v, phi):
-    q = _v_mul(_v_normalize(v), math.sin(phi/2.0))
-    q.append(math.cos(phi/2.0))
+    q = _v_mul(_v_normalize(v), math.sin(old_div(phi,2.0)))
+    q.append(math.cos(old_div(phi,2.0)))
     return q
 def _q_rotmatrix(q):
     m = [0.0]*16
@@ -177,10 +181,10 @@ class Trackball(object):
         ''' Move trackball view from x,y to x+dx,y+dy. '''
         viewport = gl.glGetIntegerv(gl.GL_VIEWPORT)
         width,height = float(viewport[2]), float(viewport[3])
-        x  = (x*2.0 - width)/width
-        dx = (2.*dx)/width
-        y  = (y*2.0 - height)/height
-        dy = (2.*dy)/height
+        x  = old_div((x*2.0 - width),width)
+        dx = old_div((2.*dx),width)
+        y  = old_div((y*2.0 - height),height)
+        dy = old_div((2.*dy),height)
         q = self._rotate(x,y,dx,dy)
         self._rotation = _q_add(q,self._rotation)
         self._count += 1
@@ -208,7 +212,7 @@ class Trackball(object):
         gl.glMatrixMode(gl.GL_PROJECTION)
         gl.glPushMatrix()
         gl.glLoadIdentity ()
-        aspect = viewport[2]/float(viewport[3])
+        aspect = old_div(viewport[2],float(viewport[3]))
         aperture = 35.0
         near = 0.1
         far = 100.0
@@ -290,10 +294,10 @@ class Trackball(object):
 
         self._theta = theta
         self._phi = phi
-        angle = self._theta*(math.pi/180.0)
+        angle = self._theta*(old_div(math.pi,180.0))
         sine = math.sin(0.5*angle)
         xrot = [1*sine, 0, 0, math.cos(0.5*angle)]
-        angle = self._phi*(math.pi/180.0)
+        angle = self._phi*(old_div(math.pi,180.0))
         sine = math.sin(0.5*angle);
         zrot = [0, 0, sine, math.cos(0.5*angle)]
         self._rotation = _q_add(xrot, zrot)
@@ -310,7 +314,7 @@ class Trackball(object):
         if (d < r * 0.70710678118654752440):    # Inside sphere
             z = math.sqrt(r*r - d*d)
         else:                                   # On hyperbola
-            t = r / 1.41421356237309504880
+            t = old_div(r, 1.41421356237309504880)
             z = t*t / d
         return z
 
@@ -333,7 +337,7 @@ class Trackball(object):
         new  = [x+dx, y+dy, self._project(self._TRACKBALLSIZE, x+dx, y+dy)]
         a = _v_cross(new, last)
         d = _v_sub(last, new)
-        t = _v_length(d) / (2.0*self._TRACKBALLSIZE)
+        t = old_div(_v_length(d), (2.0*self._TRACKBALLSIZE))
         if (t > 1.0): t = 1.0
         if (t < -1.0): t = -1.0
         phi = 2.0 * math.asin(t)

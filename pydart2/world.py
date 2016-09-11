@@ -1,3 +1,6 @@
+from __future__ import absolute_import
+from builtins import range
+from builtins import object
 # Copyright (c) 2015, Disney Research
 # All rights reserved.
 #
@@ -7,9 +10,9 @@
 
 import os.path
 import numpy as np
-import pydart2_api as papi
-from skeleton import Skeleton
-from collision_result import CollisionResult
+from . import pydart2_api as papi
+from .skeleton import Skeleton
+from .collision_result import CollisionResult
 
 
 def create_world(step, skel_path=None):
@@ -22,7 +25,7 @@ class World(object):
     DART_COLLISION_DETECTOR, \
         FCL_COLLISION_DETECTOR, \
         FCL_MESH_COLLISION_DETECTOR, \
-        BULLET_COLLISION_DETECTOR = range(NUM_COLLISION_DETECTOR_TYPES)
+        BULLET_COLLISION_DETECTOR = list(range(NUM_COLLISION_DETECTOR_TYPES))
 
     def __init__(self, step, skel_path=None):
         self.skeletons = list()

@@ -1,3 +1,7 @@
+from __future__ import division
+from __future__ import print_function
+from past.utils import old_div
+from builtins import object
 # Copyright (c) 2015, Disney Research
 # All rights reserved.
 #
@@ -7,7 +11,7 @@ import pydart2 as pydart
 import numpy as np
 
 
-class Controller:
+class Controller(object):
     def __init__(self, skel, h):
         self.h = h
         self.skel = skel
@@ -59,7 +63,7 @@ class MyWorld(pydart.World):
     def __init__(self, ):
         """
         """
-        pydart.World.__init__(self, 1.0 / 2000.0, './data/skel/fullbody1.skel')
+        pydart.World.__init__(self, old_div(1.0, 2000.0), './data/skel/fullbody1.skel')
         self.force = None
         self.duration = 0
 

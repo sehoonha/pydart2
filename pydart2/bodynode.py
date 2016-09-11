@@ -1,11 +1,14 @@
+from __future__ import absolute_import
+from builtins import range
+from builtins import object
 # Copyright (c) 2015, Disney Research
 # All rights reserved.
 #
 # Author(s): Sehoon Ha <sehoon.ha@disneyresearch.com>
 # Disney Research Robotics Group
-import pydart2_api as papi
+from . import pydart2_api as papi
 import numpy as np
-from shapenode import ShapeNode
+from .shapenode import ShapeNode
 
 
 class BodyNode(object):

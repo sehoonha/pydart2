@@ -10,15 +10,18 @@ CXX_FLAGS = '-Wall -msse2 -fPIC -std=c++11 -Xlinker -rpath /usr/local/lib '
 CXX_FLAGS += '-O3 -DNDEBUG -shared '
 CXX_FLAGS += '-g -fno-omit-frame-pointer -fno-inline-functions '
 CXX_FLAGS += '-fno-inline-functions-called-once -fno-optimize-sibling-calls '
+# CXX_FLAGS += '-DPY_VERSION_HEX=0x03000000'
 
 include_dirs = list()
 include_dirs += ['/usr/include']
 include_dirs += ['/usr/include/eigen3']
-include_dirs += ['/usr/include/python2.7']
+# include_dirs += ['/usr/include/python2.7']
+# include_dirs += ['/usr/local/include/python2.7']
+include_dirs += ['/usr/include/python3.4']
+include_dirs += ['/usr/local/include/python3.4']
 include_dirs += ['/usr/include/bullet']
 include_dirs += ['/usr/local/include']
 include_dirs += ['/usr/local/include/eigen3']
-include_dirs += ['/usr/local/include/python2.7']
 include_dirs += ['/usr/local/include/bullet']
 include_dirs += ['/usr/local/lib/python2.7/dist-packages/numpy/core/include/']
 include_dirs += ['/usr/lib/python2.7/dist-packages/numpy/core/include/']
@@ -43,7 +46,8 @@ pydart2_api = Extension('_pydart2_api',
                         libraries=libraries,
                         library_dirs=['/usr/local/lib'],
                         extra_compile_args=CXX_FLAGS.split(),
-                        swig_opts=['-c++'],
+                        swig_opts=['-c++', '-py3'],
+                        # swig_opts=['-py3', '-c++'],
                         sources=[DIR + 'pydart2_api.cpp',
                                  DIR + 'pydart2_draw.cpp',
                                  DIR + 'pydart2_api.i'],

@@ -457,6 +457,11 @@ void SKEL(setVelocities)(int wid, int skid, double* inv, int ndofs) {
     skel->setVelocities(read(inv, ndofs));
 }
 
+void SKEL(getAccelerations)(int wid, int skid, double* outv, int ndofs) {
+    dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+    write(skel->getAccelerations(), outv);
+}
+
 void SKEL(setForces)(int wid, int skid, double* inv, int ndofs) {
     dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
     skel->setForces(read(inv, ndofs));

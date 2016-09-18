@@ -326,7 +326,7 @@ class BodyNode(object):
 
     def linear_jacobian_deriv(self, offset=None, full=True):
         offset = np.zeros(3) if offset is None else offset
-        J = np.zeros((6, len(self.dependent_dofs)))
+        J = np.zeros((3, len(self.dependent_dofs)))
         papi.bodynode__getLinearJacobianDeriv(self.wid,
                                               self.skid,
                                               self.id,

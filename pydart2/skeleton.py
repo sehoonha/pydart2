@@ -139,6 +139,16 @@ class Skeleton(object):
         """ Setter also updates the internal skeleton kinematics """
         self.set_velocities(_qdot)
 
+    def accelerations(self):
+        ddq = papi.skeleton__getAccelerations(self.world.id,
+                                              self.id,
+                                              self.ndofs)
+        return SkelVector(ddq, self)
+
+    @property
+    def ddq(self):
+        return self.accelerations()
+
     def states(self):
         return np.concatenate((self.positions(), self.velocities()))
 

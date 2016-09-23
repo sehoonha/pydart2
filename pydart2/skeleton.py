@@ -12,7 +12,7 @@ from skel_vector import SkelVector
 
 from bodynode import BodyNode
 from dof import Dof
-from joint import Joint
+from joint import create_joint
 from marker import Marker
 
 
@@ -39,7 +39,7 @@ class Skeleton(object):
 
         # Initialize joints
         _njoints = papi.skeleton__getNumJoints(self.world.id, self.id)
-        self.joints = [Joint(self, i) for i in range(_njoints)]
+        self.joints = [create_joint(self, i) for i in range(_njoints)]
         self.name_to_joint = {joint.name: joint for joint in self.joints}
 
         # Initialize bodynodes

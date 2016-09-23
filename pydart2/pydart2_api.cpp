@@ -57,6 +57,7 @@ Manager* Manager::g_manager = NULL;
 bool Manager::g_verbose = true;
 dart::gui::RenderInterface* Manager::g_ri = NULL;
 
+
 void Manager::init() {
     g_manager = new Manager();
     g_ri = new dart::gui::OpenGLRenderInterface();
@@ -1059,6 +1060,13 @@ bool JOINT(isDynamic)(int wid, int skid, int jid) {
     return joint->isDynamic();
 }
 
+
+const char* JOINT(getType)(int wid, int skid, int jid) {
+    dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+    return joint->getType().c_str();
+}
+
+
 ////////////////////////////////////////
 // Joint::Parent and child Functions
 int JOINT(getParentBodyNode)(int wid, int skid, int jid) {
@@ -1203,6 +1211,128 @@ double JOINT(getCoulombFriction)(int wid, int skid, int jid, int _index) {
 void JOINT(setCoulombFriction)(int wid, int skid, int jid, int _index, double _friction) {
     dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
     joint->setCoulombFriction(_index, _friction);
+}
+
+
+////////////////////////////////////////
+// Joint::REVOLUTE_JOINT Functions
+void REVOLUTE_JOINT(getAxis)(int wid, int skid, int jid, double outv3[3]) {
+    dart::dynamics::RevoluteJoint* joint = GET_REVOLUTE_JOINT(wid, skid, jid);
+    if (joint == NULL) {
+      ERR << " [pydart2_api] joint is not RevoluteJoint\n";
+      return;
+    }
+    write(joint->getAxis(), outv3);
+}
+
+
+void REVOLUTE_JOINT(setAxis)(int wid, int skid, int jid, double inv3[3]) {
+  dart::dynamics::RevoluteJoint* joint = GET_REVOLUTE_JOINT(wid, skid, jid);
+  if (joint == NULL) {
+    ERR << " [pydart2_api] joint is not RevoluteJoint\n";
+    return;
+  }
+  joint->setAxis(read(inv3, 3));
+}
+
+
+////////////////////////////////////////
+// Joint::PRISMATIC_JOINT Functions
+void PRISMATIC_JOINT(getAxis)(int wid, int skid, int jid, double outv3[3]) {
+    dart::dynamics::PrismaticJoint* joint = GET_PRISMATIC_JOINT(wid, skid, jid);
+    if (joint == NULL) {
+      ERR << " [pydart2_api] joint is not PrismaticJoint\n";
+      return;
+    }
+    write(joint->getAxis(), outv3);
+}
+
+
+void PRISMATIC_JOINT(setAxis)(int wid, int skid, int jid, double inv3[3]) {
+  dart::dynamics::PrismaticJoint* joint = GET_PRISMATIC_JOINT(wid, skid, jid);
+  if (joint == NULL) {
+    ERR << " [pydart2_api] joint is not PrismaticJoint\n";
+    return;
+  }
+  joint->setAxis(read(inv3, 3));
+}
+
+
+////////////////////////////////////////
+// Joint::UNIVERSAL_JOINT Functions
+void UNIVERSAL_JOINT(getAxis1)(int wid, int skid, int jid, double outv3[3]) {
+    dart::dynamics::UniversalJoint* joint = GET_UNIVERSAL_JOINT(wid, skid, jid);
+    if (joint == NULL) {
+      ERR << " [pydart2_api] joint is not UniversalJoint\n";
+      return;
+    }
+    write(joint->getAxis1(), outv3);
+}
+
+
+void UNIVERSAL_JOINT(setAxis1)(int wid, int skid, int jid, double inv3[3]) {
+  dart::dynamics::UniversalJoint* joint = GET_UNIVERSAL_JOINT(wid, skid, jid);
+  if (joint == NULL) {
+    ERR << " [pydart2_api] joint is not UniversalJoint\n";
+    return;
+  }
+  joint->setAxis1(read(inv3, 3));
+}
+
+
+void UNIVERSAL_JOINT(getAxis2)(int wid, int skid, int jid, double outv3[3]) {
+    dart::dynamics::UniversalJoint* joint = GET_UNIVERSAL_JOINT(wid, skid, jid);
+    if (joint == NULL) {
+      ERR << " [pydart2_api] joint is not UniversalJoint\n";
+      return;
+    }
+    write(joint->getAxis2(), outv3);
+}
+
+
+void UNIVERSAL_JOINT(setAxis2)(int wid, int skid, int jid, double inv3[3]) {
+  dart::dynamics::UniversalJoint* joint = GET_UNIVERSAL_JOINT(wid, skid, jid);
+  if (joint == NULL) {
+    ERR << " [pydart2_api] joint is not UniversalJoint\n";
+    return;
+  }
+  joint->setAxis2(read(inv3, 3));
+}
+
+
+////////////////////////////////////////
+// Joint::EULER_JOINT Functions
+const char* EULER_JOINT(getAxisOrder)(int wid, int skid, int jid) {
+    dart::dynamics::EulerJoint* joint = GET_EULER_JOINT(wid, skid, jid);
+    if (joint == NULL) {
+      ERR << " [pydart2_api] joint is not EulerJoint\n";
+      return "Wrong Joint Type";
+    }
+    auto ordering = joint->getAxisOrder();
+    if (ordering == dart::dynamics::EulerJoint::AxisOrder::XYZ) {
+        return "XYZ";
+    }
+    if (ordering == dart::dynamics::EulerJoint::AxisOrder::ZYX) {
+        return "ZYX";
+    }
+    return "Invalid Order";
+}
+
+
+void EULER_JOINT(setAxisOrder)(int wid, int skid, int jid, const char* axisorder) {
+  dart::dynamics::EulerJoint* joint = GET_EULER_JOINT(wid, skid, jid);
+  if (joint == NULL) {
+    ERR << " [pydart2_api] joint is not EulerJoint\n";
+    return;
+  }
+  std::string ordering(axisorder);
+  if (ordering == "XYZ") {
+    joint->setAxisOrder(dart::dynamics::EulerJoint::AxisOrder::XYZ);
+  } else if (ordering == "ZYX"){
+    joint->setAxisOrder(dart::dynamics::EulerJoint::AxisOrder::ZYX);
+  } else {
+    ERR << " [pydart2_api] invalid EulerJoint AxisOrder" << ordering << "\n";
+  }
 }
 
 

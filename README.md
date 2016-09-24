@@ -11,11 +11,12 @@
 </tr>
 </table>
 
-- News! 
- + [20160805] PyDART is upgraded to PyDART2, for easier installation and richer APIs.
+- News!
+ + [2016/09/24] PyDART2 now supports both Python2 and Python3.
+ + [2016/08/05] PyDART is upgraded to PyDART2, for easier installation and richer APIs.
 
 ======
-PyDART2 is an open source python binding of DART(6.0.1), an open source physics
+PyDART2 is an open source python binding of DART, an open source physics
 simulator. Its APIs are designed to provide concise and powerful control on
 DART physics worlds. Further, a user can write simulations with a numerous
 python scientific libraries, such as NumPy(linear algebra),
@@ -25,7 +26,7 @@ learning), and so on.
 ======
 ## Environment
 + Ubuntu 16.04
-+ Python 2.7
++ Python2 / Python 3
 + DART 6.0.1 (or higher): https://github.com/dartsim/dart/
 
 ======

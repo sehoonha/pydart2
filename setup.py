@@ -2,6 +2,7 @@ from setuptools import setup
 from setuptools import find_packages
 from distutils.core import Extension
 from sys import platform as _platform
+import sys
 
 
 DIR = 'pydart2/'
@@ -15,10 +16,18 @@ CXX_FLAGS += '-fno-inline-functions-called-once -fno-optimize-sibling-calls '
 include_dirs = list()
 include_dirs += ['/usr/include']
 include_dirs += ['/usr/include/eigen3']
+
+# Fetch python version
+python_version = sys.version_info
+python_major_version = python_version[0]
+python_minor_version = python_version[1]
+
+current_python = "python%d.%d" % (python_major_version, python_minor_version)
+print("current_python = %s" % (current_python))
 # include_dirs += ['/usr/include/python2.7']
 # include_dirs += ['/usr/local/include/python2.7']
-include_dirs += ['/usr/include/python3.4']
-include_dirs += ['/usr/local/include/python3.4']
+include_dirs += ['/usr/include/%s' % current_python]
+include_dirs += ['/usr/local/include/%s' % current_python]
 include_dirs += ['/usr/include/bullet']
 include_dirs += ['/usr/local/include']
 include_dirs += ['/usr/local/include/eigen3']
@@ -30,7 +39,7 @@ libraries = list()
 libraries += ['dart', 'dart-gui']
 libraries += ['dart-optimizer-ipopt', 'dart-optimizer-nlopt',
               'dart-planning', 'dart-utils', 'dart-utils-urdf']
-libraries += ['python2.7']
+# libraries += [current_python]
 if _platform == "linux" or _platform == "linux2":
     libraries += ['GL', 'glut', 'Xmu', 'Xi']
 elif _platform == "darwin":
@@ -38,6 +47,10 @@ elif _platform == "darwin":
 libraries += ['BulletDynamics', 'BulletCollision',
               'LinearMath', 'BulletSoftBody']
 
+swig_opts = ['-c++']
+if python_major_version == 3:
+    swig_opts.append('-py3')
+print("swig_opts: %s" % (str(swig_opts)))
 
 pydart2_api = Extension('_pydart2_api',
                         define_macros=[('MAJOR_VERSION', '1'),
@@ -46,8 +59,7 @@ pydart2_api = Extension('_pydart2_api',
                         libraries=libraries,
                         library_dirs=['/usr/local/lib'],
                         extra_compile_args=CXX_FLAGS.split(),
-                        swig_opts=['-c++', '-py3'],
-                        # swig_opts=['-py3', '-c++'],
+                        swig_opts=swig_opts,
                         sources=[DIR + 'pydart2_api.cpp',
                                  DIR + 'pydart2_draw.cpp',
                                  DIR + 'pydart2_api.i'],
@@ -57,7 +69,7 @@ pydart2_api = Extension('_pydart2_api',
 
 
 setup(name='pydart2',
-      version='0.3.14',
+      version='0.4.0',
       description='Python Interface for DART Simulator',
       url='https://github.com/sehoonha/pydart2',
       author='Sehoon Ha',

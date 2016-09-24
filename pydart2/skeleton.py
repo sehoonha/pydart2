@@ -3,6 +3,8 @@ from __future__ import absolute_import
 from builtins import str
 from builtins import range
 from builtins import object
+from six import string_types
+
 # Copyright (c) 2015, Disney Research
 # All rights reserved.
 #
@@ -220,7 +222,7 @@ class Skeleton(object):
                                                   self.id, self.ndofs)
 
     def bodynode(self, query):
-        if isinstance(query, str):
+        if isinstance(query, string_types):
             return self.name_to_body[query]
         elif isinstance(query, int):
             return self.bodies[query]
@@ -239,7 +241,7 @@ class Skeleton(object):
         return self.name_to_body[_name].id
 
     def body(self, query):
-        if isinstance(query, str):
+        if isinstance(query, string_types):
             return self.name_to_body[query]
         elif isinstance(query, int):
             return self.bodies[query]
@@ -248,7 +250,7 @@ class Skeleton(object):
             return None
 
     def joint(self, query):
-        if isinstance(query, str):
+        if isinstance(query, string_types):
             return self.name_to_joint[query]
         elif isinstance(query, int):
             return self.joints[query]
@@ -257,7 +259,7 @@ class Skeleton(object):
             return None
 
     def dof(self, query):
-        if isinstance(query, str):
+        if isinstance(query, string_types):
             return self.name_to_dof[query]
         elif isinstance(query, int):
             return self.dofs[query]

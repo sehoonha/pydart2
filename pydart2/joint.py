@@ -12,6 +12,7 @@ from . import pydart2_api as papi
 class Joint(object):
     """
     """
+
     def __init__(self, _skeleton, _id):
         """
         """
@@ -70,6 +71,9 @@ class Joint(object):
 
     def is_dynamic(self, ):
         return papi.joint__isDynamic(self.wid, self.skid, self.id)
+
+    def type(self, ):
+        return papi.joint__getType(self.wid, self.skid, self.id)
 
 ########################################
 # Joint::Parent and child functions
@@ -206,3 +210,154 @@ class Joint(object):
 
     def __repr__(self):
         return '[Joint(%d): %s]' % (self.id, self.name)
+
+
+class WeldJoint(Joint):
+
+    def __init__(self, _skeleton, _id):
+        Joint.__init__(self, _skeleton, _id)
+
+    def __repr__(self):
+        return '[WeldJoint(%d): %s]' % (self.id, self.name)
+
+
+class RevoluteJoint(Joint):
+
+    def __init__(self, _skeleton, _id):
+        Joint.__init__(self, _skeleton, _id)
+
+    def axis(self, ):
+        return papi.revolute_joint__getAxis(self.wid, self.skid, self.id)
+
+    def set_axis(self, _axis):
+        return papi.revolute_joint__setAxis(
+            self.wid, self.skid, self.id, _axis)
+
+    def __repr__(self):
+        return '[RevoluteJoint(%d): %s]' % (self.id, self.name)
+
+
+class PrismaticJoint(Joint):
+
+    def __init__(self, _skeleton, _id):
+        Joint.__init__(self, _skeleton, _id)
+
+    def axis(self, ):
+        return papi.prismatic_joint__getAxis(self.wid, self.skid, self.id)
+
+    def set_axis(self, _axis):
+        return papi.prismatic_joint__setAxis(
+            self.wid, self.skid, self.id, _axis)
+
+    def __repr__(self):
+        return '[PrismaticJoint(%d): %s]' % (self.id, self.name)
+
+
+class UniversalJoint(Joint):
+
+    def __init__(self, _skeleton, _id):
+        Joint.__init__(self, _skeleton, _id)
+
+    def axis1(self, ):
+        return papi.universal_joint__getAxis1(self.wid, self.skid, self.id)
+
+    def set_axis1(self, _axis):
+        return papi.universal_joint__setAxis1(
+            self.wid, self.skid, self.id, _axis)
+
+    def axis2(self, ):
+        return papi.universal_joint__getAxis2(self.wid, self.skid, self.id)
+
+    def set_axis2(self, _axis):
+        return papi.universal_joint__setAxis2(
+            self.wid, self.skid, self.id, _axis)
+
+    def __repr__(self):
+        return '[UniversalJoint(%d): %s]' % (self.id, self.name)
+
+
+class PlanarJoint(Joint):
+
+    def __init__(self, _skeleton, _id):
+        Joint.__init__(self, _skeleton, _id)
+
+    def __repr__(self):
+        return '[PlanarJoint(%d): %s]' % (self.id, self.name)
+
+
+class ScrewJoint(Joint):
+
+    def __init__(self, _skeleton, _id):
+        Joint.__init__(self, _skeleton, _id)
+
+    def __repr__(self):
+        return '[ScrewJoint(%d): %s]' % (self.id, self.name)
+
+
+class BallJoint(Joint):
+
+    def __init__(self, _skeleton, _id):
+        Joint.__init__(self, _skeleton, _id)
+
+    def __repr__(self):
+        return '[BallJoint(%d): %s]' % (self.id, self.name)
+
+
+class TranslationalJoint(Joint):
+
+    def __init__(self, _skeleton, _id):
+        Joint.__init__(self, _skeleton, _id)
+
+    def __repr__(self):
+        return '[TranslationalJoint(%d): %s]' % (self.id, self.name)
+
+
+class EulerJoint(Joint):
+
+    def __init__(self, _skeleton, _id):
+        Joint.__init__(self, _skeleton, _id)
+
+    def axis_order(self, ):
+        return papi.euler_joint__getAxisOrder(self.wid, self.skid, self.id)
+
+    def set_axis_order(self, _axis_order):
+        return papi.euler_joint__setAxisOrder(
+            self.wid, self.skid, self.id, _axis_order)
+
+    def __repr__(self):
+        return '[EulerJoint(%d): %s]' % (self.id, self.name)
+
+
+class FreeJoint(Joint):
+
+    def __init__(self, _skeleton, _id):
+        Joint.__init__(self, _skeleton, _id)
+
+    def __repr__(self):
+        return '[FreeJoint(%d): %s]' % (self.id, self.name)
+
+
+def create_joint(_skeleton, _id):
+    wid = _skeleton.world.id
+    skid = _skeleton.id
+    id = _id
+    type_str = papi.joint__getType(wid, skid, id)
+
+    type_str_to_class = dict()
+    type_str_to_class['WeldJoint'] = WeldJoint
+    type_str_to_class['RevoluteJoint'] = RevoluteJoint
+    type_str_to_class['PrismaticJoint'] = PrismaticJoint
+    type_str_to_class['UniversalJoint'] = UniversalJoint
+    type_str_to_class['PlanarJoint'] = PlanarJoint
+    type_str_to_class['ScrewJoint'] = ScrewJoint
+    type_str_to_class['BallJoint'] = BallJoint
+    type_str_to_class['TranslationalJoint'] = TranslationalJoint
+    type_str_to_class['EulerJoint'] = EulerJoint
+    type_str_to_class['FreeJoint'] = FreeJoint
+
+    cls = type_str_to_class.get(type_str, None)
+    if cls is None:
+        print("Invalid type string: %s" % type_str)
+        return None
+    else:
+        return cls(_skeleton, _id)

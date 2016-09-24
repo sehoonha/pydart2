@@ -80,6 +80,7 @@ void SKEL(getPositions)(int wid, int skid, double* outv, int ndofs);
 void SKEL(setPositions)(int wid, int skid, double* inv, int ndofs);
 void SKEL(getVelocities)(int wid, int skid, double* outv, int ndofs);
 void SKEL(setVelocities)(int wid, int skid, double* inv, int ndofs);
+void SKEL(getAccelerations)(int wid, int skid, double* outv, int ndofs);
 void SKEL(setForces)(int wid, int skid, double* inv, int ndofs);
 
 ////////////////////////////////////////
@@ -259,6 +260,8 @@ const char* JOINT(getName)(int wid, int skid, int jid);
 const char* JOINT(setName)(int wid, int skid, int jid, const char* _name, bool _renameDofs);
 bool JOINT(isKinematic)(int wid, int skid, int jid);
 bool JOINT(isDynamic)(int wid, int skid, int jid);
+const char* JOINT(getType)(int wid, int skid, int jid);
+
 
 ////////////////////////////////////////
 // Joint::Parent and child bodynode Functions
@@ -294,6 +297,40 @@ double JOINT(getDampingCoefficient)(int wid, int skid, int jid, int _index);
 void JOINT(setDampingCoefficient)(int wid, int skid, int jid, int _index, double _coeff);
 double JOINT(getCoulombFriction)(int wid, int skid, int jid, int _index);
 void JOINT(setCoulombFriction)(int wid, int skid, int jid, int _index, double _friction);
+
+
+////////////////////////////////////////
+// Joint::REVOLUTE_JOINT Functions
+#define REVOLUTE_JOINT(funcname) revolute_joint__##funcname
+#define GET_REVOLUTE_JOINT(wid, skid, jid) dynamic_cast<dart::dynamics::RevoluteJoint*>(Manager::skeleton(wid, skid)->getJoint(jid));
+void REVOLUTE_JOINT(getAxis)(int wid, int skid, int jid, double outv3[3]);
+void REVOLUTE_JOINT(setAxis)(int wid, int skid, int jid, double inv3[3]);
+
+
+////////////////////////////////////////
+// PrismaticJoint Functions
+#define PRISMATIC_JOINT(funcname) prismatic_joint__##funcname
+#define GET_PRISMATIC_JOINT(wid, skid, jid) dynamic_cast<dart::dynamics::PrismaticJoint*>(Manager::skeleton(wid, skid)->getJoint(jid));
+void PRISMATIC_JOINT(getAxis)(int wid, int skid, int jid, double outv3[3]);
+void PRISMATIC_JOINT(setAxis)(int wid, int skid, int jid, double inv3[3]);
+
+
+////////////////////////////////////////
+// UniversalJoint Functions
+#define UNIVERSAL_JOINT(funcname) universal_joint__##funcname
+#define GET_UNIVERSAL_JOINT(wid, skid, jid) dynamic_cast<dart::dynamics::UniversalJoint*>(Manager::skeleton(wid, skid)->getJoint(jid));
+void UNIVERSAL_JOINT(getAxis1)(int wid, int skid, int jid, double outv3[3]);
+void UNIVERSAL_JOINT(setAxis1)(int wid, int skid, int jid, double inv3[3]);
+void UNIVERSAL_JOINT(getAxis2)(int wid, int skid, int jid, double outv3[3]);
+void UNIVERSAL_JOINT(setAxis2)(int wid, int skid, int jid, double inv3[3]);
+
+
+////////////////////////////////////////
+// EulerJoint Functions
+#define EULER_JOINT(funcname) euler_joint__##funcname
+#define GET_EULER_JOINT(wid, skid, jid) dynamic_cast<dart::dynamics::EulerJoint*>(Manager::skeleton(wid, skid)->getJoint(jid));
+const char* EULER_JOINT(getAxisOrder)(int wid, int skid, int jid);
+void EULER_JOINT(setAxisOrder)(int wid, int skid, int jid, const char* axisorder);
 
 
 ////////////////////////////////////////////////////////////////////////////////

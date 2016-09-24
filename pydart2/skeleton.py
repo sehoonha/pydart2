@@ -17,7 +17,7 @@ from .skel_vector import SkelVector
 
 from .bodynode import BodyNode
 from .dof import Dof
-from .joint import Joint
+from .joint import create_joint
 from .marker import Marker
 
 
@@ -44,7 +44,7 @@ class Skeleton(object):
 
         # Initialize joints
         _njoints = papi.skeleton__getNumJoints(self.world.id, self.id)
-        self.joints = [Joint(self, i) for i in range(_njoints)]
+        self.joints = [create_joint(self, i) for i in range(_njoints)]
         self.name_to_joint = {joint.name: joint for joint in self.joints}
 
         # Initialize bodynodes
@@ -143,6 +143,16 @@ class Skeleton(object):
     def dq(self, _qdot):
         """ Setter also updates the internal skeleton kinematics """
         self.set_velocities(_qdot)
+
+    def accelerations(self):
+        ddq = papi.skeleton__getAccelerations(self.world.id,
+                                              self.id,
+                                              self.ndofs)
+        return SkelVector(ddq, self)
+
+    @property
+    def ddq(self):
+        return self.accelerations()
 
     def states(self):
         return np.concatenate((self.positions(), self.velocities()))

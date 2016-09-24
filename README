@@ -1,1 +1,6 @@
-A description for pypi 
+PyDART2 is an open source python binding of DART, an open source physics
+simulator. Its APIs are designed to provide concise and powerful control on
+DART physics worlds. Further, a user can write simulations with a numerous
+python scientific libraries, such as NumPy(linear algebra),
+SciPy(optimization), scikit-learn (machine learning), PyBrain(machine
+learning), and so on.

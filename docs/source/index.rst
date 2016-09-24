@@ -13,10 +13,13 @@ python scientific libraries, such as NumPy(linear algebra),
 SciPy(optimization), scikit-learn (machine learning), PyBrain(machine
 learning), and so on.
 
+
+
 News
 ==================
-* [20160805] PyDART2 supports the DART 6.0.1
-* [20160805] PyDART is upgraded to PyDART2, for easier installation and richer APIs.
+* [2016/09/24] PyDART2 now supports both Python2 and Python3.
+* [2016/08/05] PyDART2 supports the DART 6.0.1
+* [2016/08/05] PyDART is upgraded to PyDART2, for easier installation and richer APIs.
 
 Contents:
 =================
@@ -29,11 +32,12 @@ Contents:
 Environment
 ==================
 * Ubuntu 16.04
-* Python 2.7
+* Python2/Python3
 * DART 6.0.1 (or higher): https://github.com/dartsim/dart/
 
 Contact
 ==================
+* GitHub Repository: https://github.com/sehoonha/pydart2
 Please contact me when you have questions or suggestions: sehoon.ha@gmail.com
 
 Indices and tables
@@ -42,4 +46,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-

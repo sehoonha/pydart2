@@ -290,6 +290,10 @@ class Renderer(object):
         gluDisk(self.quadric, 0.0, r, num_seg1, 1)
         glPopMatrix()
 
+    def render_cylinder_two_points(self, p0, p1, radius):
+        self.render_arrow(p0, p1, r_base=radius,
+                          head_width=0.0, head_len=0.0)
+
     def render_arrow(self, p, q, r_base=0.01, head_width=0.015, head_len=0.01):
         # glDisable(GL_LIGHTING)
         m_quadric = self.quadric
@@ -321,11 +325,12 @@ class Renderer(object):
         gluCylinder(m_quadric, r_base, r_base, arrow_len, 10, 10)
         glPopMatrix()
 
-        glColor(1.0, 0.0, 0.0)
-        glPushMatrix()
-        glMultMatrixd(m)
-        glutSolidCone(head_width, head_len, 10, 3)
-        glPopMatrix()
+        if head_width > 1e-6 and head_len > 1e-6:
+            glColor(1.0, 0.0, 0.0)
+            glPushMatrix()
+            glMultMatrixd(m)
+            glutSolidCone(head_width, head_len, 10, 3)
+            glPopMatrix()
         # gluDeleteQuadric(m_quadric)
         # glEnable(GL_LIGHTING)
 

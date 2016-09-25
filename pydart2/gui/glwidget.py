@@ -16,10 +16,12 @@ from PyQt4.QtOpenGL import *
 from . import trackball
 import time
 from .renderer import Renderer
+import numpy as np
 from numpy.linalg import norm
 
 
 class GLWidget(QGLWidget):
+
     def __init__(self, parent=None):
         super(GLWidget, self).__init__(parent)
         fmt = QGLFormat()
@@ -40,6 +42,8 @@ class GLWidget(QGLWidget):
         self.viewer = None
         self.captureIndex = 0
         self.renderer = Renderer()
+
+        self.lock_camera = False
 
     def sizeHint(self):
         return QtCore.QSize(self.width, self.height)
@@ -170,11 +174,22 @@ class GLWidget(QGLWidget):
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
 
+    def set_lock_camera(self, lock=True):
+        self.lock_camera = lock
+
     def mousePressEvent(self, event):
         self.lastPos = event.pos()
 
+        if self.sim is not None and hasattr(self.sim, "on_mouse_press"):
+            pos = np.array([event.pos().x(), event.pos().y()],
+                           dtype=np.float64)
+            self.sim.on_mouse_press(pos)
+
     def mouseReleaseEvent(self, event):
         self.lastPos = None
+
+        if self.sim is not None and hasattr(self.sim, "on_mouse_release"):
+            self.sim.on_mouse_release()
 
     def mouseMoveEvent(self, event):
         # (w, h) = (self.width, self.height)
@@ -183,13 +198,22 @@ class GLWidget(QGLWidget):
         dx = event.x() - self.lastPos.x()
         dy = event.y() - self.lastPos.y()
 
-        modifiers = QtGui.QApplication.keyboardModifiers()
-        if modifiers == QtCore.Qt.ShiftModifier:
-            self.tb.zoom_to(dx, -dy)
-        elif modifiers == QtCore.Qt.ControlModifier:
-            self.tb.trans_to(dx, -dy)
-        else:
-            self.tb.drag_to(x, y, dx, -dy)
+        if not self.lock_camera:
+            modifiers = QtGui.QApplication.keyboardModifiers()
+            if modifiers == QtCore.Qt.ShiftModifier:
+                self.tb.zoom_to(dx, -dy)
+            elif modifiers == QtCore.Qt.ControlModifier:
+                self.tb.trans_to(dx, -dy)
+            else:
+                self.tb.drag_to(x, y, dx, -dy)
+
+        if self.sim is not None and hasattr(self.sim, "on_mouse_move"):
+            p0 = np.array([self.lastPos.x(), self.lastPos.y()],
+                          dtype=np.float64)
+            p1 = np.array([event.pos().x(), event.pos().y()],
+                          dtype=np.float64)
+            self.sim.on_mouse_move(p0, p1)
+
         self.lastPos = event.pos()
         self.updateGL()
 

@@ -84,6 +84,25 @@ class Renderer(object):
     def mult_matrix_raw(self, m):
         glMultMatrixf(m)
 
+    def project(self, x, y, z, auto_flip_vertical=True):
+        modelview_mat = glGetDoublev(GL_MODELVIEW_MATRIX)
+        projection_mat = glGetDoublev(GL_PROJECTION_MATRIX)
+        viewport = glGetIntegerv(GL_VIEWPORT)
+        ret = gluProject(x, y, z, modelview_mat, projection_mat, viewport)
+        ret = list(ret)
+        if auto_flip_vertical:
+            ret[1] = viewport[-1] - ret[1]
+        return ret
+
+    def unproject(self, x, y, z, auto_flip_vertical=True):):
+        modelview_mat = glGetDoublev(GL_MODELVIEW_MATRIX)
+        projection_mat = glGetDoublev(GL_PROJECTION_MATRIX)
+        viewport = glGetIntegerv(GL_VIEWPORT)
+        if auto_flip_vertical:
+            y = viewport[-1] - y
+        ret = gluUnproject(x, y, z, modelview_mat, projection_mat, viewport)
+        return ret
+
     def line_width(self, w):
         glLineWidth(w)
 

@@ -94,7 +94,7 @@ class Renderer(object):
             ret[1] = viewport[-1] - ret[1]
         return ret
 
-    def unproject(self, x, y, z, auto_flip_vertical=True):):
+    def unproject(self, x, y, z, auto_flip_vertical=True):
         modelview_mat = glGetDoublev(GL_MODELVIEW_MATRIX)
         projection_mat = glGetDoublev(GL_PROJECTION_MATRIX)
         viewport = glGetIntegerv(GL_VIEWPORT)

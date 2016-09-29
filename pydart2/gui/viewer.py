@@ -263,10 +263,13 @@ class PydartWindow(QtGui.QMainWindow):
         if event.key() == QtCore.Qt.Key_Escape:
             print('Escape key pressed! Bye.')
             self.close()
+            return
         if 0 <= event.key() and event.key() < 256:  # If key is ascii
             key = chr(event.key())
             if hasattr(self.sim, "on_key_event"):
                 self.sim.on_key_event(key)
+            if hasattr(self.sim, "on_key_press"):
+                self.sim.on_key_press(key)
 
     def rangeSliderEvent(self, value):
         if hasattr(self.sim, 'set_frame'):

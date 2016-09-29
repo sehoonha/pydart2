@@ -77,6 +77,12 @@ class Joint(object):
 
 ########################################
 # Joint::Parent and child functions
+    def position_in_world_frame(self, ):
+        T0 = self.child_bodynode.transform()
+        T1 = self.transform_from_child_body_node()
+        T = T0.dot(T1)
+        return T[:3, 3]
+
     def parent_body_node_id(self, ):
         return papi.joint__getParentBodyNode(self.wid, self.skid, self.id)
 

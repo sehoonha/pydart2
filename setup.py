@@ -3,6 +3,7 @@ from setuptools import find_packages
 from distutils.core import Extension
 from sys import platform as _platform
 import sys
+import glob
 
 
 DIR = 'pydart2/'
@@ -52,6 +53,19 @@ if python_major_version == 3:
     swig_opts.append('-py3')
 print("swig_opts: %s" % (str(swig_opts)))
 
+sources = glob.glob(DIR + "/*.cpp")
+sources.append(DIR + "pydart2_api.i")
+
+print("source files:")
+for source_file in sources:
+    print("    > %s" % source_file)
+
+print("depend files:")
+depends = glob.glob(DIR + "/*.h")
+depends.append(DIR + "numpy.i")
+for depend_file in depends:
+    print("    > %s" % depend_file)
+
 pydart2_api = Extension('_pydart2_api',
                         define_macros=[('MAJOR_VERSION', '1'),
                                        ('MINOR_VERSION', '0')],
@@ -60,12 +74,8 @@ pydart2_api = Extension('_pydart2_api',
                         library_dirs=['/usr/local/lib'],
                         extra_compile_args=CXX_FLAGS.split(),
                         swig_opts=swig_opts,
-                        sources=[DIR + 'pydart2_api.cpp',
-                                 DIR + 'pydart2_draw.cpp',
-                                 DIR + 'pydart2_api.i'],
-                        depends=[DIR + 'pydart2_api.h',
-                                 DIR + 'pydart2_draw.h',
-                                 DIR + 'numpy.i'])
+                        sources=sources,
+                        depends=depends)
 
 
 setup(name='pydart2',

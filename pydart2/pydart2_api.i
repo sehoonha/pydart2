@@ -5,6 +5,11 @@
   #include "pydart2_api.h"
 %}
 
+%{
+  #define SWIG_FILE_WITH_INIT
+  #include "pydart2_world_api.h"
+%}
+
 /* Include the NumPy typemaps library */
 %include "numpy.i"
 
@@ -44,4 +49,4 @@ namespace std {
 %apply (double* INPLACE_ARRAY2, int DIM1, int DIM2) {(double* outm, int nrows, int ncols)};
 
 %include "pydart2_api.h"
-
+%include "pydart2_world_api.h"

@@ -19,5 +19,8 @@ from .world import World
 from .skel_vector import SkelVector
 
 
+__version__ = (0, 4, 1)
+
+
 def init(verbose=True):
     papi.init(verbose)

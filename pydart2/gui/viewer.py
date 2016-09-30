@@ -72,7 +72,7 @@ class PydartWindow(QtGui.QMainWindow):
         self.camera_event(0)
 
         self.after_reset = True
-        self.set_capture_rate (100)
+        self.set_capture_rate(100)
 
         self.input_keys = list()
         self.topLeft()

@@ -69,6 +69,7 @@ class GLWidget(QGLWidget):
         self.enable2D()
         if self.sim is not None and hasattr(self.sim, "draw_with_ri"):
             self.sim.draw_with_ri(self.renderer)
+            self.renderer.draw_text([-100, -100], "")
         self.disable2D()
 
     def resizeGL(self, w, h):

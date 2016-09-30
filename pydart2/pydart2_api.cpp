@@ -333,6 +333,36 @@ void WORLD(getGravity)(int wid, double outv3[3]) {
 }
 
 ////////////////////////////////////////
+// World::CollisionDetector Functions
+void WORLD(setCollisionDetector)(int wid, int detector_type) {
+    dart::simulation::WorldPtr world = GET_WORLD(wid);
+    dart::constraint::ConstraintSolver* solver = world->getConstraintSolver();
+    if (detector_type == 0) {
+        solver->setCollisionDetector(dart::collision::DARTCollisionDetector::create());
+    } else if (detector_type == 1) {
+      solver->setCollisionDetector(dart::collision::FCLCollisionDetector::create());
+    } else if (detector_type == 2) {
+      solver->setCollisionDetector(dart::collision::BulletCollisionDetector::create());
+    } else {
+        ERR << " [pydart_api] unknown detector_type" << std::endl;
+    }
+}
+
+int WORLD(getCollisionDetector)(int wid) {
+    dart::simulation::WorldPtr world = GET_WORLD(wid);
+    dart::constraint::ConstraintSolver* solver = world->getConstraintSolver();
+    dart::collision::CollisionDetector* detector = solver->getCollisionDetector().get();
+    if (dynamic_cast<dart::collision::DARTCollisionDetector*>(detector)) {
+        return 0;
+    } else if (dynamic_cast<dart::collision::FCLCollisionDetector*>(detector)) {
+        return 1;
+    } else if (dynamic_cast<dart::collision::BulletCollisionDetector*>(detector)) {
+        return 2;
+    }
+    return -1;
+}
+
+////////////////////////////////////////
 // World::Constraint Functions
 void WORLD(removeAllConstraints)(int wid) {
     dart::simulation::WorldPtr world = GET_WORLD(wid);
@@ -1066,6 +1096,17 @@ const char* JOINT(getType)(int wid, int skid, int jid) {
     return joint->getType().c_str();
 }
 
+
+void JOINT(setActuatorType)(int wid, int skid, int jid, int actuator_type) {
+  dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+  joint->setActuatorType(static_cast<dart::dynamics::Joint::ActuatorType>(actuator_type));
+}
+
+
+int JOINT(getActuatorType)(int wid, int skid, int jid) {
+  dart::dynamics::JointPtr joint = GET_JOINT(wid, skid, jid);
+  return (int)joint->getActuatorType();
+}
 
 ////////////////////////////////////////
 // Joint::Parent and child Functions

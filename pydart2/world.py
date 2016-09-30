@@ -21,11 +21,9 @@ def create_world(step, skel_path=None):
 
 
 class World(object):
-    NUM_COLLISION_DETECTOR_TYPES = 4
     DART_COLLISION_DETECTOR, \
         FCL_COLLISION_DETECTOR, \
-        FCL_MESH_COLLISION_DETECTOR, \
-        BULLET_COLLISION_DETECTOR = list(range(NUM_COLLISION_DETECTOR_TYPES))
+        BULLET_COLLISION_DETECTOR = list(range(3))
 
     def __init__(self, step, skel_path=None):
         self.skeletons = list()
@@ -172,6 +170,23 @@ class World(object):
 
     def remove_all_constraints(self, ):
         papi.world__removeAllConstraints(self.id)
+
+    def set_collision_detector(self, detector_type):
+        """
+        self.set_collision_detector(World.DART_COLLISION_DETECTOR)
+        """
+        papi.world__setCollisionDetector(self.id, detector_type)
+        assert(detector_type == self.collision_detector())
+
+    def collision_detector(self, ):
+        return papi.world__getCollisionDetector(self.id)
+
+    def collision_detector_string(self, ):
+        typenames = ["DART_COLLISION_DETECTOR",
+                     "FCL_COLLISION_DETECTOR",
+                     "BULLET_COLLISION_DETECTOR", ]
+        detector_type = self.collision_detector()
+        return typenames[detector_type]
 
     # def set_collision_pair(self, body1, body2, is_enable):
     #     flag_enable = 1 if is_enable else 0

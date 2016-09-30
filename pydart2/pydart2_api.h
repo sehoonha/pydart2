@@ -44,6 +44,12 @@ void WORLD(setGravity)(int wid, double inv3[3]);
 void WORLD(getGravity)(int wid, double outv3[3]);
 
 ////////////////////////////////////////
+// World::CollisionDetector Functions
+void WORLD(setCollisionDetector)(int wid, int detector_type);
+int WORLD(getCollisionDetector)(int wid);
+
+
+////////////////////////////////////////
 // World::Constraint Functions
 void WORLD(removeAllConstraints)(int wid);
 
@@ -262,6 +268,8 @@ bool JOINT(isKinematic)(int wid, int skid, int jid);
 bool JOINT(isDynamic)(int wid, int skid, int jid);
 const char* JOINT(getType)(int wid, int skid, int jid);
 
+void JOINT(setActuatorType)(int wid, int skid, int jid, int actuator_type);
+int JOINT(getActuatorType)(int wid, int skid, int jid);
 
 ////////////////////////////////////////
 // Joint::Parent and child bodynode Functions

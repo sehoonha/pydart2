@@ -12,6 +12,7 @@ from . import pydart2_api as papi
 class Joint(object):
     """
     """
+    FORCE, PASSIVE, SERVO, ACCELERATION, VELOCITY, LOCKED = list(range(6))
 
     def __init__(self, _skeleton, _id):
         """
@@ -74,6 +75,16 @@ class Joint(object):
 
     def type(self, ):
         return papi.joint__getType(self.wid, self.skid, self.id)
+
+    def set_actuator_type(self, actuator_type):
+        """
+        joint.set_actuator_type(Joint.LOCKED)
+        """
+        papi.joint__setActuatorType(
+            self.wid, self.skid, self.id, actuator_type)
+
+    def actuator_type(self, ):
+        return papi.joint__getActuatorType(self.wid, self.skid, self.id)
 
 ########################################
 # Joint::Parent and child functions

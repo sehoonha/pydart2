@@ -107,6 +107,7 @@ if __name__ == '__main__':
     print('pydart initialization OK')
 
     world = pydart.World(old_div(1.0, 2000.0), './data/skel/fullbody1.skel')
+
     print('pydart create_world OK')
 
     # Initialize the pose

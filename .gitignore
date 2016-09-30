@@ -91,3 +91,6 @@ ENV/
 # Auxiliary build files
 pydart2/pydart2_api.py
 pydart2/*wrap*
+
+examples/*.mp4
+examples/data/captures/*.png

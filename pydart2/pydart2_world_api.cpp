@@ -12,12 +12,7 @@ using std::endl;
 #include "pydart2_manager.h"
 #include "pydart2_api.h"
 #include "pydart2_world_api.h"
-
-// Dart headers
-#include "dart/dart.hpp"
-#include "dart/gui/gui.hpp"
-#include "dart/utils/utils.hpp"
-
+#include "pydart2_skeleton_api.h"
 #include "pydart2_draw.h"
 
 using namespace pydart;

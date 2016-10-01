@@ -3,11 +3,12 @@
 %{
   #define SWIG_FILE_WITH_INIT
   #include "pydart2_api.h"
-%}
-
-%{
-  #define SWIG_FILE_WITH_INIT
   #include "pydart2_world_api.h"
+  #include "pydart2_skeleton_api.h"
+  #include "pydart2_bodynode_api.h"
+  #include "pydart2_dof_api.h"
+  #include "pydart2_joint_api.h"
+  #include "pydart2_shape_api.h"
 %}
 
 /* Include the NumPy typemaps library */
@@ -50,3 +51,8 @@ namespace std {
 
 %include "pydart2_api.h"
 %include "pydart2_world_api.h"
+%include "pydart2_skeleton_api.h"
+%include "pydart2_bodynode_api.h"
+%include "pydart2_dof_api.h"
+%include "pydart2_joint_api.h"
+%include "pydart2_shape_api.h"

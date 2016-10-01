@@ -246,6 +246,10 @@ class RevoluteJoint(Joint):
     def axis(self, ):
         return papi.revolute_joint__getAxis(self.wid, self.skid, self.id)
 
+    def axis_in_world_frame(self, ):
+        R = self.parent_bodynode.T[:3, :3]
+        return R.dot(self.axis())
+
     def set_axis(self, _axis):
         return papi.revolute_joint__setAxis(
             self.wid, self.skid, self.id, _axis)
@@ -278,9 +282,17 @@ class UniversalJoint(Joint):
     def axis1(self, ):
         return papi.universal_joint__getAxis1(self.wid, self.skid, self.id)
 
+    def axis1_in_world_frame(self, ):
+        R = self.parent_bodynode.T[:3, :3]
+        return R.dot(self.axis1())
+
     def set_axis1(self, _axis):
         return papi.universal_joint__setAxis1(
             self.wid, self.skid, self.id, _axis)
+
+    def axis2_in_world_frame(self, ):
+        R = self.parent_bodynode.T[:3, :3]
+        return R.dot(self.axis2())
 
     def axis2(self, ):
         return papi.universal_joint__getAxis2(self.wid, self.skid, self.id)

@@ -19,7 +19,7 @@ from .world import World
 from .skel_vector import SkelVector
 
 
-__version__ = (0, 4, 1)
+__version__ = (0, 5, 0)
 
 
 def init(verbose=True):

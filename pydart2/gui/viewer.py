@@ -134,6 +134,23 @@ class PydartWindow(QtGui.QMainWindow):
         self.hbox.addWidget(self.glwidget)
         self.ui.setLayout(self.hbox)
 
+    def add_right_panel(self, panel):
+        TOOLBOX_HEIGHT = 30
+        STATUS_HEIGHT = 30
+        PANEL_WIDTH = panel.width
+
+        self.setGeometry(0, 0, 1280 + PANEL_WIDTH,
+                         720 + TOOLBOX_HEIGHT + STATUS_HEIGHT)
+        self.ui.setGeometry(0, TOOLBOX_HEIGHT, 1280 + PANEL_WIDTH, 720)
+        self.glwidget.setGeometry(0, 0, 1280, 720)
+        self.glwidget.resizeGL(1280, 720)
+
+        self.right_panel = panel
+        layout = panel.build_layout()
+        self.hbox.addLayout(layout)
+
+        self.ui.setLayout(self.hbox)
+
     def init_cameras(self,):
         self.cameras = list()
         self.add_camera(

@@ -7,3 +7,4 @@ from __future__ import absolute_import
 
 
 from . import viewer
+import pydart2.gui.side_panel

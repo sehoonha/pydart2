@@ -49,6 +49,9 @@ class MyWorld(pydart.World):
         self.robot.set_controller(self.controller)
         print('create controller OK')
 
+    def oh_my_god(self, txt=None):
+        print("oh my god!! " + str(txt))
+
     def on_key_press(self, key):
         if key == 'G':
             self.controller.enabled = not self.controller.enabled
@@ -74,7 +77,13 @@ if __name__ == '__main__':
     win = pydart.gui.viewer.PydartWindow(world)
     win.camera_event(1)
     win.set_capture_rate(10)
-    # win.set_callback('reset', world.hahaha)
-    # win.set_callback('on_key_press', world.new_key_press)
-    print('callbacks = \n' + win.callbacks_as_string())
+
+    panel = pydart.gui.side_panel.SidePanel()
+    panel.add_label("Mode")
+    panel.add_push_button("Hello", world.oh_my_god, next_line=False)
+    panel.add_push_button("Jello", world.oh_my_god)
+    panel.add_combobox("Render", ["No", "Yes"], default=1, callback=world.oh_my_god, label="MyRenderSetting")
+    panel.add_double_spinbox("Step", 0, 10.0, step=2.5, callback=world.oh_my_god)
+    panel.set_text("Mode", "Melo")
+    win.add_right_panel(panel)
     win.run_application()

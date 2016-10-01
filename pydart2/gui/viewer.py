@@ -1,25 +1,25 @@
-from __future__ import print_function
-from __future__ import absolute_import
-from builtins import chr
-from builtins import str
-#!/usr/bin/env python
-
 # Copyright (c) 2015, Disney Research
 # All rights reserved.
 #
 # Author(s): Sehoon Ha <sehoon.ha@disneyresearch.com>
 # Disney Research Robotics Group
 
+from __future__ import print_function
+from __future__ import absolute_import
+from builtins import chr
+from builtins import str
 import sys
 import os
 import signal
-import numpy as np
-import math
-import time
-import inspect
+
+# import numpy as np
+# import math
+# import time
+# import inspect
+
 import logging
 
-from OpenGL.GLUT import *
+import OpenGL.GLUT
 from PyQt4 import QtGui
 from PyQt4 import QtCore
 from .glwidget import GLWidget
@@ -29,6 +29,8 @@ from .trackball import Trackball
 def signal_handler(signal, frame):
     print('You pressed Ctrl+C! Bye.')
     sys.exit(0)
+
+
 signal.signal(signal.SIGINT, signal_handler)
 
 
@@ -37,7 +39,7 @@ class PydartWindow(QtGui.QMainWindow):
 
     def __init__(self, sim=None, title=None):
         if not PydartWindow.GLUT_INITED:
-            glutInit(sys.argv)
+            OpenGL.GLUT.glutInit(sys.argv)
 
         if title is None:
             title = "Simulation Viewer"
@@ -47,7 +49,8 @@ class PydartWindow(QtGui.QMainWindow):
 
         # setup_logger()
         self.logger = logging.getLogger(__name__)
-        self.sim = sim
+        self.init_callbacks()
+        self.set_simulation(sim)
         self.logger.info('sim = [%s]' % str(self.sim))
 
         # Check and create captures directory
@@ -77,13 +80,12 @@ class PydartWindow(QtGui.QMainWindow):
         self.input_keys = list()
         self.topLeft()
 
-    def run_application(self, ):
+    def run_application(self,):
         self.show()
         self.app.exec_()
 
     def closeEvent(self, event):
-        if hasattr(self.sim, "on_close"):
-            self.sim.on_close()
+        self.safe_call_callback("on_close")
         super(PydartWindow, self).closeEvent(event)
 
     def topLeft(self):
@@ -101,9 +103,11 @@ class PydartWindow(QtGui.QMainWindow):
 
     def set_simulation(self, sim):
         self.sim = sim
-        self.glwidget.sim = sim
+        if hasattr(self, "glwidget"):
+            self.glwidget.sim = sim
+        self.read_default_callbacks_from_sim()
 
-    def capture_rate(self, ):
+    def capture_rate(self,):
         return self._capture_rate
 
     def set_capture_rate(self, _capture_rate):
@@ -113,8 +117,7 @@ class PydartWindow(QtGui.QMainWindow):
         TOOLBOX_HEIGHT = 30
         STATUS_HEIGHT = 30
         PANEL_WIDTH = 0
-        self.setGeometry(0, 0,
-                         1280 + PANEL_WIDTH,
+        self.setGeometry(0, 0, 1280 + PANEL_WIDTH,
                          720 + TOOLBOX_HEIGHT + STATUS_HEIGHT)
         # self.setWindowTitle('Toolbar')
 
@@ -124,21 +127,68 @@ class PydartWindow(QtGui.QMainWindow):
         self.hbox = QtGui.QHBoxLayout()
 
         self.glwidget = GLWidget()
-        self.glwidget.sim  = self.sim
+        self.glwidget.sim = self.sim
         self.glwidget.viewer = self
         self.glwidget.setGeometry(0, 0, 1280, 720)
 
         self.hbox.addWidget(self.glwidget)
         self.ui.setLayout(self.hbox)
 
-    def init_cameras(self, ):
+    def init_cameras(self,):
         self.cameras = list()
-        self.add_camera(Trackball(rot=[-0.152, 0.045, -0.002, 0.987],
-                                  trans=[0.050, 0.210, -2.500]), "Camera Y up")
-        self.add_camera(Trackball(rot=[0.535, 0.284, 0.376, 0.701],
-                                  trans=[0.100, 0.020, -2.770]), "Camera Z up")
+        self.add_camera(
+            Trackball(
+                rot=[-0.152, 0.045, -0.002, 0.987],
+                trans=[0.050, 0.210, -2.500]),
+            "Camera Y up")
+        self.add_camera(
+            Trackball(
+                rot=[0.535, 0.284, 0.376, 0.701], trans=[0.10, 0.02, -2.770]),
+            "Camera Z up")
 
-    def num_cameras(self, ):
+    def init_callbacks(self,):
+        self.callback_events = ["reset", "step", "render_with_ri",
+                                "name",
+                                "draw_with_ri",
+                                "num_frames", "set_frame",
+                                "status", "on_close", "on_key_press",
+                                "on_mouse_press", "on_mouse_move",
+                                "on_mouse_release"]
+        self.callbacks = dict()
+        for evt in self.callback_events:
+            self.callbacks[evt] = None
+
+    def read_default_callbacks_from_sim(self,):
+        self.logger.info('read_default_callbacks_from_sim')
+        if self.sim is None:
+            return
+
+        for evt in self.callback_events:
+            if hasattr(self.sim, evt):
+                self.callbacks[evt] = getattr(self.sim, evt)
+            else:
+                self.callbacks[evt] = None
+
+    def callback(self, evt):
+        return self.callbacks[evt]
+
+    def has_callback(self, evt):
+        return self.callbacks[evt] is not None
+
+    def set_callback(self, evt, func):
+        self.callbacks[evt] = func
+
+    def safe_call_callback(self, evt, *args):
+        func = self.callbacks[evt]
+        if func is None:
+            return None
+        return func(*args)
+
+    def callbacks_as_string(self,):
+        return "\n".join(["\t[%s: %s]" % (str(evt), str(func))
+                          for evt, func in self.callbacks.items()])
+
+    def num_cameras(self,):
         return len(self.cameras)
 
     def replace_camera(self, idx, trackball):
@@ -235,11 +285,10 @@ class PydartWindow(QtGui.QMainWindow):
 
         # Do play
         elif self.playAction.isChecked():
-            if hasattr(self.sim, 'step'):
-                bIsDone = self.sim.step()
-                if bIsDone is False:
-                    print("step() returns False: stop...")
-                    self.playAction.setChecked(False)
+            bIsDone = self.safe_call_callback('step')
+            if bIsDone is False:
+                print("step() returns False: stop...")
+                self.playAction.setChecked(False)
             # capture_rate = 10
             doCapture = (self.sim.frame % self.capture_rate() == 0)
             # doCapture = True
@@ -250,13 +299,13 @@ class PydartWindow(QtGui.QMainWindow):
     def renderTimerEvent(self):
         self.glwidget.updateGL()
 
-        if hasattr(self.sim, 'status'):
-            self.statusBar().showMessage(self.sim.status())
-        else:
-            self.statusBar().showMessage(str(self.sim))
+        msg = self.safe_call_callback('status')
+        if msg is None:
+            msg = str(self.sim)
+        self.statusBar().showMessage(msg)
 
-        if hasattr(self.sim, 'num_frames'):
-            n = self.sim.num_frames()
+        n = self.safe_call_callback('num_frames')
+        if n is not None:
             self.rangeSlider.setRange(0, n - 1)
 
     def keyPressEvent(self, event):
@@ -266,20 +315,17 @@ class PydartWindow(QtGui.QMainWindow):
             return
         if 0 <= event.key() and event.key() < 256:  # If key is ascii
             key = chr(event.key())
-            if hasattr(self.sim, "on_key_event"):
-                self.sim.on_key_event(key)
-            if hasattr(self.sim, "on_key_press"):
-                self.sim.on_key_press(key)
+            self.safe_call_callback("on_key_press", key)
 
-    def rangeSliderEvent(self, value):
-        if hasattr(self.sim, 'set_frame'):
-            self.sim.set_frame(value)
+    def rangeSliderEvent(self, frame):
+        self.safe_call_callback("set_frame", frame)
 
     def screenshotEvent(self):
         self.glwidget.capture("%s_frame" % self.prob_name())
 
     def prob_name(self):
-        return "robot"
+        name = self.safe_call_callback("name")
+        return name if name is not None else "robot"
 
     def emptyEvent(self):
         cmd = 'rm %s/*.png' % self.capture_dir
@@ -287,6 +333,9 @@ class PydartWindow(QtGui.QMainWindow):
         os.system(cmd)
 
     def movieEvent(self):
+        """
+        Ubuntu tested only: avconv is required
+        """
         name = self.prob_name()
         # yuv420p for compatibility for outdated codecs
         cmt_fmt = 'avconv -r 100'
@@ -301,12 +350,14 @@ class PydartWindow(QtGui.QMainWindow):
     def resetEvent(self):
         self.after_reset = True
         self.rangeSlider.setValue(0)
-        if hasattr(self.sim, 'reset'):
-            self.sim.reset()
+        # if hasattr(self.sim, 'reset'):
+        #     self.sim.reset()
+        # if self.callbacks['reset'] is not None:
+        #     self.callbacks['reset']()
+        self.safe_call_callback('reset')
 
     def stepEvent(self):
-        if hasattr(self.sim, 'step'):
-            self.sim.step()
+        self.safe_call_callback("step")
 
     def camera_event(self, cam_id):
         print("camera_event: %d" % cam_id)

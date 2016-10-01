@@ -181,16 +181,13 @@ class GLWidget(QGLWidget):
     def mousePressEvent(self, event):
         self.lastPos = event.pos()
 
-        if self.sim is not None and hasattr(self.sim, "on_mouse_press"):
-            pos = np.array([event.pos().x(), event.pos().y()],
-                           dtype=np.float64)
-            self.sim.on_mouse_press(pos)
+        pos = np.array([event.pos().x(), event.pos().y()],
+                       dtype=np.float64)
+        self.viewer.safe_call_callback("on_mouse_press", pos)
 
     def mouseReleaseEvent(self, event):
         self.lastPos = None
-
-        if self.sim is not None and hasattr(self.sim, "on_mouse_release"):
-            self.sim.on_mouse_release()
+        self.viewer.safe_call_callback("on_mouse_release")
 
     def mouseMoveEvent(self, event):
         # (w, h) = (self.width, self.height)
@@ -208,12 +205,11 @@ class GLWidget(QGLWidget):
             else:
                 self.tb.drag_to(x, y, dx, -dy)
 
-        if self.sim is not None and hasattr(self.sim, "on_mouse_move"):
-            p0 = np.array([self.lastPos.x(), self.lastPos.y()],
-                          dtype=np.float64)
-            p1 = np.array([event.pos().x(), event.pos().y()],
-                          dtype=np.float64)
-            self.sim.on_mouse_move(p0, p1)
+        p0 = np.array([self.lastPos.x(), self.lastPos.y()],
+                      dtype=np.float64)
+        p1 = np.array([event.pos().x(), event.pos().y()],
+                      dtype=np.float64)
+        self.viewer.safe_call_callback("on_mouse_move", p0, p1)
 
         self.lastPos = event.pos()
         self.updateGL()
@@ -225,5 +221,5 @@ class GLWidget(QGLWidget):
         dir = self.viewer.capture_dir
         filename = '%s/%s.%04d.png' % (dir, name, self.captureIndex)
         img.save(filename)
-        print(('Capture to ', filename))
+        print(('Capture to %s' % filename))
         self.captureIndex += 1

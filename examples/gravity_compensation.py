@@ -53,6 +53,9 @@ class MyWorld(pydart.World):
         if key == 'G':
             self.controller.enabled = not self.controller.enabled
 
+    def on_mouse_press(self, pos):
+        print("pos = " + str(pos))
+
     def draw_with_ri(self, ri):
         ri.set_color(0, 0, 0)
         ri.draw_text([20, 40], "time = %.4fs" % self.t)
@@ -71,4 +74,7 @@ if __name__ == '__main__':
     win = pydart.gui.viewer.PydartWindow(world)
     win.camera_event(1)
     win.set_capture_rate(10)
+    # win.set_callback('reset', world.hahaha)
+    # win.set_callback('on_key_press', world.new_key_press)
+    print('callbacks = \n' + win.callbacks_as_string())
     win.run_application()

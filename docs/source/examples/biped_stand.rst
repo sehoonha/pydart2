@@ -81,7 +81,7 @@ Code
                 self.duration -= 1
                 self.skeletons[1].body('h_spine').add_ext_force(self.force)
 
-        def on_key_event(self, key):
+        def on_key_press(self, key):
             if key == '1':
                 self.force = np.array([50.0, 0.0, 0.0])
                 self.duration = 100

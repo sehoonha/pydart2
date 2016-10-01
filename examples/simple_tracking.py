@@ -1,8 +1,3 @@
-from __future__ import division
-from __future__ import print_function
-from builtins import str
-from past.utils import old_div
-from builtins import object
 # Copyright (c) 2015, Disney Research
 # All rights reserved.
 #
@@ -29,7 +24,7 @@ if __name__ == '__main__':
     pydart.init()
     print('pydart initialization OK')
 
-    world = pydart.World(old_div(1.0, 2000.0))
+    world = pydart.World(0.0005)
     world.set_gravity([0.0, 0.0, 0.0])
     print('World OK')
 

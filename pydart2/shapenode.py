@@ -12,6 +12,7 @@ from .shape import Shape
 class ShapeNode(object):
     """
     """
+
     def __init__(self, _bodynode, _id):
         """
         """
@@ -50,6 +51,23 @@ class ShapeNode(object):
                                                   self.skid,
                                                   self.bid,
                                                   self.id)
+
+    def visual_aspect_rgba(self, ):
+        if not self.has_visual_aspect():
+            return None
+        return papi.shapenode__getVisualAspectRGBA(self.wid,
+                                                   self.skid,
+                                                   self.bid,
+                                                   self.id)
+
+    def set_visual_aspect_rgba(self, rgba):
+        if not self.has_visual_aspect():
+            return
+        papi.shapenode__setVisualAspectRGBA(self.wid,
+                                            self.skid,
+                                            self.bid,
+                                            self.id,
+                                            rgba)
 
     def offset(self, ):
         return papi.shapenode__getOffset(self.wid,

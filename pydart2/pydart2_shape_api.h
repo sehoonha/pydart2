@@ -18,6 +18,9 @@ void SHAPENODE(setRelativeTransform)(int wid, int skid, int bid, int sid, double
 bool SHAPENODE(hasVisualAspect)(int wid, int skid, int bid, int sid);
 bool SHAPENODE(hasCollisionAspect)(int wid, int skid, int bid, int sid);
 
+void SHAPENODE(getVisualAspectRGBA)(int wid, int skid, int bid, int sid, double outv4[4]);
+void SHAPENODE(setVisualAspectRGBA)(int wid, int skid, int bid, int sid, double inv4[4]);
+
 ////////////////////////////////////////
 // Shape Functions
 double SHAPE(getVolume)(int wid, int skid, int bid, int sid);

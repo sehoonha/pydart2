@@ -1,6 +1,12 @@
 #ifndef PYDART2_PYDART2_API_H
 #define PYDART2_PYDART2_API_H
 
+
+#if __has_include("dart/dynamics/CapsuleShape.hpp")
+#define DART6_NEW_SHAPE_API
+#endif
+
+
 #include <vector>
 
 ////////////////////////////////////////////////////////////////////////////////

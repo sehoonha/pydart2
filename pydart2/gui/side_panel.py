@@ -121,5 +121,11 @@ class SidePanel(object):
     def set_text(self, name, label):
         self.widgets[name].setText(label)
 
+    def value(self, name):
+        return self.widgets[name].value()
+
+    def set_value(self, name, value):
+        self.widgets[name].setValue(value)
+
     def set_enabled(self, name, enabled=True):
         self.widgets[name].setEnabled(enabled)

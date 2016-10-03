@@ -24,3 +24,9 @@ build3:  $(SOURCES) $(HEADERS) $(INTERFACE)
 
 upload3:
 	python3 setup.py sdist upload
+
+runtests:
+	python3 -m unittest discover -s tests -p "test*.py" -v
+
+runtests2:
+	python3 -m unittest discover -s tests -p "test*.py" -v

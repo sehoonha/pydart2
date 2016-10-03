@@ -52,6 +52,18 @@ class SidePanel(object):
         self.register_widget(w, name, next_line)
         return w
 
+    def add_toggle_button(self, name, default=True,
+                          callback=None, label=None,
+                          next_line=True):
+        w = self.add_push_button(name,
+                                 callback=callback,
+                                 label=label,
+                                 next_line=next_line)
+        w.setCheckable(True)
+        if default is not None:
+            w.setChecked(default)
+        return w
+
     def add_combobox(self, name, items, default=0,
                      label=True,
                      callback=None, next_line=True):
@@ -126,6 +138,12 @@ class SidePanel(object):
 
     def set_value(self, name, value):
         self.widgets[name].setValue(value)
+
+    def is_checked(self, name):
+        return self.widgets[name].isChecked()
+
+    def set_checked(self, name, value):
+        self.widgets[name].setChecked(value)
 
     def set_enabled(self, name, enabled=True):
         self.widgets[name].setEnabled(enabled)

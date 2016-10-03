@@ -1,7 +1,6 @@
 #ifndef PYDART2_JOINT_API_H
 #define PYDART2_JOINT_API_H
 
-
 ////////////////////////////////////////////////////////////////////////////////
 // Joint
 #define JOINT(funcname) joint__##funcname

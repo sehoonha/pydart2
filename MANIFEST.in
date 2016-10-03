@@ -1,3 +1,10 @@
+include pydart2/pydart2_joint_api.h
+include pydart2/pydart2_bodynode_api.h
+include pydart2/pydart2_shape_api.h
 include pydart2/pydart2_api.h
+include pydart2/pydart2_dof_api.h
+include pydart2/pydart2_manager.h
 include pydart2/pydart2_draw.h
+include pydart2/pydart2_skeleton_api.h
+include pydart2/pydart2_world_api.h
 include pydart2/numpy.i

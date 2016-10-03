@@ -1,10 +1,6 @@
 #ifndef PYDART2_MANAGER_H
 #define PYDART2_MANAGER_H
 
-#define MSG if (Manager::g_verbose) dtmsg
-#define DBG if (Manager::g_verbose) dtdbg
-#define WARN if (Manager::g_verbose) dtwarn
-#define ERR if (Manager::g_verbose) dterr
 
 
 // Dart headers
@@ -50,5 +46,9 @@ void write_isometry(const Eigen::Isometry3d& src, double dst[4][4]);
 Eigen::VectorXd read(double* src, int n);
 Eigen::Isometry3d read_isometry(double src[4][4]);
 
+#define MSG if (Manager::g_verbose) dtmsg
+#define DBG if (Manager::g_verbose) dtdbg
+#define WARN if (Manager::g_verbose) dtwarn
+#define ERR if (Manager::g_verbose) dterr
 
 #endif // #ifndef PYDART2_MANAGER_H

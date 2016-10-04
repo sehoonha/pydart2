@@ -1,16 +1,24 @@
 language: python
+sudo: required
+dist: trusty
+
 python:
   - "3.4"
+
 before_install:
+  - sudo apt-add-repository ppa:libccd-debs
+  - sudo apt-add-repository ppa:fcl-debs
   - sudo apt-add-repository ppa:dartsim -y
   - sudo apt-get update -q
   - sudo apt-get install libdart6-all-dev -y
   - sudo apt-get install swig -y
   - sudo apt-get install python3-pip python3-pyqt4 python3-pyqt4.qtopengl -y
+
 # command to install dependencies
 install:
   - pip install -r requirements.txt
   - pip install .
+
 # command to run tests
 script:
   - if [[ $TRAVIS_PYTHON_VERSION == 3* ]]; then make runtests

@@ -77,6 +77,9 @@ pydart2_api = Extension('_pydart2_api',
                         sources=sources,
                         depends=depends)
 
+requires = ['numpy', 'PyOpenGL', 'PyOpenGL_accelerate']
+if python_major_version == 3:
+    requires.append("future")
 
 setup(name='pydart2',
       version='0.5.0',
@@ -85,9 +88,7 @@ setup(name='pydart2',
       author='Sehoon Ha',
       author_email='sehoon.ha@gmail.com',
       license='BSD',
-      install_requires=[
-          'numpy', 'PyOpenGL', 'PyOpenGL_accelerate'
-      ],
+      install_requires=requires,
       keywords=['physics', 'robotics', 'simulation'],
       classifiers=['Development Status :: 2 - Pre-Alpha',
                    'License :: OSI Approved :: BSD License',

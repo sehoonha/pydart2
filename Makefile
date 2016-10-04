@@ -29,4 +29,4 @@ runtests:
 	python3 -m unittest discover -s tests -p "test*.py" -v
 
 runtests2:
-	python3 -m unittest discover -s tests -p "test*.py" -v
+	python -m unittest discover -s tests -p "test*.py" -v

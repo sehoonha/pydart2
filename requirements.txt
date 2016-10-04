@@ -1,0 +1,5 @@
+scipy==0.16.1
+numpy==1.9.2
+PyOpenGL==3.1.0
+PyOpenGL-accelerate==3.1.0
+future==0.15.2

@@ -55,6 +55,7 @@ print("swig_opts: %s" % (str(swig_opts)))
 
 sources = glob.glob(DIR + "/*.cpp")
 sources.append(DIR + "pydart2_api.i")
+sources = [f for f in sources if "wrap" not in f]  # Safe guard
 
 print("source files:")
 for source_file in sources:
@@ -65,6 +66,12 @@ depends = glob.glob(DIR + "/*.h")
 depends.append(DIR + "numpy.i")
 for depend_file in depends:
     print("    > %s" % depend_file)
+
+MANIFEST_in = "\n".join(["include %s" % f for f in depends])
+print("Please check MANIFEST.in is:")
+print("============================")
+print(MANIFEST_in)
+print("============================")
 
 pydart2_api = Extension('_pydart2_api',
                         define_macros=[('MAJOR_VERSION', '1'),
@@ -82,7 +89,7 @@ if python_major_version == 3:
     requires.append("future")
 
 setup(name='pydart2',
-      version='0.5.0',
+      version='0.5.2',
       description='Python Interface for DART Simulator',
       url='https://github.com/sehoonha/pydart2',
       author='Sehoon Ha',

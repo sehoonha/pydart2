@@ -30,6 +30,12 @@ learning), and so on.
 + DART 6.0.1 (or higher): https://github.com/dartsim/dart/
 
 ======
+## Build Status
+
+[![Build Status](https://api.travis-ci.org/sehoonha/pydart2.svg)](https://travis-ci.org/sehoonha/pydart2)
+
+
+======
 ## Documentation
 + http://pydart2.readthedocs.io/en/latest/
 

@@ -298,6 +298,31 @@ class Renderer(object):
                 glEnd()
         glEnable(GL_LIGHTING)
 
+    def render_chessboard_xy(self, sz, n=10, color1=None, color2=None):
+        glDisable(GL_LIGHTING)
+        step = old_div(sz, float(n))
+        if color1 is None:
+            color1 = np.array([0.95, 0.95, 0.95])
+        if color2 is None:
+            color2 = np.array([0.7, 0.7, 0.7])
+        sz2 = 0.5 * sz
+        for i, x in enumerate(np.linspace(-sz2, sz2, n, endpoint=False)):
+            for j, y in enumerate(np.linspace(-sz2, sz2, n, endpoint=False)):
+                x2 = x + step
+                y2 = y + step
+                if (i + j) % 2 == 0:
+                    self.set_color(*color1)
+                else:
+                    self.set_color(*color2)
+
+                glBegin(GL_POLYGON)
+                glVertex([x, y, 0])
+                glVertex([x, y2, 0])
+                glVertex([x2, y2, 0])
+                glVertex([x2, y, 0])
+                glEnd()
+        glEnable(GL_LIGHTING)
+
     def render_cylinder(self, pos, r, h, num_seg1=20, num_seg2=10):
         glPushMatrix()
         glTranslated(*pos)

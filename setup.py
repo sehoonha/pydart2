@@ -89,7 +89,7 @@ if python_major_version == 3:
     requires.append("future")
 
 setup(name='pydart2',
-      version='0.5.2',
+      version='0.5.3',
       description='Python Interface for DART Simulator',
       url='https://github.com/sehoonha/pydart2',
       author='Sehoon Ha',
@@ -102,5 +102,5 @@ setup(name='pydart2',
                    'Operating System :: POSIX :: Linux',
                    'Programming Language :: Python :: 2 :: Only',
                    'Topic :: Games/Entertainment :: Simulation'],
-      packages=find_packages(),
+      packages=find_packages(exclude=['*/pydart2_api.py']),
       ext_modules=[pydart2_api])

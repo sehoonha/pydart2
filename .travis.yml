@@ -6,8 +6,8 @@ python:
   - "3.4"
 
 before_install:
-  - sudo apt-add-repository ppa:libccd-debs
-  - sudo apt-add-repository ppa:fcl-debs
+  - sudo apt-add-repository ppa:libccd-debs -y
+  - sudo apt-add-repository ppa:fcl-debs -y
   - sudo apt-add-repository ppa:dartsim -y
   - sudo apt-get update -q
   - sudo apt-get install libdart6-all-dev -y
@@ -17,8 +17,8 @@ before_install:
 # command to install dependencies
 install:
   - pip install -r requirements.txt
-  - pip install .
+  - python3 setup.py build build_ext
 
 # command to run tests
 script:
-  - if [[ $TRAVIS_PYTHON_VERSION == 3* ]]; then make runtests
+  - make runtests

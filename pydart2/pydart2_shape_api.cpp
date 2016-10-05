@@ -120,7 +120,7 @@ int SHAPE(getShapeType)(int wid, int skid, int bid, int sid) {
       case Shape::MESH: return 4;
       case Shape::SOFT_MESH: return 5;
       case Shape::LINE_SEGMENT: return 6;
-      default:  return -;1
+      default:  return -1;
     }
     return -1;
 }

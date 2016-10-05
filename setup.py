@@ -107,4 +107,5 @@ setup(name='pydart2',
                    'Operating System :: POSIX :: Linux',
                    'Programming Language :: Python :: 2 :: Only',
                    'Topic :: Games/Entertainment :: Simulation'],
+      packages=find_packages(),
       ext_modules=[pydart2_api])

@@ -21,4 +21,4 @@ install:
 
 # command to run tests
 script:
-  - if [[ $TRAVIS_PYTHON_VERSION == 3* ]]; then make runtests
+  - make runtests

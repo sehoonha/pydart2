@@ -33,8 +33,10 @@ include_dirs += ['/usr/include/bullet']
 include_dirs += ['/usr/local/include']
 include_dirs += ['/usr/local/include/eigen3']
 include_dirs += ['/usr/local/include/bullet']
-include_dirs += ['/usr/local/lib/python2.7/dist-packages/numpy/core/include/']
-include_dirs += ['/usr/lib/python2.7/dist-packages/numpy/core/include/']
+include_dirs += ['/usr/local/lib/%s/dist-packages/numpy/core/include/' %
+                 current_python]
+include_dirs += ['/usr/lib/%s/dist-packages/numpy/core/include/' %
+                 current_python]
 
 libraries = list()
 libraries += ['dart', 'dart-gui']

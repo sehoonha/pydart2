@@ -93,37 +93,42 @@ double SHAPE(getVolume)(int wid, int skid, int bid, int sid) {
     return shape->getVolume();
 }
 
-#ifdef DART6_NEW_SHAPE_API
-int SHAPE(getShapeType)(int wid, int skid, int bid, int sid) {
-    dart::dynamics::Shape* shape = GET_SHAPE(wid, skid, bid, sid);
-    using dart::dynamics::Shape;
-    using dart::dynamics::SphereShape;
-    using dart::dynamics::BoxShape;
-    using dart::dynamics::EllipsoidShape;
-    using dart::dynamics::CylinderShape;
-    using dart::dynamics::CapsuleShape;
-    using dart::dynamics::ConeShape;
-    using dart::dynamics::PlaneShape;
-    using dart::dynamics::MultiSphereShape;
-    using dart::dynamics::MeshShape;
-    using dart::dynamics::SoftMeshShape;
-    using dart::dynamics::LineSegmentShape;
+// #ifdef DART6_NEW_SHAPE_API
+// int SHAPE(getShapeType)(int wid, int skid, int bid, int sid) {
+//     dart::dynamics::Shape* shape = GET_SHAPE(wid, skid, bid, sid);
+//     using dart::dynamics::Shape;
+//     using dart::dynamics::SphereShape;
+//     using dart::dynamics::BoxShape;
+//     using dart::dynamics::EllipsoidShape;
+//     using dart::dynamics::CylinderShape;
+//     using dart::dynamics::CapsuleShape;
+//     using dart::dynamics::ConeShape;
+//     using dart::dynamics::PlaneShape;
+//     using dart::dynamics::MultiSphereShape;
+//     using dart::dynamics::MeshShape;
+//     using dart::dynamics::SoftMeshShape;
+//     using dart::dynamics::LineSegmentShape;
+//
+//     if (shape->is<BoxShape>()) return 0;
+//     else if (shape->is<EllipsoidShape>()) return 1;
+//     else if (shape->is<SphereShape>()) return 1;
+//     else if (shape->is<CylinderShape>()) return 2;
+//     else if (shape->is<MeshShape>()) return 4;
+//     else if (shape->is<SoftMeshShape>()) return 5;
+//     else if (shape->is<LineSegmentShape>()) return 6;
+//     return -1;
+// }
+// #else
+// int SHAPE(getShapeType)(int wid, int skid, int bid, int sid) {
+//     dart::dynamics::Shape* shape = GET_SHAPE(wid, skid, bid, sid);
+//     return (int)shape->getShapeType();
+// }
+// #endif
 
-    if (shape->is<BoxShape>()) return 0;
-    else if (shape->is<EllipsoidShape>()) return 1;
-    else if (shape->is<SphereShape>()) return 1;
-    else if (shape->is<CylinderShape>()) return 2;
-    else if (shape->is<MeshShape>()) return 4;
-    else if (shape->is<SoftMeshShape>()) return 5;
-    else if (shape->is<LineSegmentShape>()) return 6;
-    return -1;
-}
-#else
-int SHAPE(getShapeType)(int wid, int skid, int bid, int sid) {
+const char* SHAPE(getType)(int wid, int skid, int bid, int sid) {
     dart::dynamics::Shape* shape = GET_SHAPE(wid, skid, bid, sid);
-    return (int)shape->getShapeType();
+    return shape->getType().c_str();
 }
-#endif
 
 void SHAPE(render)(int wid, int skid, int bid, int sid) {
     dart::dynamics::Shape* shape = GET_SHAPE(wid, skid, bid, sid);

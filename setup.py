@@ -4,8 +4,6 @@ from distutils.core import Extension
 from sys import platform as _platform
 import sys
 import glob
-import numpy
-
 
 DIR = 'pydart2/'
 
@@ -34,12 +32,19 @@ include_dirs += ['/usr/include/bullet']
 include_dirs += ['/usr/local/include']
 include_dirs += ['/usr/local/include/eigen3']
 include_dirs += ['/usr/local/include/bullet']
-print("numpy.get_include() = %s" % numpy.get_include())
-include_dirs += [numpy.get_include()]
-# include_dirs += ['/usr/local/lib/%s/dist-packages/numpy/core/include/' %
-#                  current_python]
-# include_dirs += ['/usr/lib/%s/dist-packages/numpy/core/include/' %
-#                  current_python]
+try:
+    import numpy
+    NP_DIRS = [numpy.get_include()]
+    print("numpy.get_include() = %s" % numpy.get_include())
+except:
+    NP_DIRS = list()
+    NP_DIRS += ['/usr/local/lib/%s/dist-packages/numpy/core/include/' %
+                current_python]
+    NP_DIRS += ['/usr/lib/%s/dist-packages/numpy/core/include/' %
+                current_python]
+for d in NP_DIRS:
+    print("numpy_include_dirs = %s" % d)
+include_dirs += NP_DIRS
 
 libraries = list()
 libraries += ['dart', 'dart-gui']
@@ -92,9 +97,10 @@ pydart2_api = Extension('_pydart2_api',
 requires = ['numpy', 'PyOpenGL', 'PyOpenGL_accelerate']
 if python_major_version == 3:
     requires.append("future")
+    requires.append("six")
 
 setup(name='pydart2',
-      version='0.5.3',
+      version='0.5.5',
       description='Python Interface for DART Simulator',
       url='https://github.com/sehoonha/pydart2',
       author='Sehoon Ha',

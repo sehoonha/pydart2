@@ -148,118 +148,7 @@ void drawShapeFrame(
     ri->popMatrix();
 }
 
-// #ifdef DART6_NEW_SHAPE_API
-void drawShape(
-    dart::gui::RenderInterface* ri,
-    const dart::dynamics::Shape* shape,
-    const Eigen::Vector4d& color) {
-        if (!shape)
-            return;
-
-        if (!ri)
-            return;
-
-        glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-        glEnable(GL_COLOR_MATERIAL);
-
-        ri->setPenColor(color);
-
-        using dart::dynamics::Shape;
-        // using dart::dynamics::SphereShape;
-        using dart::dynamics::BoxShape;
-        using dart::dynamics::EllipsoidShape;
-        using dart::dynamics::CylinderShape;
-        // using dart::dynamics::CapsuleShape;
-        // using dart::dynamics::ConeShape;
-        using dart::dynamics::PlaneShape;
-        // using dart::dynamics::MultiSphereShape;
-        using dart::dynamics::MeshShape;
-        using dart::dynamics::SoftMeshShape;
-        using dart::dynamics::LineSegmentShape;
-
-        if (dynamic_cast<const BoxShape*>(shape) != NULL)
-        {
-          const auto* box = static_cast<const BoxShape*>(shape);
-          ri->drawCube(box->getSize());
-        }
-        // else if (dynamic_cast<const SphereShape*>(shape) != NULL)
-        // {
-        //   const auto* sphere = static_cast<const SphereShape*>(shape);
-        //   ri->drawSphere(sphere->getRadius());
-        // }
-        else if (dynamic_cast<const EllipsoidShape*>(shape) != NULL)
-        {
-          const auto* ellipsoid = static_cast<const EllipsoidShape*>(shape);
-          ri->drawEllipsoid(ellipsoid->getSize());
-        }
-        else if (dynamic_cast<const CylinderShape*>(shape) != NULL)
-        {
-          const auto* cylinder = static_cast<const CylinderShape*>(shape);
-          ri->drawCylinder(cylinder->getRadius(), cylinder->getHeight());
-        }
-        // else if (dynamic_cast<const CapsuleShape*>(shape) != NULL)
-        // {
-        //   const auto* capsule = static_cast<const CapsuleShape*>(shape);
-        //   ri->drawCapsule(capsule->getRadius(), capsule->getHeight());
-        // }
-        // else if (dynamic_cast<const ConeShape*>(shape) != NULL)
-        // {
-        //   const auto* cone = static_cast<const ConeShape*>(shape);
-        //   ri->drawCone(cone->getRadius(), cone->getHeight());
-        // }
-        // else if (dynamic_cast<const MultiSphereShape*>(shape) != NULL)
-        // {
-        //   const auto* multiSphere = static_cast<const MultiSphereShape*>(shape);
-        //   const auto& spheres = multiSphere->getSpheres();
-        //   for (const auto& sphere : spheres)
-        //   {
-        //     glTranslated(sphere.second.x(), sphere.second.y(), sphere.second.z());
-        //     ri->drawSphere(sphere.first);
-        //     glTranslated(-sphere.second.x(), -sphere.second.y(), -sphere.second.z());
-        //   }
-        //   // TODO(JS): This is an workaround that draws only spheres rather than the
-        //   // actual convex hull.
-        // }
-        else if (dynamic_cast<const MeshShape*>(shape) != NULL)
-        {
-          const auto& mesh = static_cast<const MeshShape*>(shape);
-
-          glDisable(GL_COLOR_MATERIAL); // Use mesh colors to draw
-
-          if (mesh->getDisplayList())
-            ri->drawList(mesh->getDisplayList());
-          else
-            ri->drawMesh(mesh->getScale(), mesh->getMesh());
-        }
-        else if (dynamic_cast<const SoftMeshShape*>(shape) != NULL)
-        {
-          const auto& softMesh = static_cast<const SoftMeshShape*>(shape);
-          ri->drawSoftMesh(softMesh->getAssimpMesh());
-        }
-        else if (dynamic_cast<const LineSegmentShape*>(shape) != NULL)
-        {
-          const auto& lineSegmentShape
-              = static_cast<const LineSegmentShape*>(shape);
-          ri->drawLineSegments(lineSegmentShape->getVertices(),
-                                lineSegmentShape->getConnections());
-        }
-        else if (shape->getType() == std::string("SphereShape")) {
-          const auto& bbox = shape->getBoundingBox();
-          const auto& size = bbox.getMax();
-          ri->drawEllipsoid(size);
-          // dterr << "sphere! " << radius << "\n";
-        }
-        else
-        {
-          dterr << "[SimWindow::drawShape] Attempting to draw an unsupported shape "
-                << "type [" << shape->getType() << "].\n";
-        }
-
-
-        glDisable(GL_COLOR_MATERIAL);
-
-}
-// #else
+// // #ifdef DART6_NEW_SHAPE_API
 // void drawShape(
 //     dart::gui::RenderInterface* ri,
 //     const dart::dynamics::Shape* shape,
@@ -276,78 +165,194 @@ void drawShape(
 //         ri->setPenColor(color);
 //
 //         using dart::dynamics::Shape;
+//         // using dart::dynamics::SphereShape;
 //         using dart::dynamics::BoxShape;
 //         using dart::dynamics::EllipsoidShape;
 //         using dart::dynamics::CylinderShape;
+//         // using dart::dynamics::CapsuleShape;
+//         // using dart::dynamics::ConeShape;
 //         using dart::dynamics::PlaneShape;
+//         // using dart::dynamics::MultiSphereShape;
 //         using dart::dynamics::MeshShape;
 //         using dart::dynamics::SoftMeshShape;
 //         using dart::dynamics::LineSegmentShape;
 //
-//         switch (shape->getShapeType())
+//         if (dynamic_cast<const BoxShape*>(shape) != NULL)
 //         {
-//         case Shape::BOX:
+//           const auto* box = static_cast<const BoxShape*>(shape);
+//           ri->drawCube(box->getSize());
+//         }
+//         // else if (dynamic_cast<const SphereShape*>(shape) != NULL)
+//         // {
+//         //   const auto* sphere = static_cast<const SphereShape*>(shape);
+//         //   ri->drawSphere(sphere->getRadius());
+//         // }
+//         else if (dynamic_cast<const EllipsoidShape*>(shape) != NULL)
 //         {
-//             const auto& box = static_cast<const BoxShape*>(shape);
-//             ri->drawCube(box->getSize());
-//
-//             break;
+//           const auto* ellipsoid = static_cast<const EllipsoidShape*>(shape);
+//           ri->drawEllipsoid(ellipsoid->getSize());
 //         }
-//         case Shape::ELLIPSOID:
+//         else if (dynamic_cast<const CylinderShape*>(shape) != NULL)
 //         {
-//             const auto& ellipsoid = static_cast<const EllipsoidShape*>(shape);
-//             ri->drawEllipsoid(ellipsoid->getSize());
-//
-//             break;
+//           const auto* cylinder = static_cast<const CylinderShape*>(shape);
+//           ri->drawCylinder(cylinder->getRadius(), cylinder->getHeight());
 //         }
-//         case Shape::CYLINDER:
+//         // else if (dynamic_cast<const CapsuleShape*>(shape) != NULL)
+//         // {
+//         //   const auto* capsule = static_cast<const CapsuleShape*>(shape);
+//         //   ri->drawCapsule(capsule->getRadius(), capsule->getHeight());
+//         // }
+//         // else if (dynamic_cast<const ConeShape*>(shape) != NULL)
+//         // {
+//         //   const auto* cone = static_cast<const ConeShape*>(shape);
+//         //   ri->drawCone(cone->getRadius(), cone->getHeight());
+//         // }
+//         // else if (dynamic_cast<const MultiSphereShape*>(shape) != NULL)
+//         // {
+//         //   const auto* multiSphere = static_cast<const MultiSphereShape*>(shape);
+//         //   const auto& spheres = multiSphere->getSpheres();
+//         //   for (const auto& sphere : spheres)
+//         //   {
+//         //     glTranslated(sphere.second.x(), sphere.second.y(), sphere.second.z());
+//         //     ri->drawSphere(sphere.first);
+//         //     glTranslated(-sphere.second.x(), -sphere.second.y(), -sphere.second.z());
+//         //   }
+//         //   // TODO(JS): This is an workaround that draws only spheres rather than the
+//         //   // actual convex hull.
+//         // }
+//         else if (dynamic_cast<const MeshShape*>(shape) != NULL)
 //         {
-//             const auto& cylinder = static_cast<const CylinderShape*>(shape);
-//             ri->drawCylinder(cylinder->getRadius(), cylinder->getHeight());
+//           const auto& mesh = static_cast<const MeshShape*>(shape);
 //
-//             break;
+//           glDisable(GL_COLOR_MATERIAL); // Use mesh colors to draw
+//
+//           if (mesh->getDisplayList())
+//             ri->drawList(mesh->getDisplayList());
+//           else
+//             ri->drawMesh(mesh->getScale(), mesh->getMesh());
 //         }
-//         case Shape::MESH:
+//         else if (dynamic_cast<const SoftMeshShape*>(shape) != NULL)
 //         {
-//             const auto& mesh = static_cast<const MeshShape*>(shape);
-//
-//             // glDisable(GL_COLOR_MATERIAL); // Use mesh colors to draw
-//
-//             if (mesh->getDisplayList())
-//                 ri->drawList(mesh->getDisplayList());
-//             else
-//                 ri->drawMesh(mesh->getScale(), mesh->getMesh());
-//
-//             break;
+//           const auto& softMesh = static_cast<const SoftMeshShape*>(shape);
+//           ri->drawSoftMesh(softMesh->getAssimpMesh());
 //         }
-//         case Shape::SOFT_MESH:
+//         else if (dynamic_cast<const LineSegmentShape*>(shape) != NULL)
 //         {
-//             const auto& softMesh = static_cast<const SoftMeshShape*>(shape);
-//             ri->drawSoftMesh(softMesh->getAssimpMesh());
-//
-//             break;
+//           const auto& lineSegmentShape
+//               = static_cast<const LineSegmentShape*>(shape);
+//           ri->drawLineSegments(lineSegmentShape->getVertices(),
+//                                 lineSegmentShape->getConnections());
 //         }
-//         case Shape::LINE_SEGMENT:
+//         else if (shape->getType() == std::string("SphereShape")) {
+//           const auto& bbox = shape->getBoundingBox();
+//           const auto& size = bbox.getMax();
+//           ri->drawEllipsoid(size);
+//           // dterr << "sphere! " << radius << "\n";
+//         }
+//         else
 //         {
-//             const auto& lineSegmentShape
-//                 = static_cast<const LineSegmentShape*>(shape);
-//             ri->drawLineSegments(lineSegmentShape->getVertices(),
-//                                  lineSegmentShape->getConnections());
+//           dterr << "[SimWindow::drawShape] Attempting to draw an unsupported shape "
+//                 << "type [" << shape->getType() << "].\n";
+//         }
 //
-//             break;
-//         }
-//         default:
-//         {
-//             dterr << "[SimWindow::drawShape] Attempting to draw unsupported shape "
-//                   << "type '" << shape->getShapeType() << "'.\n";
-//             break;
-//         }
-//         }
 //
 //         glDisable(GL_COLOR_MATERIAL);
+//
 // }
-// #endif
 
+void drawShape(
+    dart::gui::RenderInterface* ri,
+    const dart::dynamics::Shape* shape,
+    const Eigen::Vector4d& color) {
+        if (!shape)
+            return;
+
+        if (!ri)
+            return;
+
+        glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+        glEnable(GL_COLOR_MATERIAL);
+
+        ri->setPenColor(color);
+
+        using dart::dynamics::Shape;
+        using dart::dynamics::BoxShape;
+        using dart::dynamics::EllipsoidShape;
+        using dart::dynamics::CylinderShape;
+        using dart::dynamics::PlaneShape;
+        using dart::dynamics::MeshShape;
+        using dart::dynamics::SoftMeshShape;
+        using dart::dynamics::LineSegmentShape;
+
+        switch (shape->getShapeType())
+        {
+        case Shape::BOX:
+        {
+            const auto& box = static_cast<const BoxShape*>(shape);
+            ri->drawCube(box->getSize());
+
+            break;
+        }
+        case Shape::ELLIPSOID:
+        {
+            const auto& ellipsoid = static_cast<const EllipsoidShape*>(shape);
+            ri->drawEllipsoid(ellipsoid->getSize());
+
+            break;
+        }
+        case Shape::CYLINDER:
+        {
+            const auto& cylinder = static_cast<const CylinderShape*>(shape);
+            ri->drawCylinder(cylinder->getRadius(), cylinder->getHeight());
+
+            break;
+        }
+        case Shape::MESH:
+        {
+            const auto& mesh = static_cast<const MeshShape*>(shape);
+
+            // glDisable(GL_COLOR_MATERIAL); // Use mesh colors to draw
+
+            if (mesh->getDisplayList())
+                ri->drawList(mesh->getDisplayList());
+            else
+                ri->drawMesh(mesh->getScale(), mesh->getMesh());
+
+            break;
+        }
+        case Shape::SOFT_MESH:
+        {
+            const auto& softMesh = static_cast<const SoftMeshShape*>(shape);
+            ri->drawSoftMesh(softMesh->getAssimpMesh());
+
+            break;
+        }
+        case Shape::LINE_SEGMENT:
+        {
+            const auto& lineSegmentShape
+                = static_cast<const LineSegmentShape*>(shape);
+            ri->drawLineSegments(lineSegmentShape->getVertices(),
+                                 lineSegmentShape->getConnections());
+
+            break;
+        }
+        default:
+        {
+            const auto& bbox = shape->getBoundingBox();
+            const auto& size = bbox.getMax();
+            ri->drawEllipsoid(size);
+            break;
+        }
+        // default:
+        // {
+        //     dterr << "[SimWindow::drawShape] Attempting to draw unsupported shape "
+        //           << "type '" << shape->getShapeType() << "'.\n";
+        //     break;
+        // }
+        }
+
+        glDisable(GL_COLOR_MATERIAL);
+}
 
 void drawPointMasses(
     dart::gui::RenderInterface* ri,

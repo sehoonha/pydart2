@@ -14,25 +14,6 @@ using std::endl;
 #include "pydart2_shape_api.h"
 #include "pydart2_draw.h"
 
-#ifdef DART6_NEW_SHAPE_API
-#include "dart/dynamics/Skeleton.hpp"
-#include "dart/dynamics/SoftBodyNode.hpp"
-#include "dart/dynamics/SphereShape.hpp"
-#include "dart/dynamics/BoxShape.hpp"
-#include "dart/dynamics/EllipsoidShape.hpp"
-#include "dart/dynamics/CylinderShape.hpp"
-#include "dart/dynamics/CapsuleShape.hpp"
-#include "dart/dynamics/ConeShape.hpp"
-#include "dart/dynamics/PlaneShape.hpp"
-#include "dart/dynamics/MultiSphereShape.hpp"
-#include "dart/dynamics/MeshShape.hpp"
-#include "dart/dynamics/SoftMeshShape.hpp"
-#include "dart/dynamics/LineSegmentShape.hpp"
-#include "dart/dynamics/Marker.hpp"
-#include "dart/constraint/ConstraintSolver.hpp"
-#include "dart/collision/CollisionDetector.hpp"
-#endif
-
 using namespace pydart;
 
 
@@ -119,16 +100,36 @@ double SHAPE(getVolume)(int wid, int skid, int bid, int sid) {
 //     return -1;
 // }
 // #else
-// int SHAPE(getShapeType)(int wid, int skid, int bid, int sid) {
-//     dart::dynamics::Shape* shape = GET_SHAPE(wid, skid, bid, sid);
-//     return (int)shape->getShapeType();
-// }
+int SHAPE(getShapeType)(int wid, int skid, int bid, int sid) {
+    dart::dynamics::Shape* shape = GET_SHAPE(wid, skid, bid, sid);
+
+    using dart::dynamics::Shape;
+    using dart::dynamics::BoxShape;
+    using dart::dynamics::EllipsoidShape;
+    using dart::dynamics::CylinderShape;
+    using dart::dynamics::PlaneShape;
+    using dart::dynamics::MeshShape;
+    using dart::dynamics::SoftMeshShape;
+    using dart::dynamics::LineSegmentShape;
+
+    switch (shape->getShapeType())
+    {
+      case Shape::BOX: return 0;
+      case Shape::ELLIPSOID: return 1;
+      case Shape::CYLINDER: return 2;
+      case Shape::MESH: return 4;
+      case Shape::SOFT_MESH: return 5;
+      case Shape::LINE_SEGMENT: return 6;
+      default:  return -;1
+    }
+    return -1;
+}
 // #endif
 
-const char* SHAPE(getType)(int wid, int skid, int bid, int sid) {
-    dart::dynamics::Shape* shape = GET_SHAPE(wid, skid, bid, sid);
-    return shape->getType().c_str();
-}
+// const char* SHAPE(getType)(int wid, int skid, int bid, int sid) {
+//     dart::dynamics::Shape* shape = GET_SHAPE(wid, skid, bid, sid);
+//     return shape->getType().c_str();
+// }
 
 void SHAPE(render)(int wid, int skid, int bid, int sid) {
     dart::dynamics::Shape* shape = GET_SHAPE(wid, skid, bid, sid);

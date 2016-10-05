@@ -4,6 +4,7 @@ from distutils.core import Extension
 from sys import platform as _platform
 import sys
 import glob
+import numpy
 
 
 DIR = 'pydart2/'
@@ -33,10 +34,12 @@ include_dirs += ['/usr/include/bullet']
 include_dirs += ['/usr/local/include']
 include_dirs += ['/usr/local/include/eigen3']
 include_dirs += ['/usr/local/include/bullet']
-include_dirs += ['/usr/local/lib/%s/dist-packages/numpy/core/include/' %
-                 current_python]
-include_dirs += ['/usr/lib/%s/dist-packages/numpy/core/include/' %
-                 current_python]
+print("numpy.get_include() = %s" % numpy.get_include())
+include_dirs += [numpy.get_include()]
+# include_dirs += ['/usr/local/lib/%s/dist-packages/numpy/core/include/' %
+#                  current_python]
+# include_dirs += ['/usr/lib/%s/dist-packages/numpy/core/include/' %
+#                  current_python]
 
 libraries = list()
 libraries += ['dart', 'dart-gui']

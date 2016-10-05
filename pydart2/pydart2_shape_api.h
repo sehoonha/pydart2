@@ -25,6 +25,7 @@ void SHAPENODE(setVisualAspectRGBA)(int wid, int skid, int bid, int sid, double 
 // Shape Functions
 double SHAPE(getVolume)(int wid, int skid, int bid, int sid);
 int SHAPE(getShapeType)(int wid, int skid, int bid, int sid);
+// const char* SHAPE(getType)(int wid, int skid, int bid, int sid);
 void SHAPE(render)(int wid, int skid, int bid, int sid);
 void SHAPE(getBoundingBoxMin)(int wid, int skid, int bid, int sid, double outv3[3]);
 void SHAPE(getBoundingBoxMax)(int wid, int skid, int bid, int sid, double outv3[3]);

@@ -24,6 +24,10 @@ class SidePanel(object):
             return
         self.layout.append(self.line)
 
+    def push_line(self,):
+        self.process_line()
+        self.line = list()
+
     def build_layout(self,):
         self.process_line()  # Push if not processed yet
         self.vbox = QtGui.QVBoxLayout()

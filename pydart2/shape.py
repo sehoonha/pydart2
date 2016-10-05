@@ -42,12 +42,15 @@ class Shape(object):
         return papi.shape__getVolume(self.wid, self.skid, self.bid, self.id)
 
     def shape_type(self, ):
-        return papi.shape__getShapeType(self.wid, self.skid, self.bid, self.id)
+        type_ = papi.shape__getShapeType(self.wid, self.skid,
+                                         self.bid, self.id)
+        type_ = 1 if type_ == -1 else type_  # Assume to be ELLIPSOID
+        return type_
 
     def shape_type_name(self, ):
         type_ = self.shape_type()
         names = ["BOX", "ELLIPSOID", "CYLINDER", "PLANE",
-                 "MESH", "SOFT_MESH", "LINE_SEGMENT", ]
+                 "MESH", "SOFT_MESH", "LINE_SEGMENT"]
         return names[type_]
 
     def render(self, ):

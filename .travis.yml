@@ -13,7 +13,7 @@ before_install:
   - sudo apt-get update -q
   - sudo apt-get install libdart6-all-dev -y
   - sudo apt-get install swig -y
-  - if [[ $TRAVIS_PYTHON_VERSION == 2.7 ]]; then sudo apt-get install swig python-pip python-qt4 python-qt4-dev python-qt4-gl -y fi
+  - if [[ $TRAVIS_PYTHON_VERSION == 2.7 ]]; then sudo apt-get install swig python-pip python-qt4 python-qt4-dev python-qt4-gl -y; fi
   - if [[ $TRAVIS_PYTHON_VERSION == 3.4 ]]; then sudo apt-get install python3-pip python3-pyqt4 python3-pyqt4.qtopengl -y; fi
 
 # command to install dependencies
@@ -23,5 +23,5 @@ install:
 
 # command to run tests
 script:
-  - if [[ $TRAVIS_PYTHON_VERSION == 2.7 ]]; then make runtests2 -y; fi
-  - if [[ $TRAVIS_PYTHON_VERSION == 3.4 ]]; then make runtests -y; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == 2.7 ]]; then make runtests2; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.4 ]]; then make runtests; fi

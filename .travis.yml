@@ -23,5 +23,5 @@ install:
 
 # command to run tests
 script:
-  - if [[ $TRAVIS_PYTHON_VERSION == 2.7 ]]; then make runtests2 -y; fi
-  - if [[ $TRAVIS_PYTHON_VERSION == 3.4 ]]; then make runtests -y; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == 2.7 ]]; then make runtests2; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.4 ]]; then make runtests; fi

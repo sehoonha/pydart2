@@ -28,7 +28,7 @@ They can be installed by the following command:
 
 .. code-block:: bash
 
-   sudo apt-get install swig python-pip3 python3-pyqt4 python3-pyqt4.qtopengl
+   sudo apt-get install swig python3-pip python3-pyqt4 python3-pyqt4.qtopengl
 
 
 The final step is to install PyDART2 using pip3.
@@ -43,7 +43,7 @@ All done! Please enjoy the simulation.
 
    $ python3
    >>> import pydart2 as pydart
-   >>> pydart2.init(verbose=True)
+   >>> pydart.init(verbose=True)
    Msg  [pydart2_api] Initialize pydart manager OK
 
 For Python2 users, please apply the following commands:

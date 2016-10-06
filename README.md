@@ -33,6 +33,7 @@ learning), and so on.
 ## Build Status
 
 [![Build Status](https://api.travis-ci.org/sehoonha/pydart2.svg)](https://travis-ci.org/sehoonha/pydart2)
+[![Doc Status](https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat)](http://pydart2.readthedocs.io/en/latest/)
 
 
 ======

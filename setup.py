@@ -94,13 +94,11 @@ pydart2_api = Extension('_pydart2_api',
                         sources=sources,
                         depends=depends)
 
-requires = ['numpy', 'PyOpenGL', 'PyOpenGL_accelerate']
-if python_major_version == 3:
-    requires.append("future")
-    requires.append("six")
+requires = ['numpy', 'PyOpenGL', 'PyOpenGL_accelerate',
+            'future', 'six']
 
 setup(name='pydart2',
-      version='0.5.5',
+      version='0.5.7',
       description='Python Interface for DART Simulator',
       url='https://github.com/sehoonha/pydart2',
       author='Sehoon Ha',
@@ -111,7 +109,10 @@ setup(name='pydart2',
       classifiers=['Development Status :: 2 - Pre-Alpha',
                    'License :: OSI Approved :: BSD License',
                    'Operating System :: POSIX :: Linux',
-                   'Programming Language :: Python :: 2 :: Only',
+                   'Intended Audience :: Science/Research',
+                   "Programming Language :: Python",
+                   'Programming Language :: Python :: 2.7',
+                   'Programming Language :: Python :: 3.4',
                    'Topic :: Games/Entertainment :: Simulation'],
       packages=find_packages(),
       ext_modules=[pydart2_api])

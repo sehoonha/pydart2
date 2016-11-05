@@ -30,4 +30,29 @@ void SHAPE(render)(int wid, int skid, int bid, int sid);
 void SHAPE(getBoundingBoxMin)(int wid, int skid, int bid, int sid, double outv3[3]);
 void SHAPE(getBoundingBoxMax)(int wid, int skid, int bid, int sid, double outv3[3]);
 
+////////////////////////////////////////
+// BoxShape Functions
+#define BOX_SHAPE(funcname) box_shape__##funcname
+#define GET_BOX_SHAPE(wid, skid, bid, sid) dynamic_cast<dart::dynamics::BoxShape*>((Manager::skeleton(wid, skid)->getBodyNode(bid)->getShapeNodes()[sid])->getShape().get());
+
+void BOX_SHAPE(getSize)(int wid, int skid, int bid, int sid, double outv3[3]);
+void BOX_SHAPE(setSize)(int wid, int skid, int bid, int sid, double inv3[3]);
+
+////////////////////////////////////////
+// EllipsoidShape Functions
+#define ELLIPSOID_SHAPE(funcname) ellipsoid_shape__##funcname
+#define GET_ELLIPSOID_SHAPE(wid, skid, bid, sid) dynamic_cast<dart::dynamics::EllipsoidShape*>((Manager::skeleton(wid, skid)->getBodyNode(bid)->getShapeNodes()[sid])->getShape().get());
+
+void ELLIPSOID_SHAPE(getSize)(int wid, int skid, int bid, int sid, double outv3[3]);
+void ELLIPSOID_SHAPE(setSize)(int wid, int skid, int bid, int sid, double inv3[3]);
+
+////////////////////////////////////////
+// MeshShape Functions
+#define MESH_SHAPE(funcname) mesh_shape__##funcname
+#define GET_MESH_SHAPE(wid, skid, bid, sid) dynamic_cast<dart::dynamics::MeshShape*>((Manager::skeleton(wid, skid)->getBodyNode(bid)->getShapeNodes()[sid])->getShape().get());
+
+void MESH_SHAPE(getScale)(int wid, int skid, int bid, int sid, double outv3[3]);
+const char* MESH_SHAPE(getMeshPath)(int wid, int skid, int bid, int sid);
+
+
 #endif // #ifndef PYDART2_SHAPE_API_H

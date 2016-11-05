@@ -17,7 +17,7 @@ from . import pydart2_api as papi
 import numpy as np
 from .skel_vector import SkelVector
 
-from .bodynode import BodyNode
+# from .bodynode import BodyNode
 from .dof import Dof
 from .joint import create_joint
 from .marker import Marker
@@ -51,7 +51,9 @@ class Skeleton(object):
 
         # Initialize bodynodes
         _nbodynodes = papi.skeleton__getNumBodyNodes(self.world.id, self.id)
-        self.bodynodes = [BodyNode(self, i) for i in range(_nbodynodes)]
+        from .world import World
+        self.bodynodes = [World.CLASS_BODYNODE(self, i)
+                          for i in range(_nbodynodes)]
         self.name_to_body = {body.name: body for body in self.bodynodes}
 
         # Initialize markers

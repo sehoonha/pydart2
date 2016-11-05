@@ -12,6 +12,8 @@ import os.path
 import numpy as np
 from . import pydart2_api as papi
 from .skeleton import Skeleton
+from .bodynode import BodyNode
+
 from .collision_result import CollisionResult
 
 
@@ -24,6 +26,9 @@ class World(object):
     DART_COLLISION_DETECTOR, \
         FCL_COLLISION_DETECTOR, \
         BULLET_COLLISION_DETECTOR = list(range(3))
+
+    CLASS_SKELETON = Skeleton  # Modify this for inherited skeleton class
+    CLASS_BODYNODE = BodyNode
 
     def __init__(self, step, skel_path=None):
         self.skeletons = list()
@@ -44,12 +49,12 @@ class World(object):
         papi.destroyWorld(self.id)
 
     def add_skeleton(self, filename):
-        skel = Skeleton(self, _filename=filename)
+        skel = World.CLASS_SKELETON(self, _filename=filename)
         self.skeletons.append(skel)
         return skel
 
     def add_skeleton_from_id(self, _skel_id):
-        skel = Skeleton(_world=self, _id=_skel_id)
+        skel = World.CLASS_SKELETON(_world=self, _id=_skel_id)
         self.skeletons.append(skel)
         return skel
 

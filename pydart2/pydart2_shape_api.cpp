@@ -146,3 +146,45 @@ void SHAPE(getBoundingBoxMax)(int wid, int skid, int bid, int sid, double outv3[
     dart::dynamics::Shape* shape = GET_SHAPE(wid, skid, bid, sid);
     write(shape->getBoundingBox().getMax(), outv3);
 }
+
+
+////////////////////////////////////////
+// BoxShape Functions
+void BOX_SHAPE(getSize)(int wid, int skid, int bid, int sid, double outv3[3]) {
+    dart::dynamics::BoxShape* shape = GET_BOX_SHAPE(wid, skid, bid, sid);
+    write(shape->getSize(), outv3);
+}
+
+void BOX_SHAPE(setSize)(int wid, int skid, int bid, int sid, double inv3[3]) {
+    dart::dynamics::BoxShape* shape = GET_BOX_SHAPE(wid, skid, bid, sid);
+    shape->setSize(read(inv3, 3));
+}
+
+
+////////////////////////////////////////
+// EllipsoidShape Functions
+void ELLIPSOID_SHAPE(getSize)(int wid, int skid, int bid, int sid, double outv3[3]) {
+    dart::dynamics::EllipsoidShape* shape = GET_ELLIPSOID_SHAPE(wid, skid, bid, sid);
+    if (shape != NULL) {
+      write(shape->getSize(), outv3);
+    }
+}
+
+void ELLIPSOID_SHAPE(setSize)(int wid, int skid, int bid, int sid, double inv3[3]) {
+    dart::dynamics::EllipsoidShape* shape = GET_ELLIPSOID_SHAPE(wid, skid, bid, sid);
+    if (shape != NULL) {
+        shape->setSize(read(inv3, 3));
+    }
+}
+
+////////////////////////////////////////
+// MeshShape Functions
+void MESH_SHAPE(getScale)(int wid, int skid, int bid, int sid, double outv3[3]) {
+    dart::dynamics::MeshShape* shape = GET_MESH_SHAPE(wid, skid, bid, sid);
+    write(shape->getScale(), outv3);
+}
+
+const char* MESH_SHAPE(getMeshPath)(int wid, int skid, int bid, int sid) {
+    dart::dynamics::MeshShape* shape = GET_MESH_SHAPE(wid, skid, bid, sid);
+    return shape->getMeshPath().c_str();
+}

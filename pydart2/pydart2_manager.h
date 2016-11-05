@@ -5,6 +5,7 @@
 
 // Dart headers
 #include "dart/dart.hpp"
+#include "dart/collision/bullet/BulletCollisionDetector.hpp"
 #include "dart/gui/gui.hpp"
 #include "dart/utils/utils.hpp"
 

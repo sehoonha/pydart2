@@ -39,7 +39,7 @@ int WORLD(addSkeleton)(int wid, const char* const path) {
     std::string strpath(path);
     std::string ext = strpath.substr(strpath.length() - 4);
     boost::algorithm::to_lower(ext);
-
+    MSG << "[pydart_api] " << path << endl;
     SkeletonPtr skel = NULL;
     if (ext == ".sdf") {
         MSG << " [pydart_api] parse as SDF (ext: " << ext << ")" << endl;
@@ -170,7 +170,8 @@ int WORLD(getCollisionDetector)(int wid) {
         return 0;
     } else if (dynamic_cast<dart::collision::FCLCollisionDetector*>(detector)) {
         return 1;
-    } else if (dynamic_cast<dart::collision::BulletCollisionDetector*>(detector)) {
+    }
+    else if (dynamic_cast<dart::collision::BulletCollisionDetector*>(detector)) {
         return 2;
     }
     return -1;

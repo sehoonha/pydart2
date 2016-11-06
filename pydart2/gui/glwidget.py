@@ -7,9 +7,9 @@ from past.utils import old_div
 #
 # Author(s): Sehoon Ha <sehoon.ha@disneyresearch.com>
 # Disney Research Robotics Group
-from OpenGL.GL import *
-from OpenGL.GLU import *
-from OpenGL.GLUT import *
+import OpenGL.GL as GL
+import OpenGL.GLU as GLU
+# import OpenGL.GLUT as GLUT
 from PyQt4 import QtGui
 from PyQt4 import QtCore
 from PyQt4.QtOpenGL import QGLWidget, QGLFormat
@@ -49,15 +49,15 @@ class GLWidget(QGLWidget):
         return QtCore.QSize(self.width, self.height)
 
     def paintGL(self):
-        glEnable(GL_DEPTH_TEST)
-        glClearColor(0.98, 0.98, 0.98, 0.0)
-        glClearColor(1.0, 1.0, 1.0, 1.0)
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+        GL.glEnable(GL.GL_DEPTH_TEST)
+        GL.glClearColor(0.98, 0.98, 0.98, 0.0)
+        GL.glClearColor(1.0, 1.0, 1.0, 1.0)
+        GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
 
-        glLoadIdentity()
+        GL.glLoadIdentity()
         # glTranslate(0.0, -0.2, self.zoom)  # Camera
-        glTranslate(*self.tb.trans)
-        glMultMatrixf(self.tb.matrix)
+        GL.glTranslate(*self.tb.trans)
+        GL.glMultMatrixf(self.tb.matrix)
 
         if self.sim is not None and hasattr(self.sim, "render"):
             self.sim.render()
@@ -74,45 +74,45 @@ class GLWidget(QGLWidget):
 
     def resizeGL(self, w, h):
         (self.width, self.height) = (w, h)
-        glViewport(0, 0, w, h)
-        glMatrixMode(GL_PROJECTION)
-        glLoadIdentity()
+        GL.glViewport(0, 0, w, h)
+        GL.glMatrixMode(GL.GL_PROJECTION)
+        GL.glLoadIdentity()
 
-        gluPerspective(45.0, old_div(float(w), float(h)), 0.01, 100.0)
-        glMatrixMode(GL_MODELVIEW)
-        glLoadIdentity()
+        GLU.gluPerspective(45.0, old_div(float(w), float(h)), 0.01, 100.0)
+        GL.glMatrixMode(GL.GL_MODELVIEW)
+        GL.glLoadIdentity()
 
     def initializeGL(self):
-        # return self.initializeGL_Stelian()
-        glDisable(GL_CULL_FACE)
-        glEnable(GL_DEPTH_TEST)
+        # return self.initializeGL.GL_Stelian()
+        GL.glDisable(GL.GL_CULL_FACE)
+        GL.glEnable(GL.GL_DEPTH_TEST)
 
-        glDepthFunc(GL_LEQUAL)
-        glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST)
+        GL.glDepthFunc(GL.GL_LEQUAL)
+        GL.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST)
 
-        glEnable(GL_LINE_SMOOTH)
-        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
-        # GlEnable(GL_POLYGON_SMOOTH)
-        glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST)
+        GL.glEnable(GL.GL_LINE_SMOOTH)
+        GL.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST)
+        # GlEnable(GL.GL_POLYGON_SMOOTH)
+        GL.glHint(GL.GL_POLYGON_SMOOTH_HINT, GL.GL_NICEST)
 
-        glEnable(GL_DITHER)
-        glShadeModel(GL_SMOOTH)
-        glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST)
+        GL.glEnable(GL.GL_DITHER)
+        GL.glShadeModel(GL.GL_SMOOTH)
+        GL.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST)
 
-        glClearColor(1.0, 1.0, 1.0, 1.0)
-        glClear(GL_COLOR_BUFFER_BIT)
+        GL.glClearColor(1.0, 1.0, 1.0, 1.0)
+        GL.glClear(GL.GL_COLOR_BUFFER_BIT)
 
-        glEnable(GL_DEPTH_TEST)
-        glDepthFunc(GL_LEQUAL)
-        glDisable(GL_CULL_FACE)
-        glEnable(GL_NORMALIZE)
+        GL.glEnable(GL.GL_DEPTH_TEST)
+        GL.glDepthFunc(GL.GL_LEQUAL)
+        GL.glDisable(GL.GL_CULL_FACE)
+        GL.glEnable(GL.GL_NORMALIZE)
 
-        glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE)
-        glEnable(GL_COLOR_MATERIAL)
+        GL.glColorMaterial(GL.GL_FRONT_AND_BACK, GL.GL_AMBIENT_AND_DIFFUSE)
+        GL.glEnable(GL.GL_COLOR_MATERIAL)
 
-        glEnable(GL_BLEND)
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-        glEnable(GL_MULTISAMPLE)
+        GL.glEnable(GL.GL_BLEND)
+        GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
+        GL.glEnable(GL.GL_MULTISAMPLE)
         # glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA)
 
         ambient = [0.2, 0.2, 0.2, 1.0]
@@ -121,7 +121,7 @@ class GLWidget(QGLWidget):
         front_mat_specular = [0.2, 0.2, 0.2, 1.0]
         front_mat_diffuse = [0.5, 0.28, 0.38, 1.0]
         lmodel_ambient = [0.2, 0.2, 0.2, 1.0]
-        lmodel_twoside = [GL_FALSE]
+        lmodel_twoside = [GL.GL_FALSE]
 
         # position = [1.0, 1.0, 1.0, 0.0]
         # position1 = [-1.0, 1.0, 0.0, 0.0]
@@ -129,51 +129,54 @@ class GLWidget(QGLWidget):
         position = [1.0, 1.0, 0.0, 0.0]
         position1 = [-1.0, 0.0, 0.0, 0.0]
 
-        glEnable(GL_LIGHT0)
-        glLightfv(GL_LIGHT0, GL_AMBIENT, ambient)
-        glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse)
-        glLightfv(GL_LIGHT0, GL_POSITION, position)
+        GL.glEnable(GL.GL_LIGHT0)
+        GL.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, ambient)
+        GL.glLightfv(GL.GL_LIGHT0, GL.GL_DIFFUSE, diffuse)
+        GL.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, position)
 
-        glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient)
-        glLightModelfv(GL_LIGHT_MODEL_TWO_SIDE, lmodel_twoside)
+        GL.glLightModelfv(GL.GL_LIGHT_MODEL_AMBIENT, lmodel_ambient)
+        GL.glLightModelfv(GL.GL_LIGHT_MODEL_TWO_SIDE, lmodel_twoside)
 
-        glEnable(GL_LIGHT1)
-        # glLightfv(GL_LIGHT1, GL_AMBIENT, ambient)
-        glLightfv(GL_LIGHT1, GL_DIFFUSE, diffuse)
-        glLightfv(GL_LIGHT1, GL_POSITION, position1)
-        glEnable(GL_LIGHTING)
+        GL.glEnable(GL.GL_LIGHT1)
+        # glLightfv(GL.GL_LIGHT1, GL.GL_AMBIENT, ambient)
+        GL.glLightfv(GL.GL_LIGHT1, GL.GL_DIFFUSE, diffuse)
+        GL.glLightfv(GL.GL_LIGHT1, GL.GL_POSITION, position1)
+        GL.glEnable(GL.GL_LIGHTING)
 
-        glEnable(GL_COLOR_MATERIAL)
-        glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, front_mat_shininess)
-        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, front_mat_specular)
-        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, front_mat_diffuse)
+        GL.glEnable(GL.GL_COLOR_MATERIAL)
+        GL.glMaterialfv(GL.GL_FRONT_AND_BACK, GL.GL_SHININESS,
+                        front_mat_shininess)
+        GL.glMaterialfv(GL.GL_FRONT_AND_BACK, GL.GL_SPECULAR,
+                        front_mat_specular)
+        GL.glMaterialfv(GL.GL_FRONT_AND_BACK, GL.GL_DIFFUSE,
+                        front_mat_diffuse)
 
-        # glBlendFunc(GL_ONE, GL_ONE)
-        # glCullFace(GL_BACK)
+        # glBlendFunc(GL.GL_ONE, GL.GL_ONE)
+        # glCullFace(GL.GL_BACK)
 
     def enable2D(self):
         w, h = self.width, self.height
-        glMatrixMode(GL_PROJECTION)
-        glLoadIdentity()
-        glDisable(GL_LIGHTING | GL_DEPTH_TEST)
-        glDepthMask(0)
-        glOrtho(0, w, h, 0, -1, 1)
-        glViewport(0, 0, w, h)
-        glMatrixMode(GL_MODELVIEW)
-        glLoadIdentity()
+        GL.glMatrixMode(GL.GL_PROJECTION)
+        GL.glLoadIdentity()
+        GL.glDisable(GL.GL_LIGHTING | GL.GL_DEPTH_TEST)
+        GL.glDepthMask(0)
+        GL.glOrtho(0, w, h, 0, -1, 1)
+        GL.glViewport(0, 0, w, h)
+        GL.glMatrixMode(GL.GL_MODELVIEW)
+        GL.glLoadIdentity()
 
     def disable2D(self):
         w, h = self.width, self.height
-        glMatrixMode(GL_PROJECTION)
-        glLoadIdentity()
+        GL.glMatrixMode(GL.GL_PROJECTION)
+        GL.glLoadIdentity()
 
-        glEnable(GL_DEPTH_TEST | GL_LIGHTING)
-        glDepthMask(1)
-        gluPerspective(45.0, old_div(float(w), float(h)), 0.01, 100.0)
+        GL.glEnable(GL.GL_DEPTH_TEST | GL.GL_LIGHTING)
+        GL.glDepthMask(1)
+        GLU.gluPerspective(45.0, old_div(float(w), float(h)), 0.01, 100.0)
 
-        glViewport(0, 0, w, h)
-        glMatrixMode(GL_MODELVIEW)
-        glLoadIdentity()
+        GL.glViewport(0, 0, w, h)
+        GL.glMatrixMode(GL.GL_MODELVIEW)
+        GL.glLoadIdentity()
 
     def set_lock_camera(self, lock=True):
         self.lock_camera = lock

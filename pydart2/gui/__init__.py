@@ -5,6 +5,8 @@ from __future__ import absolute_import
 # Author(s): Sehoon Ha <sehoon.ha@disneyresearch.com>
 # Disney Research Robotics Group
 
+from pydart2.gui import viewer
+from pydart2.gui import side_panel
 
-from . import viewer
-import pydart2.gui.side_panel
+assert viewer
+assert side_panel

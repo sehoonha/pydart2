@@ -34,6 +34,7 @@ learning), and so on.
 
 [![Build Status](https://api.travis-ci.org/sehoonha/pydart2.svg)](https://travis-ci.org/sehoonha/pydart2)
 [![Doc Status](https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat)](http://pydart2.readthedocs.io/en/latest/)
+[![Code Health](https://landscape.io/github/sehoonha/pydart2/master/landscape.svg?style=flat)](https://landscape.io/github/sehoonha/pydart2/master)
 
 
 ======

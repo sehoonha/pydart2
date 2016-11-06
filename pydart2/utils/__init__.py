@@ -8,3 +8,8 @@ from . import transformations
 from . import misc
 from . import log
 from . import jsonpickle
+
+assert transformations
+assert misc
+assert log
+assert jsonpickle

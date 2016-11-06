@@ -12,12 +12,12 @@ from OpenGL.GLU import *
 from OpenGL.GLUT import *
 from PyQt4 import QtGui
 from PyQt4 import QtCore
-from PyQt4.QtOpenGL import *
+from PyQt4.QtOpenGL import QGLWidget, QGLFormat
 from . import trackball
-import time
+# import time
 from .renderer import Renderer
 import numpy as np
-from numpy.linalg import norm
+# from numpy.linalg import norm
 
 
 class GLWidget(QGLWidget):

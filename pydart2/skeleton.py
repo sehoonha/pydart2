@@ -1,8 +1,8 @@
 from __future__ import print_function
 from __future__ import absolute_import
 from builtins import str
-from builtins import range
-from builtins import object
+# from builtins import range
+# from builtins import object
 from six import string_types
 
 # Copyright (c) 2015, Disney Research

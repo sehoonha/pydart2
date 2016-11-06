@@ -1,5 +1,5 @@
 from __future__ import absolute_import
-from builtins import object
+# from builtins import object
 # Copyright (c) 2015, Disney Research
 # All rights reserved.
 #

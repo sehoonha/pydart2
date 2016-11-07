@@ -295,8 +295,8 @@ class Renderer(object):
 
                 GL.glBegin(GL.GL_POLYGON)
                 GL.glVertex([x, 0, z])
+                GL.glVertex([x, 0, z2])
                 GL.glVertex([x2, 0, z2])
-                GL.GL.glVertex([x, 0, z2])
                 GL.glVertex([x2, 0, z])
                 GL.glEnd()
         GL.glEnable(GL.GL_LIGHTING)

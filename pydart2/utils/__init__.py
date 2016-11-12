@@ -8,6 +8,7 @@ from . import transformations
 from . import misc
 from . import log
 from . import jsonpickle
+from . import time_measure
 try:
     from . import colored_text
     assert(colored_text)
@@ -18,3 +19,4 @@ assert(transformations)
 assert(misc)
 assert(log)
 assert(jsonpickle)
+assert(time_measure)

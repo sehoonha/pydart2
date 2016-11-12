@@ -8,8 +8,13 @@ from . import transformations
 from . import misc
 from . import log
 from . import jsonpickle
+try:
+    from . import colored_text
+    assert(colored_text)
+except Exception:
+    print("Error while importing pydart2.utils.colored_text")
 
-assert transformations
-assert misc
-assert log
-assert jsonpickle
+assert(transformations)
+assert(misc)
+assert(log)
+assert(jsonpickle)

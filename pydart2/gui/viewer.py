@@ -303,7 +303,7 @@ class PydartWindow(QtGui.QMainWindow):
         # Do play
         elif self.playAction.isChecked():
             bIsDone = self.safe_call_callback('step')
-            if bIsDone is False:
+            if (bIsDone is not None) and (not bIsDone):
                 print("step() returns False: stop...")
                 self.playAction.setChecked(False)
             # capture_rate = 10

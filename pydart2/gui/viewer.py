@@ -54,9 +54,8 @@ class PydartWindow(QtGui.QMainWindow):
         self.logger.info('sim = [%s]' % str(self.sim))
 
         # Check and create captures directory
-        self.capture_dir = 'data/captures'
-        if not os.path.isdir('data/captures'):
-            os.makedirs('data/captures')
+        self.set_capture_rate(100)
+        self.set_capture_dir('data/captures')
 
         self.initUI()
         self.initActions()
@@ -112,6 +111,12 @@ class PydartWindow(QtGui.QMainWindow):
 
     def set_capture_rate(self, _capture_rate):
         self._capture_rate = _capture_rate
+
+    def capture_dir(self,):
+        return self._capture_dir
+
+    def set_capture_dir(self, _capture_dir):
+        self._capture_dir = _capture_dir
 
     def initUI(self):
         TOOLBOX_HEIGHT = 30
@@ -311,7 +316,7 @@ class PydartWindow(QtGui.QMainWindow):
             # doCapture = True
 
         if self.captureAction.isChecked() and doCapture:
-            self.glwidget.capture(self.prob_name())
+            self.capture()
 
     def renderTimerEvent(self):
         self.glwidget.updateGL()
@@ -344,8 +349,11 @@ class PydartWindow(QtGui.QMainWindow):
         name = self.safe_call_callback("name")
         return name if name is not None else "robot"
 
+    def capture(self, ):
+        self.glwidget.capture(self.prob_name())
+
     def emptyEvent(self):
-        cmd = 'rm %s/*.png' % self.capture_dir
+        cmd = 'rm %s/*.png' % self.capture_dir()
         print('cmd = %s' % cmd)
         os.system(cmd)
 
@@ -353,14 +361,17 @@ class PydartWindow(QtGui.QMainWindow):
         """
         Ubuntu tested only: avconv is required
         """
+        if not os.path.isdir(self.capture_dir()):
+            os.makedirs(self.capture_dir())
+
         name = self.prob_name()
         # yuv420p for compatibility for outdated codecs
-        cmt_fmt = 'avconv -r 100'
+        cmt_fmt = 'avconv -r %d' % self.capture_rate()
         cmt_fmt += ' -i %s/%s.%%04d.png'
         cmt_fmt += ' -pix_fmt yuv420p'
         cmt_fmt += ' %s.mp4'
-        print(self.capture_dir)
-        cmd = cmt_fmt % (self.capture_dir, name, name)
+        print(self.capture_dir())
+        cmd = cmt_fmt % (self.capture_dir(), name, name)
         print('cmd = %s' % cmd)
         os.system(cmd)
 

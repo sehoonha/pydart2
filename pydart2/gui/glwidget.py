@@ -221,7 +221,7 @@ class GLWidget(QGLWidget):
         img = self.grabFrameBuffer()
         if name is None:
             name = 'frame'
-        dir = self.viewer.capture_dir
+        dir = self.viewer.capture_dir()
         filename = '%s/%s.%04d.png' % (dir, name, self.captureIndex)
         img.save(filename)
         print(('Capture to %s' % filename))

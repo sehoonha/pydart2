@@ -88,6 +88,7 @@ void SKEL(setRootJointToTransAndEuler)(int wid, int skid) {
     dart::dynamics::Joint* newJoint = ret.first;
     newJoint->setName("root_t");
     dart::dynamics::BodyNode* newBody = ret.second;
+    newBody->setMass(0.0);
     // rearrange the root joints
     oldRoot->moveTo(newBody);
 }

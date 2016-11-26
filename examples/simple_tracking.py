@@ -29,6 +29,7 @@ if __name__ == '__main__':
     print('World OK')
 
     skel = world.add_skeleton('./data/sdf/atlas/atlas_v3_no_head.sdf')
+    skel.set_root_joint_to_trans_and_euler()
     print('Skeleton = ' + str(skel))
 
     # Set joint damping

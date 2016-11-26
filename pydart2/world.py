@@ -141,7 +141,7 @@ class World(object):
                            scale=render_contact_force_scale)
 
     def states(self):
-        return np.concatenate([skel.x for skel in self.skels])
+        return np.concatenate([skel.x for skel in self.skeletons])
 
     @property
     def x(self):
@@ -149,7 +149,7 @@ class World(object):
 
     def set_states(self, _x):
         lo = 0
-        for skel in self.skels:
+        for skel in self.skeletons:
             hi = lo + 2 * skel.ndofs
             skel.x = _x[lo:hi]
             lo = hi

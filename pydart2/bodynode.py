@@ -162,12 +162,24 @@ class BodyNode(object):
     def m(self):
         return self.mass()
 
+    def set_mass(self, mass):
+        return papi.bodynode__setMass(self.wid, self.skid, self.id, mass)
+
     def inertia(self):
         return papi.bodynode__getInertia(self.wid, self.skid, self.id)
 
     @property
     def I(self):
         return self.inertia()
+
+    def set_inertia(self, I):
+        return papi.bodynode__setInertia(self.wid, self.skid, self.id, I)
+
+    def set_inertia_entries(self, Ixx, Iyy, Izz, Ixy=0.0, Ixz=0.0, Iyz=0.0):
+        I = np.array([[Ixx, Ixy, Ixz],
+                      [Ixy, Iyy, Iyz],
+                      [Ixz, Iyz, Izz]])
+        return self.set_inertia(I)
 
 ########################################
 # Momentum Functions

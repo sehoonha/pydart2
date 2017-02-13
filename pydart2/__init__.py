@@ -18,15 +18,17 @@ assert constraints
 
 # import os.path
 
-try:
-    from . import gui
-    assert gui
-except Exception:
-    e = sys.exc_info()[1]
-    print("-" * 40)
-    print("Error while importing pydart2.gui")
-    print(e)
-    print("-" * 40)
+from . import gui
+
+# try:
+#     from . import gui
+#     assert gui
+# except Exception:
+#     e = sys.exc_info()[1]
+#     print("-" * 40)
+#     print("Error while importing pydart2.gui")
+#     print(e)
+#     print("-" * 40)
 
 __version__ = (0, 5, 0)
 

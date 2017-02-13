@@ -55,7 +55,7 @@ include_dirs += NP_DIRS
 
 libraries = list()
 libraries += ['dart', 'dart-gui']
-libraries += ['dart-optimizer-ipopt', 'dart-optimizer-nlopt',
+libraries += ['dart-optimizer-nlopt',
               'dart-planning', 'dart-utils', 'dart-utils-urdf']
 # libraries += [current_python]
 if _platform == "linux" or _platform == "linux2":

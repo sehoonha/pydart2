@@ -9,7 +9,7 @@ from past.utils import old_div
 # Disney Research Robotics Group
 import OpenGL.GL as GL
 import OpenGL.GLU as GLU
-# import OpenGL.GLUT as GLUT
+import OpenGL.GLUT as GLUT
 from PyQt4 import QtGui
 from PyQt4 import QtCore
 from PyQt4.QtOpenGL import QGLWidget, QGLFormat
@@ -49,15 +49,20 @@ class GLWidget(QGLWidget):
         return QtCore.QSize(self.width, self.height)
 
     def paintGL(self):
-        GL.glEnable(GL.GL_DEPTH_TEST)
         GL.glClearColor(0.98, 0.98, 0.98, 0.0)
         GL.glClearColor(1.0, 1.0, 1.0, 1.0)
+
         GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
 
         GL.glLoadIdentity()
-        # glTranslate(0.0, -0.2, self.zoom)  # Camera
+        # GL.glTranslate(0.0, -0.0, -6.0)  # Camera
+        # GLUT.glutSolidTeapot(1.0)
+
         GL.glTranslate(*self.tb.trans)
         GL.glMultMatrixf(self.tb.matrix)
+
+        # GL.glColor4d(1.0, 0.0, 0.0, 1.0)
+        # GLUT.glutSolidTeapot(1.0)
 
         if self.sim is not None and hasattr(self.sim, "render"):
             self.sim.render()
@@ -70,6 +75,8 @@ class GLWidget(QGLWidget):
         if self.sim is not None and hasattr(self.sim, "draw_with_ri"):
             self.sim.draw_with_ri(self.renderer)
             self.renderer.draw_text([-100, -100], "")
+        # self.renderer.draw_text([100, 100], "Hello Jello Melo")
+
         self.disable2D()
 
     def resizeGL(self, w, h):

@@ -37,6 +37,8 @@ include_dirs += ['/usr/include/bullet']
 include_dirs += ['/usr/local/include']
 include_dirs += ['/usr/local/include/eigen3']
 include_dirs += ['/usr/local/include/bullet']
+include_dirs += ['/usr/local/Cellar/urdfdom_headers/0.2.3/include']
+
 try:
     import numpy
     NP_DIRS = [numpy.get_include()]
@@ -59,7 +61,11 @@ libraries += ['dart-optimizer-ipopt', 'dart-optimizer-nlopt',
 if _platform == "linux" or _platform == "linux2":
     libraries += ['GL', 'glut', 'Xmu', 'Xi']
 elif _platform == "darwin":
-    libraries += ['GLUT', 'Cocoa', 'OpenGL']
+    CXX_FLAGS += '-framework Cocoa '
+    CXX_FLAGS += '-framework OpenGL '
+    CXX_FLAGS += '-framework GLUT '
+
+    # libraries += ['GLUT', 'Cocoa', 'OpenGL']
 libraries += ['BulletDynamics', 'BulletCollision',
               'LinearMath', 'BulletSoftBody']
 

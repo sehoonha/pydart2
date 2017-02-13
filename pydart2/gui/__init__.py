@@ -6,11 +6,26 @@ from __future__ import absolute_import
 # Disney Research Robotics Group
 
 from pydart2.gui import opengl
-from pydart2.gui import pyqt4
-from pydart2.gui import viewer
 assert(opengl)
-assert(pyqt4)
-assert(viewer)
+
+try:
+    from pydart2.gui import glut
+    assert(glut)
+except Exception:
+    print("[Warn] fail to load GLUT -- check the installation")
+
+try:
+    from pydart2.gui import pyqt4
+    assert(pyqt4)
+except:
+    print("[Warn] fail to load PyQt4 -- check the installation")
+
+try:
+    from pydart2.gui import viewer
+    assert(viewer)
+except:
+    print("[Warn] fail to load viewer")
+
 
 # assert(pydart2.gui.opengl)
 # assert(pydart2.gui.pyqt4)

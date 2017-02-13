@@ -14,9 +14,15 @@ try:
 except Exception:
     print("[Warn] fail to load GLUT -- check the installation")
 
+# try:
+#     from pydart2.gui import pyqt4
+#     assert(pyqt4)
+# except:
+#     print("[Warn] fail to load PyQt4 -- check the installation")
+
 try:
-    from pydart2.gui import pyqt4
-    assert(pyqt4)
+    from pydart2.gui import pyqt5
+    assert(pyqt5)
 except:
     print("[Warn] fail to load PyQt4 -- check the installation")
 

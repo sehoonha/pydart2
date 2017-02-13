@@ -5,8 +5,15 @@ def launch_window(sim, win, default_camera):
 
 
 def launch_pyqt4(sim, title=None, default_camera=None):
-    from pydart2.gui.pyqt4.window import PyQT4Window
-    win = PyQT4Window(sim, title)
+    from pydart2.gui.pyqt4.window import PyQt4Window
+    win = PyQt4Window(sim, title)
+    launch_window(sim, win, default_camera)
+
+
+def launch_pyqt5(sim, title=None, default_camera=None):
+    from pydart2.gui.pyqt5.window import PyQt5Window
+
+    win = PyQt5Window(sim, title)
     launch_window(sim, win, default_camera)
 
 
@@ -20,5 +27,6 @@ def launch(sim, title=None, default_camera=None):
     """
     default is PyQt4
     """
-    launch_pyqt4(sim, title, default_camera)
+    # launch_pyqt4(sim, title, default_camera)
+    launch_pyqt5(sim, title, default_camera)
     # launch_glut(sim, title, default_camera)

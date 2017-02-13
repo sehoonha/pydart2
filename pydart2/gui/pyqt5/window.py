@@ -17,12 +17,12 @@ import signal
 # import time
 # import inspect
 
-
 import logging
 
 import OpenGL.GLUT
-from PyQt4 import QtGui
-from PyQt4 import QtCore
+from PyQt5 import QtGui
+from PyQt5 import QtCore
+from PyQt5 import QtWidgets
 from .glwidget import GLWidget
 from pydart2.gui.trackball import Trackball
 
@@ -35,18 +35,18 @@ def signal_handler(signal, frame):
 signal.signal(signal.SIGINT, signal_handler)
 
 
-class PyQt4Window(QtGui.QMainWindow):
+class PyQt5Window(QtWidgets.QMainWindow):
     GLUT_INITED = False
 
     def __init__(self, sim=None, title=None):
-        if not PyQt4Window.GLUT_INITED:
+        if not PyQt5Window.GLUT_INITED:
             OpenGL.GLUT.glutInit(sys.argv)
 
         if title is None:
             title = "Simulation Viewer"
-        self.app = QtGui.QApplication([title])
+        self.app = QtWidgets.QApplication([title])
 
-        super(PyQt4Window, self).__init__()
+        super(PyQt5Window, self).__init__()
 
         # setup_logger()
         self.logger = logging.getLogger(__name__)
@@ -86,11 +86,11 @@ class PyQt4Window(QtGui.QMainWindow):
 
     def closeEvent(self, event):
         self.safe_call_callback("on_close")
-        super(PyQt4Window, self).closeEvent(event)
+        super(PyQt5Window, self).closeEvent(event)
 
     def topLeft(self):
         frameGm = self.frameGeometry()
-        desktop = QtGui.QApplication.desktop()
+        desktop = QtWidgets.QApplication.desktop()
         screen = desktop.screenNumber(desktop.cursor().pos())
         # centerPoint = desktop.screenGeometry(screen).center()
         # frameGm.moveCenter(centerPoint)
@@ -127,10 +127,10 @@ class PyQt4Window(QtGui.QMainWindow):
                          720 + TOOLBOX_HEIGHT + STATUS_HEIGHT)
         # self.setWindowTitle('Toolbar')
 
-        self.ui = QtGui.QWidget(self)
+        self.ui = QtWidgets.QWidget(self)
         self.ui.setGeometry(0, TOOLBOX_HEIGHT, 1280 + PANEL_WIDTH, 720)
 
-        self.hbox = QtGui.QHBoxLayout()
+        self.hbox = QtWidgets.QHBoxLayout()
 
         self.glwidget = GLWidget(self)
         self.glwidget.sim = self.sim
@@ -212,39 +212,39 @@ class PyQt4Window(QtGui.QMainWindow):
         cam_id = scene.num_cameras() - 1
         if name is None:
             name = 'Camera %d' % cam_id
-        action = QtGui.QAction(name, self)
+        action = QtWidgets.QAction(name, self)
         action.triggered.connect(lambda: self.camera_event(cam_id))
         self.cameraMenu.addAction(action)
         print("add_camera_event: ID = %d name = %s" % (cam_id, name))
 
     def initActions(self):
         # Create actions
-        self.resetAction = QtGui.QAction('Reset', self)
+        self.resetAction = QtWidgets.QAction('Reset', self)
         self.resetAction.triggered.connect(self.resetEvent)
 
-        self.stepAction = QtGui.QAction('Step', self)
+        self.stepAction = QtWidgets.QAction('Step', self)
         self.stepAction.triggered.connect(self.stepEvent)
 
-        self.playAction = QtGui.QAction('Play', self)
+        self.playAction = QtWidgets.QAction('Play', self)
         self.playAction.setCheckable(True)
         self.playAction.setShortcut('Space')
 
-        self.animAction = QtGui.QAction('Anim', self)
+        self.animAction = QtWidgets.QAction('Anim', self)
         self.animAction.setCheckable(True)
 
-        self.captureAction = QtGui.QAction('Capture', self)
+        self.captureAction = QtWidgets.QAction('Capture', self)
         self.captureAction.setCheckable(True)
 
-        self.emptyAction = QtGui.QAction('Empty', self)
+        self.emptyAction = QtWidgets.QAction('Empty', self)
         self.emptyAction.triggered.connect(self.emptyEvent)
 
-        self.movieAction = QtGui.QAction('Movie', self)
+        self.movieAction = QtWidgets.QAction('Movie', self)
         self.movieAction.triggered.connect(self.movieEvent)
 
-        self.screenshotAction = QtGui.QAction('Screenshot', self)
+        self.screenshotAction = QtWidgets.QAction('Screenshot', self)
         self.screenshotAction.triggered.connect(self.screenshotEvent)
 
-        self.printCamAction = QtGui.QAction('Print Camera', self)
+        self.printCamAction = QtWidgets.QAction('Print Camera', self)
         self.printCamAction.triggered.connect(self.printCamEvent)
 
     def initToolbar(self):
@@ -260,7 +260,7 @@ class PyQt4Window(QtGui.QMainWindow):
         self.toolbar.addAction(self.emptyAction)
         self.toolbar.addAction(self.movieAction)
 
-        self.rangeSlider = QtGui.QSlider(QtCore.Qt.Horizontal, self)
+        self.rangeSlider = QtWidgets.QSlider(QtCore.Qt.Horizontal, self)
         self.rangeSlider.valueChanged[int].connect(self.rangeSliderEvent)
         self.toolbar.addWidget(self.rangeSlider)
 

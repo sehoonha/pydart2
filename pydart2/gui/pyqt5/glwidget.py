@@ -95,11 +95,20 @@ class GLWidget(QtWidgets.QOpenGLWidget):
         self.viewer.safe_call_callback("on_mouse_move", p0, p1)
 
         self.lastPos = event.pos()
-        self.paintGL()
+        # self.paintGL()
         self.update()
 
     def capture(self, name=None):
-        img = self.grabFrameBuffer()
+        data = GL.glReadPixels(0, 0,
+                               self.width, self.height,
+                               GL.GL_RGBA,
+                               GL.GL_UNSIGNED_BYTE)
+        img = QtGui.QImage(data, self.width, self.height,
+                           QtGui.QImage.Format_RGBA8888_Premultiplied)
+        T = QtGui.QTransform()
+        T.scale(1.0, -1.0)
+        img = img.transformed(T)
+        #                        img = self.grabFrameBuffer()
         if name is None:
             name = 'frame'
         dir = self.viewer.capture_dir()

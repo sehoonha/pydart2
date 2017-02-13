@@ -309,7 +309,7 @@ class PyQt5Window(QtWidgets.QMainWindow):
 
     def renderTimerEvent(self):
         # self.glwidget.updateGL()
-        self.glwidget.paintGL()
+        # self.glwidget.paintGL()
         self.glwidget.update()
 
         msg = self.safe_call_callback('status')

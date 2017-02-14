@@ -136,6 +136,7 @@ class PyQt5Window(QtWidgets.QMainWindow):
         self.glwidget.sim = self.sim
         self.glwidget.viewer = self
         self.glwidget.setGeometry(0, 0, 1280, 720)
+        self.scene = self.glwidget.scene
 
         self.hbox.addWidget(self.glwidget)
         self.ui.setLayout(self.hbox)

@@ -7,6 +7,7 @@ import glob
 
 DIR = 'pydart2/'
 
+# CXX_FLAGS = '-Wall -msse2 -fPIC -stdlib=libc++ -Xlinker -rpath /usr/local/lib '
 CXX_FLAGS = '-Wall -msse2 -fPIC -std=c++11 -Xlinker -rpath /usr/local/lib '
 CXX_FLAGS += '-O3 -DNDEBUG -shared '
 CXX_FLAGS += '-g -fno-omit-frame-pointer -fno-inline-functions '
@@ -64,6 +65,8 @@ elif _platform == "darwin":
     CXX_FLAGS += '-framework Cocoa '
     CXX_FLAGS += '-framework OpenGL '
     CXX_FLAGS += '-framework GLUT '
+    CXX_FLAGS += '-stdlib=libc++ '
+    CXX_FLAGS += '-I/opt/local/include/gcc47/c++ -L/opt/local/lib/gcc47 '
 
     # libraries += ['GLUT', 'Cocoa', 'OpenGL']
 libraries += ['BulletDynamics', 'BulletCollision',

@@ -10,7 +10,7 @@ DIR = 'pydart2/'
 CXX_FLAGS = '-Wall -msse2 -fPIC -std=c++11 -Xlinker -rpath /usr/local/lib '
 CXX_FLAGS += '-O3 -DNDEBUG -shared '
 CXX_FLAGS += '-g -fno-omit-frame-pointer -fno-inline-functions '
-CXX_FLAGS += '-fno-inline-functions-called-once -fno-optimize-sibling-calls '
+CXX_FLAGS += '-fno-optimize-sibling-calls '
 
 # CXX_FLAGS = '-fopenmp -Wall -Wextra -fPIC -std=c++11 '
 # CXX_FLAGS = '-O3 -DNDEBUG'
@@ -60,6 +60,7 @@ libraries += ['dart-optimizer-nlopt',
 # libraries += [current_python]
 if _platform == "linux" or _platform == "linux2":
     libraries += ['GL', 'glut', 'Xmu', 'Xi']
+    CXX_FLAGS += '-fno-inline-functions-called-once'
 elif _platform == "darwin":
     CXX_FLAGS += '-framework Cocoa '
     CXX_FLAGS += '-framework OpenGL '

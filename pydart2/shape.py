@@ -42,16 +42,26 @@ class Shape(object):
         return papi.shape__getVolume(self.wid, self.skid, self.bid, self.id)
 
     def shape_type(self, ):
-        type_ = papi.shape__getShapeType(self.wid, self.skid,
-                                         self.bid, self.id)
-        type_ = 1 if type_ == -1 else type_  # Assume to be ELLIPSOID
-        return type_
+        return self.type_id()
+        # type_ = papi.shape__getShapeType(self.wid, self.skid,
+        #                                  self.bid, self.id)
+        # type_ = 1 if type_ == -1 else type_  # Assume to be ELLIPSOID
+        # return type_
 
     def shape_type_name(self, ):
-        type_ = self.shape_type()
-        names = ["BOX", "ELLIPSOID", "CYLINDER", "PLANE",
-                 "MESH", "SOFT_MESH", "LINE_SEGMENT"]
-        return names[type_]
+        return self.type()
+        # type_ = self.shape_type()
+        # names = ["BOX", "ELLIPSOID", "CYLINDER", "PLANE",
+        #          "MESH", "SOFT_MESH", "LINE_SEGMENT"]
+        # return names[type_]
+
+    def type(self, ):
+        return papi.shape__getType(self.wid, self.skid,
+                                   self.bid, self.id)
+
+    def type_id(self, ):
+        return papi.shape__getTypeID(self.wid, self.skid,
+                                     self.bid, self.id)
 
     def render(self, ):
         papi.shape__render(self.wid, self.skid, self.bid, self.id)
@@ -69,6 +79,14 @@ class Shape(object):
 
     def __repr__(self):
         return '[Shape(%d:%d)]' % (self.bid, self.id)
+
+
+class SphereShape(Shape):
+    def __init__(self, _shapenode):
+        Shape.__init__(self, _shapenode)
+
+    def __repr__(self):
+        return '[SphereShape(%d:%d)]' % (self.bid, self.id)
 
 
 class BoxShape(Shape):
@@ -111,12 +129,36 @@ class CylinderShape(Shape):
         return '[CylinderShape(%d:%d)]' % (self.bid, self.id)
 
 
+class CapsuleShape(Shape):
+    def __init__(self, _shapenode):
+        Shape.__init__(self, _shapenode)
+
+    def __repr__(self):
+        return '[CapsuleShape(%d:%d)]' % (self.bid, self.id)
+
+
+class ConeShape(Shape):
+    def __init__(self, _shapenode):
+        Shape.__init__(self, _shapenode)
+
+    def __repr__(self):
+        return '[ConeShape(%d:%d)]' % (self.bid, self.id)
+
+
 class PlaneShape(Shape):
     def __init__(self, _shapenode):
         Shape.__init__(self, _shapenode)
 
     def __repr__(self):
         return '[PlaneShape(%d:%d)]' % (self.bid, self.id)
+
+
+class MultiSphereShape(Shape):
+    def __init__(self, _shapenode):
+        Shape.__init__(self, _shapenode)
+
+    def __repr__(self):
+        return '[MultiSphereShape(%d:%d)]' % (self.bid, self.id)
 
 
 class MeshShape(Shape):
@@ -158,12 +200,14 @@ def create_shape(shapenode):
 
     wid, skid, bid, id = world.id, skeleton.id, bodynode.id, shapenode.id
 
-    type_ = papi.shape__getShapeType(wid, skid, bid, id)
-    type_ = 1 if type_ == -1 else type_  # Assume to be ELLIPSOID
-    shape_classes = [BoxShape, EllipsoidShape, CylinderShape, PlaneShape,
+    type_ = papi.shape__getTypeID(wid, skid, bid, id)
+    # type_ = 1 if type_ == -1 else type_  # Assume to be ELLIPSOID
+    shape_classes = [SphereShape, BoxShape, EllipsoidShape, CylinderShape,
+                     CapsuleShape, ConeShape, PlaneShape, MultiSphereShape,
                      MeshShape, SoftMeshShape, LineSegmentShape]
-    if type_ < len(shape_classes):
+    if 0 <= type_ < len(shape_classes):
         cls = shape_classes[type_]
+        print("shape = %d cls = %s" % (type_, cls))
         return cls(shapenode)
     else:
         print("Invalid type: %d" % type_)

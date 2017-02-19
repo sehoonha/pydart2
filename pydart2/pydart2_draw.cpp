@@ -301,7 +301,7 @@ void drawShape(
         else if (shape->is<EllipsoidShape>())
         {
           const auto* ellipsoid = static_cast<const EllipsoidShape*>(shape);
-          ri->drawEllipsoid(ellipsoid->getDiameters());
+          ri->drawEllipsoid(ellipsoid->getSize());
         }
         else if (shape->is<CylinderShape>())
         {

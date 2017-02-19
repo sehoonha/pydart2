@@ -6,6 +6,7 @@ from __future__ import absolute_import
 # Author(s): Sehoon Ha <sehoon.ha@disneyresearch.com>
 # Disney Research Robotics Group
 from . import pydart2_api as papi
+import numpy as np
 
 
 class Shape(object):
@@ -85,6 +86,14 @@ class SphereShape(Shape):
     def __init__(self, _shapenode):
         Shape.__init__(self, _shapenode)
 
+    def radius(self, ):
+        return papi.sphere_shape__getRadius(self.wid, self.skid, self.bid,
+                                            self.id)
+
+    def set_radius(self, _radius):
+        return papi.sphere_shape__setRadius(self.wid, self.skid, self.bid,
+                                            self.id, _radius)
+
     def __repr__(self):
         return '[SphereShape(%d:%d)]' % (self.bid, self.id)
 
@@ -125,6 +134,22 @@ class CylinderShape(Shape):
     def __init__(self, _shapenode):
         Shape.__init__(self, _shapenode)
 
+    def radius(self, ):
+        return papi.cylindershape__getRadius(self.wid, self.skid,
+                                             self.bid, self.id)
+
+    def set_radius(self, _radius):
+        papi.cylindershape__setRadius(self.wid, self.skid, self.bid,
+                                      self.id, _radius)
+
+    def height(self, ):
+        return papi.cylindershape__getHeight(self.wid, self.skid,
+                                             self.bid, self.id)
+
+    def set_height(self, _height):
+        papi.cylindershape__setHeight(self.wid, self.skid, self.bid,
+                                      self.id, _height)
+
     def __repr__(self):
         return '[CylinderShape(%d:%d)]' % (self.bid, self.id)
 
@@ -132,6 +157,22 @@ class CylinderShape(Shape):
 class CapsuleShape(Shape):
     def __init__(self, _shapenode):
         Shape.__init__(self, _shapenode)
+
+    def radius(self, ):
+        return papi.capsuleshape__getRadius(self.wid, self.skid,
+                                            self.bid, self.id)
+
+    def set_radius(self, radius):
+        papi.capsuleshape__setRadius(self.wid, self.skid,
+                                     self.bid, self.id, radius)
+
+    def height(self, ):
+        return papi.capsuleshape__getHeight(self.wid, self.skid,
+                                            self.bid, self.id)
+
+    def set_height(self, height):
+        papi.capsuleshape__setHeight(self.wid, self.skid, self.bid,
+                                     self.id, height)
 
     def __repr__(self):
         return '[CapsuleShape(%d:%d)]' % (self.bid, self.id)
@@ -141,6 +182,22 @@ class ConeShape(Shape):
     def __init__(self, _shapenode):
         Shape.__init__(self, _shapenode)
 
+    def radius(self, ):
+        return papi.coneshape__getRadius(self.wid, self.skid, self.bid,
+                                         self.id)
+
+    def set_radius(self, radius):
+        papi.coneshape__setRadius(self.wid, self.skid, self.bid, self.id,
+                                  radius)
+
+    def height(self, ):
+        return papi.coneshape__getHeight(self.wid, self.skid, self.bid,
+                                         self.id)
+
+    def set_height(self, height):
+        papi.coneshape__setHeight(self.wid, self.skid, self.bid, self.id,
+                                  height)
+
     def __repr__(self):
         return '[ConeShape(%d:%d)]' % (self.bid, self.id)
 
@@ -149,6 +206,22 @@ class PlaneShape(Shape):
     def __init__(self, _shapenode):
         Shape.__init__(self, _shapenode)
 
+    def normal(self, ):
+        return papi.planeshape__getNormal(self.wid, self.skid, self.bid,
+                                          self.id)
+
+    def set_normal(self, inv3):
+        papi.planeshape__setNormal(self.wid, self.skid, self.bid, self.id,
+                                   inv3)
+
+    def offset(self, ):
+        return papi.planeshape__getOffset(self.wid, self.skid, self.bid,
+                                          self.id)
+
+    def set_offset(self, _offset):
+        papi.planeshape__setOffset(self.wid, self.skid, self.bid, self.id,
+                                   _offset)
+
     def __repr__(self):
         return '[PlaneShape(%d:%d)]' % (self.bid, self.id)
 
@@ -156,6 +229,24 @@ class PlaneShape(Shape):
 class MultiSphereShape(Shape):
     def __init__(self, _shapenode):
         Shape.__init__(self, _shapenode)
+
+    def add_sphere(self, r, pos):
+        sphere = np.concatenate([[r], pos])
+        papi.multisphereshape__addSphere(self.wid, self.skid, self.bid,
+                                         self.id, sphere)
+
+    def spheres(self, ):
+        n = self.num_spheres()
+        data = papi.multisphereshape__getSpheres(self.wid, self.skid,
+                                                 self.bid, self.id,
+                                                 n * 4)
+        spheres = np.split(data, n)
+        spheres = [{'r': s[0], 'pos': s[1:]} for s in spheres]
+        return spheres
+
+    def num_spheres(self, ):
+        return papi.multisphereshape__getNumSpheres(self.wid, self.skid,
+                                                    self.bid, self.id)
 
     def __repr__(self):
         return '[MultiSphereShape(%d:%d)]' % (self.bid, self.id)
@@ -207,8 +298,9 @@ def create_shape(shapenode):
                      MeshShape, SoftMeshShape, LineSegmentShape]
     if 0 <= type_ < len(shape_classes):
         cls = shape_classes[type_]
-        print("shape = %d cls = %s" % (type_, cls))
-        return cls(shapenode)
+        ret = cls(shapenode)
+        print("Shape = %s" % ret)
+        return ret
     else:
         print("Invalid type: %d" % type_)
         return None

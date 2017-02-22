@@ -110,7 +110,7 @@ requires = ['numpy', 'PyOpenGL', 'PyOpenGL_accelerate',
             'future', 'six']
 
 setup(name='pydart2',
-      version='0.5.8',
+      version='0.6.0',
       description='Python Interface for DART Simulator',
       url='https://github.com/sehoonha/pydart2',
       author='Sehoon Ha',

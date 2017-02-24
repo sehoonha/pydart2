@@ -20,6 +20,7 @@ class GLUTWindow(object):
         self.is_simulating = False
         self.is_animating = False
         self.frame_index = 0
+        self.capture_index = 0
 
     def initGL(self, w, h):
         self.scene.init()
@@ -61,6 +62,8 @@ class GLUTWindow(object):
             print("frame = %d/%d" % (self.frame_index, self.sim.num_frames()))
             if hasattr(self.sim, "set_frame"):
                 self.sim.set_frame(self.frame_index)
+        elif key == 'c':
+            self.capture()
 
     def mouseFunc(self, button, state, x, y):
         if state == 0:  # Mouse pressed
@@ -86,6 +89,8 @@ class GLUTWindow(object):
             return
         if self.is_simulating:
             self.sim.step()
+            # if self.sim.frame % 10 == 0:
+            #     self.capture()
         elif self.is_animating:
             self.frame_index = (self.frame_index + 1) % self.sim.num_frames()
             if hasattr(self.sim, "set_frame"):
@@ -94,6 +99,18 @@ class GLUTWindow(object):
     def renderTimer(self, timer):
         GLUT.glutPostRedisplay()
         GLUT.glutTimerFunc(20, self.renderTimer, 1)
+
+    def capture(self, ):
+        print("capture! index = %d" % self.capture_index)
+        from PIL import Image
+        GL.glPixelStorei(GL.GL_PACK_ALIGNMENT, 1)
+        w, h = 1280, 720
+        data = GL.glReadPixels(0, 0, w, h, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE)
+        img = Image.fromstring("RGBA", (w, h), data)
+        img = img.transpose(Image.FLIP_TOP_BOTTOM)
+        filename = "./data/captures/capture%04d.png" % self.capture_index
+        img.save(filename, 'png')
+        self.capture_index += 1
 
     def run(self, ):
         print("\n")

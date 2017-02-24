@@ -28,5 +28,5 @@ def launch(sim, title=None, default_camera=None):
     default is PyQt5
     """
     # launch_pyqt4(sim, title, default_camera)
-    launch_pyqt5(sim, title, default_camera)
-    # launch_glut(sim, title, default_camera)
+    # launch_pyqt5(sim, title, default_camera)
+    launch_glut(sim, title, default_camera)

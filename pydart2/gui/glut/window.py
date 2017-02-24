@@ -123,6 +123,7 @@ class GLUTWindow(object):
         GLUT.glutInit(())
         GLUT.glutInitDisplayMode(GLUT.GLUT_RGBA |
                                  GLUT.GLUT_DOUBLE |
+                                 GLUT.GLUT_MULTISAMPLE |
                                  GLUT.GLUT_ALPHA |
                                  GLUT.GLUT_DEPTH)
         GLUT.glutInitWindowSize(*self.window_size)

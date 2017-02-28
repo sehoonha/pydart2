@@ -58,14 +58,18 @@ class MusculoTendonUnit(object):
 
         # update muscle state
         self.l_se = l_mtu - self.l_ce
+        # print("l_se = %.4f" % self.l_se)
+        # print("L_SLACK = %.4f" % self.L_SLACK)
         f_se0 = fn_f_p0(self.l_se / self.L_SLACK, MTU.E_REF)
         f_be0 = fn_f_p0_ext(self.l_ce / self.L_OPT,
                             MTU.E_REF_BE, MTU.E_REF_BE2)
         f_pe0 = fn_f_p0(self.l_ce / self.L_OPT, MTU.E_REF_PE)
+        print(f_se0, f_be0, f_pe0)
         f_lce0 = fn_f_lce0(self.l_ce / self.L_OPT, MTU.W, MTU.C)
         f_vce0 = (f_se0 + f_be0) / (f_pe0 + self.a * f_lce0)
         # f_vce0 = (f_se0 + f_be0 - f_pe0)/(self.A*f_lce0)
         v_ce0 = fn_inv_f_vce0(f_vce0, MTU.K, MTU.N)
+        print(f_lce0, f_vce0, v_ce0)
 
         self.v_ce = self.L_OPT * self.V_MAX * v_ce0
         self.l_ce = self.l_ce + self.TIMESTEP * self.v_ce

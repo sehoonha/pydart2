@@ -60,6 +60,15 @@ class Route(object):
         world_points = [pt.to_world() for pt in self.points]
         ri.render_lines(world_points)
 
+    def length(self, ):
+        world_points = [pt.to_world() for pt in self.points]
+        length = 0.0
+        pt0 = world_points[0]
+        for pt1 in world_points[1:]:
+            length += np.linalg.norm(pt0 - pt1)
+            pt0 = pt1
+        return length
+
     def __repr__(self, ):
         tokens = [str(pt) for pt in self.points]
-        return "[%s]" % (", ".join(tokens))
+        return "[%s: length = %.4f]" % (", ".join(tokens), self.length())

@@ -6,3 +6,4 @@
 
 
 from pydart2.muscle.tendon_unit import MusculoTendonUnit as MTU
+from pydart2.muscle.route import Route

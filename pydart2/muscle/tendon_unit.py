@@ -29,9 +29,10 @@ class MusculoTendonUnit(object):
     # S range
     R_S = [.01, 1]
 
-    def __init__(self, TIMESTEP,
+    def __init__(self,
                  F_MAX, L_OPT, V_MAX, L_SLACK,
-                 L_MTU=None, A=0.01, DEL_T=0.02, name=None):
+                 L_MTU=None, A=0.01, DEL_T=0.02,
+                 name=None, TIMESTEP=0.001):
         self.TIMESTEP = TIMESTEP
         self.F_MAX = F_MAX
         self.L_OPT = L_OPT
@@ -41,7 +42,7 @@ class MusculoTendonUnit(object):
         self.l_ce = L_OPT if L_MTU is None else L_MTU - L_SLACK
         self.F_mtu = None
 
-        self.A = A
+        self.a = A
         self.DEL_T = DEL_T
         self.name = name if name is not None else "MTU"
 
@@ -53,7 +54,7 @@ class MusculoTendonUnit(object):
         MTU = MusculoTendonUnit
 
         # ECC
-        self.A = self.fn_ECC(s)
+        self.a = self.fn_ECC(s)
 
         # update muscle state
         self.l_se = l_mtu - self.l_ce
@@ -62,7 +63,7 @@ class MusculoTendonUnit(object):
                             MTU.E_REF_BE, MTU.E_REF_BE2)
         f_pe0 = fn_f_p0(self.l_ce / self.L_OPT, MTU.E_REF_PE)
         f_lce0 = fn_f_lce0(self.l_ce / self.L_OPT, MTU.W, MTU.C)
-        f_vce0 = (f_se0 + f_be0) / (f_pe0 + self.A * f_lce0)
+        f_vce0 = (f_se0 + f_be0) / (f_pe0 + self.a * f_lce0)
         # f_vce0 = (f_se0 + f_be0 - f_pe0)/(self.A*f_lce0)
         v_ce0 = fn_inv_f_vce0(f_vce0, MTU.K, MTU.N)
 
@@ -75,21 +76,20 @@ class MusculoTendonUnit(object):
         MTU = MusculoTendonUnit
         lo, hi = MTU.R_S
         S = np.minimum(hi, np.maximum(lo, S))
-        A = self.A
+        A = self.a
         if S > A:
             tau = MTU.TAU_ACT
         else:
             tau = MTU.TAU_DACT
 
         dA = (S - A) / tau
-        self.A = A + self.TIMESTEP * dA
+        self.a = A + self.TIMESTEP * dA
 
-        return self.A
+        return self.a
 
 
 if __name__ == '__main__':
-    mtu = MusculoTendonUnit(TIMESTEP=0.001,
-                            F_MAX=15000, L_OPT=0.1, V_MAX=12, L_SLACK=0.4)
+    mtu = MusculoTendonUnit(F_MAX=15000, L_OPT=0.1, V_MAX=12, L_SLACK=0.4)
     for frame in range(10):
         mtu.update(0.9, 0.5)
-        print("A = %.4f F_mtu = %.4f" % (mtu.A, mtu.F_mtu))
+        print("A = %.4f F_mtu = %.4f" % (mtu.a, mtu.F_mtu))

@@ -2,6 +2,8 @@
 #          : Seungmoon Song <ssm0445@gmail.com>
 import numpy as np
 from pydart2.utils.misc import S
+import pydart2.utils.transformations as trans
+from itertools import tee
 
 
 class AttachmentPoint(object):
@@ -38,6 +40,10 @@ class Route(object):
             self.points = [AttachmentPoint(name, offset)
                            for name, offset in points]
 
+        self.world_points = None
+        self.world_directions = None
+        self.length = None
+
     def num_points(self, ):
         return len(self.points)
 
@@ -52,6 +58,36 @@ class Route(object):
     def initialize_points(self, skeleton):
         for pt in self.points:
             pt.initialize(skeleton)
+        self.local_points = [pt.offset for pt in self.points]
+        self.bodynodes = [pt.body for pt in self.points]
+
+    def update_geometry_variables(self, ):
+        self.world_points = [pt.to_world() for pt in self.points]
+        self.length = 0.0
+        self.world_directions = list()
+
+        pt0 = self.world_points[0]
+        for pt1 in self.world_points[1:]:
+            diff = pt1 - pt0
+            length = np.linalg.norm(diff)
+            direction = diff / length
+
+            self.length += length
+            self.world_directions.append(direction)
+
+            pt0 = pt1
+
+    def local_points_as_pair(self, ):
+        "s -> (offset0, offset1), (offset1, offset2), ..."
+        a, b = tee(self.local_points)
+        next(b, None)
+        return zip(a, b)
+
+    def bodynodes_as_pair(self, ):
+        "s -> (body0, body1), (body1, body2), ..."
+        a, b = tee(self.bodynodes)
+        next(b, None)
+        return zip(a, b)
 
     def render_with_ri(self, ri, ):
         if self.num_points() < 2:
@@ -60,15 +96,6 @@ class Route(object):
         world_points = [pt.to_world() for pt in self.points]
         ri.render_lines(world_points)
 
-    def length(self, ):
-        world_points = [pt.to_world() for pt in self.points]
-        length = 0.0
-        pt0 = world_points[0]
-        for pt1 in world_points[1:]:
-            length += np.linalg.norm(pt0 - pt1)
-            pt0 = pt1
-        return length
-
     def __repr__(self, ):
         tokens = [str(pt) for pt in self.points]
-        return "[%s: length = %.4f]" % (", ".join(tokens), self.length())
+        return "[%s: length = %.4f]" % (", ".join(tokens), self.length)

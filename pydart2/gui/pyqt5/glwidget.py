@@ -108,11 +108,11 @@ class GLWidget(QtWidgets.QOpenGLWidget):
         T = QtGui.QTransform()
         T.scale(1.0, -1.0)
         img = img.transformed(T)
-        #                        img = self.grabFrameBuffer()
+
         if name is None:
             name = 'frame'
         dir = self.viewer.capture_dir()
         filename = '%s/%s.%04d.png' % (dir, name, self.captureIndex)
         img.save(filename)
-        print(('Capture to %s' % filename))
+        print('Capture to %s' % filename)
         self.captureIndex += 1

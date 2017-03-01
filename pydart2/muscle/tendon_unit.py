@@ -40,6 +40,7 @@ class MusculoTendonUnit(object):
         self.L_SLACK = L_SLACK
 
         self.l_ce = L_OPT if L_MTU is None else L_MTU - L_SLACK
+        # print("initialize: l_ce = %.4f" % self.l_ce)
         self.F_mtu = None
 
         self.a = A
@@ -64,15 +65,18 @@ class MusculoTendonUnit(object):
         f_be0 = fn_f_p0_ext(self.l_ce / self.L_OPT,
                             MTU.E_REF_BE, MTU.E_REF_BE2)
         f_pe0 = fn_f_p0(self.l_ce / self.L_OPT, MTU.E_REF_PE)
-        print(f_se0, f_be0, f_pe0)
         f_lce0 = fn_f_lce0(self.l_ce / self.L_OPT, MTU.W, MTU.C)
         f_vce0 = (f_se0 + f_be0) / (f_pe0 + self.a * f_lce0)
         # f_vce0 = (f_se0 + f_be0 - f_pe0)/(self.A*f_lce0)
         v_ce0 = fn_inv_f_vce0(f_vce0, MTU.K, MTU.N)
-        print(f_lce0, f_vce0, v_ce0)
+        # print(f_se0, f_be0, f_pe0)
+        # print(f_lce0, f_vce0, v_ce0)
 
         self.v_ce = self.L_OPT * self.V_MAX * v_ce0
         self.l_ce = self.l_ce + self.TIMESTEP * self.v_ce
+        # print("\tl_mtu = %.4f" % l_mtu)
+        # print("\tl_ce = %.4f l_se = %.4f" % (self.l_ce, self.l_se))
+        # print("\tv_ce = %.4f" % self.v_ce)
         self.F_mtu = self.F_MAX * f_se0
         return self.F_mtu
 

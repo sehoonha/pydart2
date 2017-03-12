@@ -60,6 +60,7 @@ class Route(object):
             pt.initialize(skeleton)
         self.local_points = [pt.offset for pt in self.points]
         self.bodynodes = [pt.body for pt in self.points]
+        self.update_geometry_variables()
 
     def update_geometry_variables(self, ):
         self.world_points = [pt.to_world() for pt in self.points]

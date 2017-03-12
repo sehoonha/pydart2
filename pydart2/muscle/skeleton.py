@@ -30,6 +30,10 @@ class MusculoSkeleton(Skeleton):
         for _, route in self.muscles:
             route.update_geometry_variables()
 
+    def reset_muscles(self, ):
+        for (mtu, route) in self.muscles:
+            mtu.reset()
+
     def stimulate(self, stimulation):
         self.update_route_geometry()
         for S, (mtu, route) in zip(stimulation, self.muscles):

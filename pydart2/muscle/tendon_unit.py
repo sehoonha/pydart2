@@ -35,17 +35,25 @@ class MusculoTendonUnit(object):
                  name=None, TIMESTEP=0.001):
         self.TIMESTEP = TIMESTEP
         self.F_MAX = F_MAX
-        self.L_OPT = L_OPT
         self.V_MAX = V_MAX
-        self.L_SLACK = L_SLACK
 
-        self.l_ce = L_OPT if L_MTU is None else L_MTU - L_SLACK
+        self.L_OPT = L_OPT
+        self.L_SLACK = L_SLACK
+        self.L_MTU = L_MTU
+
+        self.A = A
+
         # print("initialize: l_ce = %.4f" % self.l_ce)
         self.F_mtu = None
+        self.reset()
 
-        self.a = A
         self.DEL_T = DEL_T
         self.name = name if name is not None else "MTU"
+
+    def reset(self, ):
+        L_OPT, L_SLACK, L_MTU = self.L_OPT, self.L_SLACK, self.L_MTU
+        self.l_ce = L_OPT if L_MTU is None else L_MTU - L_SLACK
+        self.a = self.A
 
     def update(self, s, l_mtu):
         from pydart2.muscle.model_geyer_2010 import fn_inv_f_vce0

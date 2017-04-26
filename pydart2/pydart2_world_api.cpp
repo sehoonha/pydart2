@@ -157,6 +157,8 @@ void WORLD(setCollisionDetector)(int wid, int detector_type) {
       solver->setCollisionDetector(dart::collision::FCLCollisionDetector::create());
     } else if (detector_type == 2) {
       solver->setCollisionDetector(dart::collision::BulletCollisionDetector::create());
+    } else if (detector_type == 3) {
+        solver->setCollisionDetector(dart::collision::OdeCollisionDetector::create());
     } else {
         ERR << " [pydart_api] unknown detector_type" << std::endl;
     }
@@ -173,6 +175,9 @@ int WORLD(getCollisionDetector)(int wid) {
     }
     else if (dynamic_cast<dart::collision::BulletCollisionDetector*>(detector)) {
         return 2;
+    }
+    else if (dynamic_cast<dart::collision::OdeCollisionDetector*>(detector)) {
+        return 3;
     }
     return -1;
 }

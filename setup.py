@@ -37,6 +37,7 @@ include_dirs += ['/usr/include/bullet']
 include_dirs += ['/usr/local/include']
 include_dirs += ['/usr/local/include/eigen3']
 include_dirs += ['/usr/local/include/bullet']
+include_dirs += ['/usr/local/include/ode']
 include_dirs += ['/usr/local/Cellar/urdfdom_headers/0.2.3/include']
 
 try:
@@ -56,7 +57,7 @@ include_dirs += NP_DIRS
 libraries = list()
 libraries += ['dart', 'dart-gui']
 libraries += ['dart-optimizer-nlopt',
-              'dart-planning', 'dart-utils', 'dart-utils-urdf']
+              'dart-planning', 'dart-utils', 'dart-utils-urdf', 'dart-collision-ode', 'dart-collision-bullet']
 # libraries += [current_python]
 if _platform == "linux" or _platform == "linux2":
     libraries += ['GL', 'glut', 'Xmu', 'Xi']
@@ -68,7 +69,7 @@ elif _platform == "darwin":
 
     # libraries += ['GLUT', 'Cocoa', 'OpenGL']
 libraries += ['BulletDynamics', 'BulletCollision',
-              'LinearMath', 'BulletSoftBody']
+              'LinearMath', 'BulletSoftBody', 'ode']
 
 swig_opts = ['-c++']
 if python_major_version == 3:

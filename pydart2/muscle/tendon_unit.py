@@ -87,6 +87,7 @@ class MusculoTendonUnit(object):
         # print("\tf_se0 = %.4f" % f_se0)
         # print("\tF_mtu = %.4f" % self.F_mtu)
         # print("\tv_ce = %.4f" % self.v_ce)
+        # print("\n")
         return self.F_mtu
 
     def fn_ECC(self, S):

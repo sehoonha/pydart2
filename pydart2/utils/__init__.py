@@ -13,7 +13,7 @@ try:
     from . import colored_text
     assert(colored_text)
 except Exception:
-    print("Error while importing pydart2.utils.colored_text")
+    print("Error while importing colored_text (pip install colorama)")
 
 assert(transformations)
 assert(misc)

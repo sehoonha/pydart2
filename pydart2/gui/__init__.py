@@ -24,7 +24,7 @@ try:
     from pydart2.gui import pyqt5
     assert(pyqt5)
 except:
-    print("[Warn] fail to load PyQt5 -- check the installation")
+    print("[Warn] fail to load PyQt5 (pip install pyqt5)")
 
 try:
     from pydart2.gui import viewer

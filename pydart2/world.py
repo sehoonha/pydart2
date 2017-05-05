@@ -161,6 +161,8 @@ class World(object):
                            scale=render_contact_force_scale)
 
     def states(self):
+        if len(self.skeletons) == 0:
+            return np.array(())
         return np.concatenate([skel.x for skel in self.skeletons])
 
     @property

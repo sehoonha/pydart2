@@ -47,8 +47,11 @@ class World(object):
     def destroy(self):
         papi.destroyWorld(self.id)
 
-    def add_skeleton(self, filename):
-        skel = World.CLASS_SKELETON(self, _filename=filename)
+    def add_skeleton(self, filename, CLASS=None):
+        if CLASS is not None:
+            skel = CLASS(self, _filename=filename)
+        else:
+            skel = World.CLASS_SKELETON(self, _filename=filename)
         self.skeletons.append(skel)
         return skel
 

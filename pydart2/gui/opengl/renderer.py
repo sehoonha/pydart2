@@ -263,6 +263,12 @@ class Renderer(object):
         GL.glVertex(*p1)
         GL.glEnd()
 
+    def render_lines(self, points):
+        GL.glBegin(GL.GL_LINE_STRIP)
+        for pt in points:
+            GL.glVertex(*pt)
+        GL.glEnd()
+
     def render_sphere(self, pos, r, num_seg1=20, num_seg2=10):
         GL.glPushMatrix()
         GL.glTranslated(*pos)

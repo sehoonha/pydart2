@@ -1,5 +1,6 @@
 from PyQt5 import QtCore
 from PyQt5 import QtGui
+from PyQt5 import QtWidgets
 
 
 class SidePanel(object):
@@ -30,12 +31,12 @@ class SidePanel(object):
 
     def build_layout(self,):
         self.process_line()  # Push if not processed yet
-        self.vbox = QtGui.QVBoxLayout()
+        self.vbox = QtWidgets.QVBoxLayout()
         for i, line in enumerate(self.layout):
             if len(line) == 1:
                 self.vbox.addWidget(line[0])
             elif len(line) > 1:
-                hbox = QtGui.QHBoxLayout()
+                hbox = QtWidgets.QHBoxLayout()
                 for w in line:
                     hbox.addWidget(w)
                 self.vbox.addLayout(hbox)
@@ -44,15 +45,16 @@ class SidePanel(object):
 
     def add_label(self, name, label=None, next_line=True):
         label = name if label is None else label
-        w = QtGui.QLabel(label)
+        w = QtWidgets.QLabel(label)
         self.register_widget(w, name, next_line)
         return w
 
     def add_push_button(self, name, callback=None, label=None, next_line=True):
         label = name if label is None else label
-        w = QtGui.QPushButton(label)
+        w = QtWidgets.QPushButton(label)
         if callback is not None:
-            QtCore.QObject.connect(w, QtCore.SIGNAL('clicked()'), callback)
+            # QtCore.QObject.connect(w, QtCore.SIGNAL('clicked()'), callback)
+            w.clicked.connect(callback)
         self.register_widget(w, name, next_line)
         return w
 
@@ -72,11 +74,12 @@ class SidePanel(object):
                      callback=None, label=None,
                      next_line=True):
         label = name if label is None else label
-        w = QtGui.QCheckBox(label)
+        w = QtWidgets.QCheckBox(label)
         self.register_widget(w, name, next_line)
 
         if callback is not None:
-            QtCore.QObject.connect(w, QtCore.SIGNAL('clicked()'), callback)
+            # QtCore.QObject.connect(w, QtCore.SIGNAL('clicked()'), callback)
+            w.clicked.connect(callback)
         if default is not None:
             w.setChecked(default)
         return w
@@ -88,13 +91,14 @@ class SidePanel(object):
             self.add_label(label if isinstance(label, str)
                            else name, next_line=False)
 
-        w = QtGui.QComboBox()
+        w = QtWidgets.QComboBox()
         w.addItems(items)
         w.setCurrentIndex(default)
         if callback is not None:
-            QtCore.QObject.connect(w,
-                                   QtCore.SIGNAL('currentIndexChanged(int)'),
-                                   callback)
+            # QtCore.QObject.connect(w,
+            #                        QtCore.SIGNAL('currentIndexChanged(int)'),
+            #                        callback)
+            w.currentIndexChanged.connect(callback)
         self.register_widget(w, name, next_line)
         return w
 
@@ -104,7 +108,7 @@ class SidePanel(object):
         if label:
             self.add_label(label if isinstance(label, str)
                            else name, next_line=False)
-        w = QtGui.QSpinBox()
+        w = QtWidgets.QSpinBox()
         w.setMinimum(min)
         w.setMaximum(max)
         if default is not None:
@@ -116,9 +120,10 @@ class SidePanel(object):
         if suffix is not None:
             w.setSuffix(suffix)
         if callback is not None:
-            QtCore.QObject.connect(w,
-                                   QtCore.SIGNAL('valueChanged(int)'),
-                                   callback)
+            # QtCore.QObject.connect(w,
+            #                        QtCore.SIGNAL('valueChanged(int)'),
+            #                        callback)
+            w.valueChanged.connect(callback)
         self.register_widget(w, name, next_line)
         return w
 
@@ -129,7 +134,7 @@ class SidePanel(object):
         if label:
             self.add_label(label if isinstance(label, str)
                            else name, next_line=False)
-        w = QtGui.QDoubleSpinBox()
+        w = QtWidgets.QDoubleSpinBox()
         w.setMinimum(min)
         w.setMaximum(max)
         if default is not None:
@@ -141,9 +146,10 @@ class SidePanel(object):
         if suffix is not None:
             w.setSuffix(suffix)
         if callback is not None:
-            QtCore.QObject.connect(w,
-                                   QtCore.SIGNAL('valueChanged(double)'),
-                                   callback)
+            # QtCore.QObject.connect(w,
+            #                        QtCore.SIGNAL('valueChanged(double)'),
+            #                        callback)
+            w.valueChanged.connect(callback)
         self.register_widget(w, name, next_line)
         return w
 

@@ -1,6 +1,5 @@
 numpy
 PyOpenGL
-PyOpenGL-accelerate
 future
 six
 colorama

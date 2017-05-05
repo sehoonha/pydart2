@@ -73,6 +73,11 @@ class Skeleton(object):
                                                    self.id)
         self.build()
 
+    def set_root_joint_to_weld(self, ):
+        papi.skeleton__setRootJointToWeld(self.world.id,
+                                          self.id)
+        self.build()
+
     def set_controller(self, _controller):
         self.controller = _controller
 

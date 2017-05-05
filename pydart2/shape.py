@@ -299,7 +299,7 @@ def create_shape(shapenode):
     if 0 <= type_ < len(shape_classes):
         cls = shape_classes[type_]
         ret = cls(shapenode)
-        print("Shape = %s" % ret)
+        # print("Shape = %s" % ret)
         return ret
     else:
         print("Invalid type: %d" % type_)

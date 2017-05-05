@@ -81,6 +81,7 @@ class MusculoTendonUnit(object):
         self.F_mtu = self.F_MAX * f_se0
 
         # print("\n")
+        # print("\ta = %.4f (s = %.4f)" % (self.a, s))
         # print("\tl_mtu = %.4f" % l_mtu)
         # print("\tl_ce = %.4f l_se = %.4f" % (self.l_ce, self.l_se))
         # print("\tl_se/L_SLACK = %.4f" % (self.l_se / self.L_SLACK))

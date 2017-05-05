@@ -30,6 +30,13 @@ class CollisionResult(object):
     def num_contacted_bodies(self,):
         return len(self.contacted_bodies)
 
+    def copy(self, ):
+        ret = CollisionResult(self.world)
+        ret.id = self.id
+        ret.contacts = list(self.contacts)
+        ret.contacted_bodies = list(self.contacted_bodies)
+        return ret
+
     def update(self,):
         self.contacts = list()
         self.contacted_bodies = list()

@@ -4,13 +4,43 @@ from distutils.core import Extension
 from sys import platform as _platform
 import sys
 import glob
+import os.path
+
+
+def check_file(directories, file):
+    for directory in directories:
+        path = os.path.join(directory, file)
+        detected = os.path.isfile(path)
+        print("check [%s] -> %s" % (path, detected))
+        if detected:
+            return True
+    return False
+
 
 DIR = 'pydart2/'
+dirs = ['/usr/include', '/usr/local/include']
+print("-- check DART headers --")
+PYDART2_BULLET_FOUND = \
+    check_file(dirs, "dart/collision/bullet/BulletCollisionDetector.hpp")
+print("PYDART2_BULLET_FOUND = %s" % PYDART2_BULLET_FOUND)
+
+PYDART2_ODE_FOUND = \
+    check_file(dirs, "dart/collision/ode/OdeCollisionDetector.hpp")
+print("PYDART2_ODE_FOUND = %s" % PYDART2_ODE_FOUND)
+print("------------------------")
 
 CXX_FLAGS = '-Wall -msse2 -fPIC -std=c++11 -Xlinker -rpath /usr/local/lib '
 CXX_FLAGS += '-O3 -DNDEBUG -shared '
 CXX_FLAGS += '-g -fno-omit-frame-pointer -fno-inline-functions '
 CXX_FLAGS += '-fno-optimize-sibling-calls '
+
+
+if PYDART2_BULLET_FOUND:
+    CXX_FLAGS += " -DPYDART2_BULLET_FOUND"
+if PYDART2_ODE_FOUND:
+    CXX_FLAGS += " -DPYDART2_ODE_FOUND"
+
+print("CXX_FLAGS: %s" % str(CXX_FLAGS))
 
 # CXX_FLAGS = '-fopenmp -Wall -Wextra -fPIC -std=c++11 '
 # CXX_FLAGS = '-O3 -DNDEBUG'
@@ -57,7 +87,8 @@ include_dirs += NP_DIRS
 libraries = list()
 libraries += ['dart', 'dart-gui']
 libraries += ['dart-optimizer-nlopt',
-              'dart-planning', 'dart-utils', 'dart-utils-urdf', 'dart-collision-ode', 'dart-collision-bullet']
+              'dart-planning', 'dart-utils', 'dart-utils-urdf', ]
+
 # libraries += [current_python]
 if _platform == "linux" or _platform == "linux2":
     libraries += ['GL', 'glut', 'Xmu', 'Xi']
@@ -69,7 +100,12 @@ elif _platform == "darwin":
 
     # libraries += ['GLUT', 'Cocoa', 'OpenGL']
 libraries += ['BulletDynamics', 'BulletCollision',
-              'LinearMath', 'BulletSoftBody', 'ode']
+              'LinearMath', 'BulletSoftBody']
+if PYDART2_BULLET_FOUND:
+    libraries += ['dart-collision-bullet']
+if PYDART2_ODE_FOUND:
+    libraries += ['dart-collision-ode']
+    libraries += ['ode']
 
 swig_opts = ['-c++']
 if python_major_version == 3:

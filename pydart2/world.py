@@ -26,7 +26,8 @@ def create_world(step, skel_path=None):
 class World(object):
     DART_COLLISION_DETECTOR, \
         FCL_COLLISION_DETECTOR, \
-        BULLET_COLLISION_DETECTOR = list(range(3))
+        BULLET_COLLISION_DETECTOR, \
+        ODE_COLLISION_DETECTOR = list(range(4))
 
     CLASS_SKELETON = Skeleton  # Modify this for inherited skeleton class
 

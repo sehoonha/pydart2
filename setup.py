@@ -8,6 +8,7 @@ import os.path
 
 
 def check_file(directories, file):
+    print("> search... %s" % file)
     for directory in directories:
         path = os.path.join(directory, file)
         detected = os.path.isfile(path)

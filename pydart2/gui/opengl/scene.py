@@ -99,6 +99,7 @@ class OpenGLScene(object):
         GL.glLoadIdentity()
 
     def render(self, sim=None):
+        GL.glCullFace(GL.GL_BACK)
         GL.glEnable(GL.GL_DEPTH_TEST)
         GL.glClearColor(0.98, 0.98, 0.98, 0.0)
         GL.glClearColor(1.0, 1.0, 1.0, 1.0)

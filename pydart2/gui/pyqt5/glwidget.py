@@ -17,6 +17,9 @@ from PyQt5.QtOpenGL import QGLWidget, QGLFormat
 from pydart2.gui import trackball
 # import time
 from pydart2.gui.opengl.scene import OpenGLScene
+from pydart2.gui.opengl.scene_shadow import OpenGLShadowScene
+assert(OpenGLScene)
+assert(OpenGLShadowScene)
 import numpy as np
 # from numpy.linalg import norm
 
@@ -26,10 +29,10 @@ class GLWidget(QtWidgets.QOpenGLWidget):
     def __init__(self, parent=None):
         super(GLWidget, self).__init__(parent)
 
-        fmt = QtGui.QSurfaceFormat()
-        # fmt.setSampleBuffers(True)
-        fmt.setSamples(4)
-        self.setFormat(fmt)
+        # fmt = QtGui.QSurfaceFormat()
+        # # fmt.setSampleBuffers(True)
+        # fmt.setSamples(4)
+        # self.setFormat(fmt)
 
         self.width = 1280
         self.height = 720
@@ -41,7 +44,7 @@ class GLWidget(QtWidgets.QOpenGLWidget):
         self.viewer = None
         self.captureIndex = 0
 
-        self.scene = OpenGLScene(self.width, self.height, parent)
+        self.scene = OpenGLShadowScene(self.width, self.height, parent)
         self.renderer = self.scene.renderer
 
         self.lock_camera = False

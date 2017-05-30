@@ -4,6 +4,9 @@ import OpenGL.GLUT as GLUT
 import sys
 import numpy as np
 from pydart2.gui.opengl.scene import OpenGLScene
+from pydart2.gui.opengl.scene_shadow import OpenGLShadowScene
+assert(OpenGLScene)
+assert(OpenGLShadowScene)
 
 # Some api in the chain is translating the keystrokes to this octal string
 # so instead of saying: ESCAPE = 27, we use the following.
@@ -14,7 +17,8 @@ class GLUTWindow(object):
         self.sim = sim
         self.title = title if title is not None else "GLUT Window"
         self.window_size = (1280, 720)
-        self.scene = OpenGLScene(*self.window_size)
+        # self.scene = OpenGLScene(*self.window_size)
+        self.scene = OpenGLShadowScene(*self.window_size)
 
         self.mouseLastPos = None
         self.is_simulating = False

@@ -12,7 +12,7 @@ class OpenGLShadowScene(OpenGLScene):
 
         self.SHADOWMAP_SIZE = 1024
         # self.light_pos = np.array((60, 90, 50))
-        self.light_pos = (1.0, 2.0, 1.0)
+        self.light_pos = np.array((1.0, 4.0, 1.0))
         self.light_dir = np.negative(self.light_pos)
         self.light_color = (1.0, 1.0, 1.0)
         self.light_inner_angle = 15  # default: 20
@@ -81,7 +81,7 @@ class OpenGLShadowScene(OpenGLScene):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
-        gluPerspective(60, float(width) / float(height), 0.01, 100.0)
+        gluPerspective(30, float(width) / float(height), 1.0, 1000.0)
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
         params = list(light_pos) + [0, 0, 0] + [0, 1, 0]
@@ -102,8 +102,9 @@ class OpenGLShadowScene(OpenGLScene):
         # glutSolidCube(1.0)
         # glDisableClientState(GL_VERTEX_ARRAY)
 
-        sim.render()
         self.test_render()
+        # sim.render()
+        # sim.skeletons[-1].render()
 
         self.shadowmap_shader.disable()
 
@@ -122,6 +123,8 @@ class OpenGLShadowScene(OpenGLScene):
         glCullFace(GL_BACK)
         bias = [0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0,
                 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0]
+        # bias = [0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0,
+        #         0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0]
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
         glMultMatrixf(bias)
@@ -132,7 +135,7 @@ class OpenGLShadowScene(OpenGLScene):
         glBindFramebuffer(GL_FRAMEBUFFER, 0)
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
-        gluPerspective(45.0, float(width) / float(height), 0.01, 100.0)
+        gluPerspective(60.0, float(width) / float(height), 1.0, 1000.0)
 
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
@@ -142,7 +145,7 @@ class OpenGLShadowScene(OpenGLScene):
         # cameraPos = (0, 3, 4)
         # params = list(cameraPos) + [0, 0, 0] + [0, 1, 0]
         # gluLookAt(*params)
-        # glRotate(rotation, 0, 1, 0)
+        # # glRotate(rotation, 0, 1, 0)
         # cameraProj = glGetFloatv(GL_PROJECTION_MATRIX).flatten()
         # cameraView = glGetFloatv(GL_MODELVIEW_MATRIX).flatten()
 
@@ -163,15 +166,15 @@ class OpenGLShadowScene(OpenGLScene):
         display_shader.setUniform("u_light.outerAngle",
                                   "float", light_outer_angle)
 
-        sim.render()
         self.test_render()
+        # sim.render()
 
-        glPushMatrix()
-        glTranslated(*self.light_pos)
-        glColor4d(1.0, 1.0, 0.0, 1.0)
-        # glutSolidCube(0.1)
-        glutSolidSphere(0.2, 50, 20)
-        glPopMatrix()
+        # glPushMatrix()
+        # glTranslated(*self.light_pos)
+        # glColor4d(1.0, 1.0, 0.0, 1.0)
+        # # glutSolidCube(0.1)
+        # glutSolidSphere(0.2, 50, 20)
+        # glPopMatrix()
 
         # glEnableClientState(GL_VERTEX_ARRAY)
         # glEnableClientState(GL_TEXTURE_COORD_ARRAY)
@@ -199,8 +202,8 @@ class OpenGLShadowScene(OpenGLScene):
         glLoadIdentity()
         glActiveTexture(GL_TEXTURE1)
         glBindTexture(GL_TEXTURE_2D, self.render_target)
+        glColor4f(1, 1, 1, 1.0)
         glBegin(GL_QUADS)
-        glColor3f(1, 1, 1)
         glTexCoord2f(0, 0)
         glVertex3f(0.5, 0.5, 0)
         glTexCoord2f(1, 0)
@@ -215,7 +218,7 @@ class OpenGLShadowScene(OpenGLScene):
         SCALE = 0.01
         glPushMatrix()
         glColor4d(0.1, 0.1, 0.5, 1.0)
-        glTranslated(0.0, -0.89, 0.0)
+        glTranslated(0.0, 0.1, 0.0)
         for i in range(1):
             for j in range(1):
                 size = SCALE * 500.0 / 2.0
@@ -234,17 +237,24 @@ class OpenGLShadowScene(OpenGLScene):
                 glEnd()
                 glPopMatrix()
         glPopMatrix()
-        return
 
         glPushMatrix()
-        glTranslated(0.0, SCALE * 5.0, 0.0)
+        glTranslated(0.0, SCALE * 20.0, 0.0)
         glColor4d(1.0, 1.0, 0.0, 1.0)
         # glutSolidSphere(20.0, 100, 50)
         glutSolidCube(SCALE * 20.0)
         glPopMatrix()
 
+        # glPushMatrix()
+        # glTranslated(SCALE * 10.0, SCALE * 40.0, SCALE * 0.0)
+        # glColor4d(0.0, 1.0, 0.0, 1.0)
+        # glRotated(30, 0.0, 0.0, 1.0)
+        # # glutSolidSphere(20.0, 100, 50)
+        # glutSolidCube(SCALE * 20.0)
+        # glPopMatrix()
+
         glPushMatrix()
-        glTranslated(SCALE * 30.0, SCALE * 30.0, SCALE * 10.0)
+        glTranslated(SCALE * 30.0, SCALE * 50.0, SCALE * 10.0)
         glColor4d(0.8, 0.0, 0.3, 1.0)
-        glutSolidSphere(SCALE * 10.0, 40, 20)
+        glutSolidSphere(SCALE * 15.0, 40, 20)
         glPopMatrix()

@@ -51,7 +51,10 @@ vec4 calcShadow()
     float z = projCoords.z;
     float n = 1.0;
     float f = 1000.0;
+    //float n = 0.01;
+    //float f = 100.0;
     float currentDepth = (2.0 * n) / (f + n - z * (f - n));
+    //float currentDepth = projCoords.z;
     vec3 shadow = u_light.color;
     float bias = 0.00005;
     // simple bias works here well enough,
@@ -72,6 +75,7 @@ vec4 calcShadow()
     {
         shadow = vec3(0.5, 0.5, 0.5);//ambient light
     }
+    //shadow = vec3(1.0, 1.0, 1.0);
     return vec4(shadow, 1.0);
 }
 

@@ -29,10 +29,10 @@ class GLWidget(QtWidgets.QOpenGLWidget):
     def __init__(self, parent=None):
         super(GLWidget, self).__init__(parent)
 
-        # fmt = QtGui.QSurfaceFormat()
-        # # fmt.setSampleBuffers(True)
-        # fmt.setSamples(4)
-        # self.setFormat(fmt)
+        fmt = QtGui.QSurfaceFormat()
+        # fmt.setSampleBuffers(True)
+        fmt.setSamples(4)
+        self.setFormat(fmt)
 
         self.width = 1280
         self.height = 720
@@ -44,7 +44,8 @@ class GLWidget(QtWidgets.QOpenGLWidget):
         self.viewer = None
         self.captureIndex = 0
 
-        self.scene = OpenGLShadowScene(self.width, self.height, parent)
+        self.scene = OpenGLScene(self.width, self.height, parent)
+        # self.scene = OpenGLShadowScene(self.width, self.height, parent)
         self.renderer = self.scene.renderer
 
         self.lock_camera = False

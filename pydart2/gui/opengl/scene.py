@@ -155,7 +155,7 @@ class OpenGLScene(object):
         self.add_camera(
             Trackball(
                 rot=[-0.152, 0.045, -0.002, 0.987],
-                trans=[0.050, 0.210, -2.500]),
+                trans=[0.050, 0.210 - 0.8, -2.500]),
             "Camera Y up")
         self.add_camera(
             Trackball(

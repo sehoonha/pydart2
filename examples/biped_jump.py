@@ -110,6 +110,7 @@ if __name__ == '__main__':
     skel = world.skeletons[1]
     q = skel.q
     q[(2, 4, 5)] = [0.02 * np.pi, -0.02, 0]
+    q[4] = 0.9
     skel.set_positions(q)
     print('skeleton position OK')
 

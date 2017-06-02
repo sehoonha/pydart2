@@ -82,4 +82,7 @@ void drawContact(
     double size,
     double scale);
 
+void drawCube(
+    const Eigen::Vector3d& _size);
+
 #endif // #ifndef PYDART2_PYDART2_DRAW_H

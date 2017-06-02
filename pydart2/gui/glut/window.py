@@ -17,8 +17,8 @@ class GLUTWindow(object):
         self.sim = sim
         self.title = title if title is not None else "GLUT Window"
         self.window_size = (1280, 720)
-        # self.scene = OpenGLScene(*self.window_size)
-        self.scene = OpenGLShadowScene(*self.window_size)
+        self.scene = OpenGLScene(*self.window_size)
+        # self.scene = OpenGLShadowScene(*self.window_size)
 
         self.mouseLastPos = None
         self.is_simulating = False

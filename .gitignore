@@ -94,3 +94,5 @@ pydart2/*wrap*
 
 examples/*.mp4
 examples/data/captures/*.png
+
+wheelhouse/

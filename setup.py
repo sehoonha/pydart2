@@ -149,7 +149,7 @@ requires = ['numpy', 'PyOpenGL',
             'future', 'six', 'colorama', ]
 
 setup(name='pydart2',
-      version='0.7.0',
+      version='0.7.4',
       description='Python Interface for DART Simulator',
       url='https://github.com/sehoonha/pydart2',
       author='Sehoon Ha',
@@ -166,4 +166,7 @@ setup(name='pydart2',
                    'Programming Language :: Python :: 3.5',
                    'Topic :: Games/Entertainment :: Simulation'],
       packages=find_packages(),
+      package_data={
+          'pydart2': ['pydart2/pydart2_api.py'],
+      },
       ext_modules=[pydart2_api])

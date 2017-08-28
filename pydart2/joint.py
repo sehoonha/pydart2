@@ -247,8 +247,16 @@ class RevoluteJoint(Joint):
         return papi.revolute_joint__getAxis(self.wid, self.skid, self.id)
 
     def axis_in_world_frame(self, ):
-        R = self.parent_bodynode.T[:3, :3]
-        return R.dot(self.axis())
+        # if self.parent_bodynode:
+        #     R = self.parent_bodynode.T[:3, :3]
+        #     return R.dot(self.axis())
+        if self.child_bodynode:
+            R0 = self.child_bodynode.T[:3, :3]
+            R1 = self.transform_from_child_body_node()[:3, :3]
+            R = R0.dot(R1)
+            return R.dot(self.axis())
+        else:
+            return self.axis()
 
     def set_axis(self, _axis):
         return papi.revolute_joint__setAxis(

@@ -42,4 +42,18 @@ int WORLD(getCollisionDetector)(int wid);
 // World::Constraint Functions
 void WORLD(removeAllConstraints)(int wid);
 
+
+////////////////////////////////////////
+// World::Collision Filter Functions
+void WORLD(createCollisionFilter)(int wid);
+void WORLD(addBodyNodePairToCollisionBlackList)(int wid,
+                                                int skid0, int bid0,
+                                                int skid1, int bid1);
+void WORLD(removeBodyNodePairFromCollisionBlackList)(int wid,
+                                                     int skid0, int bid0,
+                                                     int skid1, int bid1);
+void WORLD(removeAllBodyNodePairsFromCollisionBlackList)(int wid);
+
+
+
 #endif // #ifndef PYDART2_WORLD_API_H

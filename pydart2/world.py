@@ -15,6 +15,7 @@ from .skeleton import Skeleton
 # from .bodynode import BodyNode
 
 from .collision_result import CollisionResult
+from .collision_filter import CollisionFilter
 from .recording import Recording
 
 
@@ -35,6 +36,7 @@ class World(object):
         self.skeletons = list()
         self.control_skel = None
         self.recording = None
+        self.collision_filter = None
 
         if skel_path is not None:
             skel_path = os.path.realpath(skel_path)
@@ -238,6 +240,10 @@ class World(object):
 
     def disable_recording(self, ):
         self.recording = None
+
+    def create_collision_filter(self, ):
+        self.collision_filter = CollisionFilter(self)
+        return self.collision_filter
 
     def __repr__(self):
         return "[World ID:%d time:%.4f # frames: %d]" % (

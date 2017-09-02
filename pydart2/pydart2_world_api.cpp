@@ -199,3 +199,53 @@ void WORLD(removeAllConstraints)(int wid) {
     dart::simulation::WorldPtr world = GET_WORLD(wid);
     world->getConstraintSolver()->removeAllConstraints();
 }
+
+////////////////////////////////////////
+// World::Collision Filter Functions
+void WORLD(createCollisionFilter)(int wid) {
+    dart::simulation::WorldPtr world = GET_WORLD(wid);
+    dart::constraint::ConstraintSolver* solver = world->getConstraintSolver();
+    auto& option = solver->getCollisionOption();
+    auto bodyNodeFilter = std::make_shared<dart::collision::BodyNodeCollisionFilter>();
+    MSG << "filter = " << option.collisionFilter << endl;
+    option.collisionFilter = bodyNodeFilter;
+    MSG << "filter = " << option.collisionFilter << endl;
+}
+
+void WORLD(addBodyNodePairToCollisionBlackList)(int wid,
+                                                int skid0, int bid0,
+                                                int skid1, int bid1) {
+    dart::dynamics::BodyNodePtr body0 = Manager::skeleton(wid, skid0)->getBodyNode(bid0);
+    dart::dynamics::BodyNodePtr body1 = Manager::skeleton(wid, skid1)->getBodyNode(bid1);
+
+    dart::simulation::WorldPtr world = GET_WORLD(wid);
+    dart::constraint::ConstraintSolver* solver = world->getConstraintSolver();
+    auto& option = solver->getCollisionOption();
+    dart::collision::BodyNodeCollisionFilter* filter = dynamic_cast<dart::collision::BodyNodeCollisionFilter*>(
+        option.collisionFilter.get());
+    filter->addBodyNodePairToBlackList(body0, body1);
+}
+
+void WORLD(removeBodyNodePairFromCollisionBlackList)(int wid,
+                                                     int skid0, int bid0,
+                                                     int skid1, int bid1) {
+    dart::dynamics::BodyNodePtr body0 = Manager::skeleton(wid, skid0)->getBodyNode(bid0);
+    dart::dynamics::BodyNodePtr body1 = Manager::skeleton(wid, skid1)->getBodyNode(bid1);
+
+    dart::simulation::WorldPtr world = GET_WORLD(wid);
+    dart::constraint::ConstraintSolver* solver = world->getConstraintSolver();
+    auto& option = solver->getCollisionOption();
+    dart::collision::BodyNodeCollisionFilter* filter = dynamic_cast<dart::collision::BodyNodeCollisionFilter*>(
+        option.collisionFilter.get());
+    filter->removeBodyNodePairFromBlackList(body0, body1);
+
+}
+
+void WORLD(removeAllBodyNodePairsFromCollisionBlackList)(int wid) {
+    dart::simulation::WorldPtr world = GET_WORLD(wid);
+    dart::constraint::ConstraintSolver* solver = world->getConstraintSolver();
+    auto& option = solver->getCollisionOption();
+    dart::collision::BodyNodeCollisionFilter* filter = dynamic_cast<dart::collision::BodyNodeCollisionFilter*>(
+        option.collisionFilter.get());
+    filter->removeAllBodyNodePairsFromBlackList();
+}

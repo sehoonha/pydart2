@@ -105,6 +105,7 @@ class GLWidget(QtWidgets.QOpenGLWidget):
                                GL.GL_UNSIGNED_BYTE)
         img = QtGui.QImage(data, self.width, self.height,
                            QtGui.QImage.Format_RGBA8888_Premultiplied)
+        img = img.copy(9, 39, self.width - 9, self.height - 39)
         T = QtGui.QTransform()
         T.scale(1.0, -1.0)
         img = img.transformed(T)

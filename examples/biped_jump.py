@@ -102,7 +102,7 @@ if __name__ == '__main__':
     pydart.init()
     print('pydart initialization OK')
 
-    world = pydart.World(0.0005, './data/skel/fullbody1.skel')
+    world = pydart.World(0.01, './data/skel/fullbody1.skel')
 
     print('pydart create_world OK')
 

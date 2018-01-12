@@ -287,6 +287,8 @@ class PyQt5Window(QtWidgets.QMainWindow):
 
         # Do animation
         if self.animAction.isChecked():
+            if not self.is_current_scene_rendered:
+                return
             v = self.rangeSlider.value()
             v += 1
             if v <= self.rangeSlider.maximum():
@@ -294,6 +296,7 @@ class PyQt5Window(QtWidgets.QMainWindow):
             else:
                 self.animAction.setChecked(False)
             doCapture = True
+            self.is_current_scene_rendered = False
 
         # Do play
         elif self.playAction.isChecked():
@@ -321,6 +324,7 @@ class PyQt5Window(QtWidgets.QMainWindow):
         n = self.safe_call_callback('num_frames')
         if n is not None:
             self.rangeSlider.setRange(0, n - 1)
+        self.is_current_scene_rendered = True
 
     def keyPressEvent(self, event):
         if event.key() == QtCore.Qt.Key_Escape:

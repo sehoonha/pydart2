@@ -74,11 +74,11 @@ if __name__ == '__main__':
 
     world = MyWorld()
 
-    win = pydart.gui.viewer.PydartWindow(world)
+    win = pydart.gui.pyqt5.window.PyQt5Window(world)
     win.camera_event(1)
     win.set_capture_rate(10)
 
-    panel = pydart.gui.side_panel.SidePanel()
+    panel = pydart.gui.pyqt5.side_panel.SidePanel()
     panel.add_label("Mode")
     panel.add_push_button("Hello", world.oh_my_god, next_line=False)
     panel.add_push_button("Jello", world.oh_my_god)

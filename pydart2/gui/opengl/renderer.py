@@ -347,6 +347,40 @@ class Renderer(object):
         self.render_arrow(p0, p1, r_base=radius,
                           head_width=0.0, head_len=0.0)
 
+    def render_box_two_points(self, p, q, sx, sy):
+        # glDisable(GL_LIGHTING)
+        # m_quadric = self.quadric
+        # GLU.gluQuadricNormals(m_quadric, GLU.GLU_SMOOTH)
+        p = np.array(p)
+        q = np.array(q)
+        u = (q - p)
+        u /= norm(u)
+        P = q
+        z = np.array([0, 0.0, 1.0])
+        z /= norm(z)
+        if norm(z - u) < 1e-8:
+            axis = np.array([0, 0, 1])
+            angle = 0.0
+        else:
+            axis = np.cross(z, u)
+            axis /= norm(axis)
+            angle = math.acos(u.dot(z))
+        M = R_axis_angle(axis, angle)
+        m = [M[0, 0], M[1, 0], M[2, 0], 0.0, M[0, 1], M[1, 1], M[2, 1], 0.0,
+             M[0, 2], M[1, 2], M[2, 2], 0.0, P[0], P[1], P[2], 1.0]
+        m2 = [M[0, 0], M[1, 0], M[2, 0], 0.0, M[0, 1], M[1, 1], M[2, 1], 0.0,
+              M[0, 2], M[1, 2], M[2, 2], 0.0, p[0], p[1], p[2], 1.0]
+
+        GL.glPushMatrix()
+        GL.glMultMatrixd(m2)
+        sz = norm(q - p)
+        # glColor(0.9, 0.2, 0.2)
+        # GLU.gluCylinder(m_quadric, r_base, r_base, arrow_len, 4, 10)
+        GL.glScaled(sx, sy, sz)
+        GL.glTranslated(0.0, 0.0, 0.5)
+        GLUT.glutSolidCube(1.0)
+        GL.glPopMatrix()
+
     def render_arrow(self, p, q, r_base=0.01, head_width=0.015, head_len=0.01):
         # glDisable(GL_LIGHTING)
         m_quadric = self.quadric
@@ -375,7 +409,7 @@ class Renderer(object):
         GL.glMultMatrixd(m2)
         arrow_len = norm(q - p) - head_len
         # glColor(0.9, 0.2, 0.2)
-        GLU.gluCylinder(m_quadric, r_base, r_base, arrow_len, 10, 10)
+        GLU.gluCylinder(m_quadric, r_base, r_base, arrow_len, 4, 10)
         GL.glPopMatrix()
 
         if head_width > 1e-6 and head_len > 1e-6:

@@ -37,9 +37,9 @@ CXX_FLAGS += '-fno-optimize-sibling-calls '
 
 
 if PYDART2_BULLET_FOUND:
-    CXX_FLAGS += " -DPYDART2_BULLET_FOUND"
+    CXX_FLAGS += "-DPYDART2_BULLET_FOUND "
 if PYDART2_ODE_FOUND:
-    CXX_FLAGS += " -DPYDART2_ODE_FOUND"
+    CXX_FLAGS += "-DPYDART2_ODE_FOUND "
 
 print("CXX_FLAGS: %s" % str(CXX_FLAGS))
 
@@ -98,6 +98,7 @@ elif _platform == "darwin":
     CXX_FLAGS += '-framework Cocoa '
     CXX_FLAGS += '-framework OpenGL '
     CXX_FLAGS += '-framework GLUT '
+    CXX_FLAGS += '-mmacosx-version-min=10.9 '
 
     # libraries += ['GLUT', 'Cocoa', 'OpenGL']
 libraries += ['BulletDynamics', 'BulletCollision',

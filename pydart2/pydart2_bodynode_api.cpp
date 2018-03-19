@@ -213,6 +213,17 @@ void BODY(getCOMSpatialAcceleration)(int wid, int skid, int bid, double outv6[6]
     write(body->getCOMSpatialAcceleration(), outv6);
 }
 
+void BODY(getLinearMomentum)(int wid, int skid, int bid, double outv3[3]) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
+    write(body->getLinearMomentum(), outv3);
+}
+
+
+void BODY(getAngularMomentum)(int wid, int skid, int bid, double outv6[6]) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
+    write(body->getAngularMomentum(), outv6);
+}
+
 ////////////////////////////////////////
 // BodyNode::Friction and Restitution Functions
 void BODY(setFrictionCoeff)(int wid, int skid, int bid, double _coeff) {

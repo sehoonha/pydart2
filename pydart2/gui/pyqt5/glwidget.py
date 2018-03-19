@@ -109,6 +109,7 @@ class GLWidget(QtWidgets.QOpenGLWidget):
         T = QtGui.QTransform()
         T.scale(1.0, -1.0)
         img = img.transformed(T)
+        img = img.scaled(1280, 720)
 
         if name is None:
             name = 'frame'

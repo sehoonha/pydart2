@@ -177,7 +177,7 @@ void SKEL(getPositionDifferences)(int wid, int skid,
     dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
     Eigen::VectorXd dq1 = read(inv1, indofs1);
     Eigen::VectorXd dq2 = read(inv2, indofs2);
-    Eigen::VectorXd dq_diff = skel->getVelocityDifferences(dq1, dq2);
+    Eigen::VectorXd dq_diff = skel->getPositionDifferences(dq1, dq2);
     write(dq_diff, outv);
 }
 
@@ -188,7 +188,7 @@ void SKEL(getVelocityDifferences)(int wid, int skid,
     dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
     Eigen::VectorXd q1 = read(inv1, indofs1);
     Eigen::VectorXd q2 = read(inv2, indofs2);
-    Eigen::VectorXd q_diff = skel->getPositionDifferences(q1, q2);
+    Eigen::VectorXd q_diff = skel->getVelocityDifferences(q1, q2);
     write(q_diff, outv);
 }
 

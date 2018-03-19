@@ -35,3 +35,11 @@ __version__ = (0, 5, 0)
 
 def init(verbose=True):
     papi.init(verbose)
+
+
+def verbose():
+    return papi.getVerbose()
+
+
+def set_verbose(verbose=True):
+    papi.setVerbose(verbose)

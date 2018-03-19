@@ -217,6 +217,17 @@ class BodyNode(object):
                                                         self.skid,
                                                         self.id)
 
+    def linear_momentum(self, ):
+        return papi.bodynode__getLinearMomentum(self.wid,
+                                                self.skid,
+                                                self.id)
+
+    def angular_momentum(self, ):
+        return papi.bodynode__getAngularMomentum(self.wid,
+                                                 self.skid,
+                                                 self.id)
+
+
 ########################################
 # Friction and Restitution Functions
     def set_friction_coeff(self, _coeff):

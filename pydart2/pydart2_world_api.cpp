@@ -50,7 +50,10 @@ int WORLD(addSkeleton)(int wid, const char* const path) {
         skel = urdfLoader.parseSkeleton(path);
     } else if (ext == ".vsk") {
         MSG << " [pydart_api] parse as VSK (ext: " << ext << ")" << endl;
-        skel = dart::utils::VskParser::readSkeleton(path);
+        auto option = dart::utils::VskParser::Options();
+        option.density = 1893.0;
+        option.removeEndBodyNodes = true;
+        skel = dart::utils::VskParser::readSkeleton(path, option);
     } else {
         ERR << " [pydart_api] bad extension (ext: " << ext << ")" << endl;
         return -1;

@@ -120,7 +120,7 @@ class PyQt5Window(QtWidgets.QMainWindow):
         self._capture_dir = _capture_dir
 
     def initUI(self):
-        TOOLBOX_HEIGHT = 30
+        TOOLBOX_HEIGHT = 60
         STATUS_HEIGHT = 30
         PANEL_WIDTH = 0
         self.setGeometry(0, 0, 1280 + PANEL_WIDTH,

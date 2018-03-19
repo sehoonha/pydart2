@@ -56,4 +56,6 @@ class Marker(object):
         return papi.marker__render(self.wid, self.skid, self.id)
 
     def __repr__(self):
-        return '[Marker(%d)]' % (self.id)
+        offset = self.local_position()
+        tag = "%.4f %.4f %.4f" % tuple(offset)
+        return '[Marker(%d)(%s)]' % (self.id, tag)

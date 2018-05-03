@@ -55,3 +55,4 @@ class SkelVector(np.ndarray):
         if obj is None:
             return
         self.skel = getattr(obj, 'skel', None)
+        self.keys = getattr(obj, 'keys', None)

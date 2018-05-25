@@ -6,15 +6,26 @@ python:
   - "2.7"
   - "3.4"
 
+os:
+  - linux
+  - osx
+
 before_install:
-  - sudo apt-add-repository ppa:libccd-debs -y
-  - sudo apt-add-repository ppa:fcl-debs -y
-  - sudo apt-add-repository ppa:dartsim -y
-  - sudo apt-get update -q
-  - sudo apt-get install libdart6-all-dev -y
-  - sudo apt-get install swig -y
-  - if [[ $TRAVIS_PYTHON_VERSION == 2.7 ]]; then sudo apt-get install swig python-pip python-qt4 python-qt4-dev python-qt4-gl -y; fi
-  - if [[ $TRAVIS_PYTHON_VERSION == 3.4 ]]; then sudo apt-get install python3-pip python3-pyqt4 python3-pyqt4.qtopengl -y; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      sudo apt-add-repository ppa:libccd-debs -y;
+      sudo apt-add-repository ppa:fcl-debs -y;
+      sudo apt-add-repository ppa:dartsim -y;
+      sudo apt-get update -q;
+      sudo apt-get install libdart6-all-dev -y;
+      sudo apt-get install swig -y;
+      if [[ $TRAVIS_PYTHON_VERSION == 2.7 ]]; then sudo apt-get install swig python-pip python-qt4 python-qt4-dev python-qt4-gl -y; fi;
+      if [[ $TRAVIS_PYTHON_VERSION == 3.4 ]]; then sudo apt-get install python3-pip python3-pyqt4 python3-pyqt4.qtopengl -y; fi;
+    fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      brew install dartsim;
+      brew install swig;
+    fi
+
 
 # command to install dependencies
 install:

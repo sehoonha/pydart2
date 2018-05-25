@@ -66,7 +66,7 @@ First, please check out the repository.
 .. code-block:: bash
 
    git clone https://github.com/sehoonha/pydart2.git
-   cd pydart
+   cd pydart2
 
 The next step is to compile the package using setup.py
 

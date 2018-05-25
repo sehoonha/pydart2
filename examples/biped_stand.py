@@ -33,22 +33,42 @@ class Controller(object):
 
         # Check the balance
         COP = skel.body('h_heel_left').to_world([0.05, 0, 0])
-        offset = skel.C[0] - COP[0]
+        offset = skel.C[0] - COP[0] + 0.03
         preoffset = self.preoffset
 
         # Adjust the target pose -- translated from bipedStand app of DART
         foot = skel.dof_indices(["j_heel_left_1", "j_toe_left",
                                  "j_heel_right_1", "j_toe_right"])
-        if 0.0 < offset < 0.1:
-            k1, k2, kd = 200.0, 100.0, 10.0
-            k = np.array([-k1, -k2, -k1, -k2])
-            tau[foot] += k * offset + kd * (preoffset - offset) * np.ones(4)
-            self.preoffset = offset
-        elif -0.2 < offset < -0.05:
-            k1, k2, kd = 2000.0, 100.0, 100.0
-            k = np.array([-k1, -k2, -k1, -k2])
-            tau[foot] += k * offset + kd * (preoffset - offset) * np.ones(4)
-            self.preoffset = offset
+        # if 0.0 < offset < 0.1:
+        #     k1, k2, kd = 200.0, 100.0, 10.0
+        #     k = np.array([-k1, -k2, -k1, -k2])
+        #     tau[foot] += k * offset + kd * (preoffset - offset) * np.ones(4)
+        #     self.preoffset = offset
+        # elif -0.2 < offset < -0.05:
+        #     k1, k2, kd = 2000.0, 100.0, 100.0
+        #     k = np.array([-k1, -k2, -k1, -k2])
+        #     tau[foot] += k * offset + kd * (preoffset - offset) * np.ones(4)
+        #     self.preoffset = offset
+
+        # # High-stiffness
+        # k1, k2, kd = 200.0, 10.0, 10.0
+        # k = np.array([-k1, -k2, -k1, -k2])
+        # tau[foot] += k * offset + kd * (preoffset - offset) * np.ones(4)
+        # print("offset = %s" % offset)
+        # self.preoffset = offset
+
+        # Low-stiffness
+        k1, k2, kd = 20.0, 1.0, 10.0
+        k = np.array([-k1, -k2, -k1, -k2])
+        tau[foot] += k * offset + kd * (preoffset - offset) * np.ones(4)
+        if offset > 0.03:
+            tau[foot] += 0.3 * np.array([-100.0, -50.0, -100.0, -50.0])
+            print("Discrete A")
+        if offset < -0.02:
+            tau[foot] += -1.0 * np.array([-100.0, 0.0, -100.0, 0.0])
+            print("Discrete B")
+        print("offset = %s" % offset)
+        self.preoffset = offset
 
         # Make sure the first six are zero
         tau[:6] = 0
@@ -114,4 +134,4 @@ if __name__ == '__main__':
     print("'1'--'2': programmed interaction")
     print("    '1': push forward")
     print("    '2': push backward")
-    pydart.gui.viewer.launch(world)
+    pydart.gui.viewer.launch_pyqt5(world)

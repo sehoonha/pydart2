@@ -10,6 +10,7 @@ using std::endl;
 #include <boost/algorithm/string.hpp>
 
 #include "pydart2_manager.h"
+#include "dart/gui/LoadOpengl.hpp"
 
 namespace pydart {
 
@@ -19,9 +20,24 @@ dart::gui::RenderInterface* Manager::g_ri = NULL;
 
 
 void Manager::init() {
+    MSG << " [pydart2_api] init...\n";
     g_manager = new Manager();
+    MSG << " [pydart2_api] manager OK...\n";
     g_ri = new dart::gui::OpenGLRenderInterface();
-    g_ri->initialize();
+    MSG << " [pydart2_api] RI OK...\n";
+    // g_ri->initialize();
+    // glMatrixMode(GL_MODELVIEW);
+    // glLoadIdentity();
+    // glMatrixMode(GL_PROJECTION);
+    // glLoadIdentity();
+    // glCullFace(GL_FRONT);
+    // glDisable(GL_LIGHTING);
+    // glEnable(GL_DEPTH_TEST);
+    // //glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+    // glShadeModel(GL_SMOOTH);
+    // clear(Eigen::Vector3d(1.0, 1.0, 1.0));
+
+    MSG << " [pydart2_api] RI init OK...\n";
     g_manager->next_id = 0;
     // if (verbose) dtmsg << "Hello!";
     MSG << " [pydart2_api] Initialize pydart manager OK\n";

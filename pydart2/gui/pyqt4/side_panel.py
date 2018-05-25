@@ -68,6 +68,19 @@ class SidePanel(object):
             w.setChecked(default)
         return w
 
+    def add_checkbox(self, name, default=True,
+                     callback=None, label=None,
+                     next_line=True):
+        label = name if label is None else label
+        w = QtGui.QCheckBox(label)
+        self.register_widget(w, name, next_line)
+
+        if callback is not None:
+            QtCore.QObject.connect(w, QtCore.SIGNAL('clicked()'), callback)
+        if default is not None:
+            w.setChecked(default)
+        return w
+
     def add_combobox(self, name, items, default=0,
                      label=True,
                      callback=None, next_line=True):

@@ -147,6 +147,13 @@ double BODY(getMass)(int wid, int skid, int bid) {
     return body->getMass();
 }
 
+
+void BODY(setMass)(int wid, int skid, int bid, double mass) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
+    body->setMass(mass);
+}
+
+
 void BODY(getInertia)(int wid, int skid, int bid, double outv33[3][3]) {
     dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
     double Ixx, Iyy, Izz, Ixy, Ixz, Iyz;
@@ -156,6 +163,18 @@ void BODY(getInertia)(int wid, int skid, int bid, double outv33[3][3]) {
     outv33[0][2] = Ixz;    outv33[2][0] = Ixz;
     outv33[1][2] = Iyz;    outv33[2][1] = Iyz;
 }
+
+
+void BODY(setInertia)(int wid, int skid, int bid, double inv33[3][3]) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
+    double Ixx, Iyy, Izz, Ixy, Ixz, Iyz;
+    Ixx = inv33[0][0]; Iyy = inv33[1][1]; Izz = inv33[2][2];
+    Ixy = inv33[0][1]; Ixz = inv33[0][2];
+    Iyz = inv33[1][2];
+
+    body->setMomentOfInertia(Ixx, Iyy, Izz, Ixy, Ixz, Iyz);
+}
+
 
 ////////////////////////////////////////
 // BodyNode::Momentum Functions

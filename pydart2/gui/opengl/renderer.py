@@ -1,6 +1,6 @@
 from __future__ import division
-from builtins import range
-from builtins import object
+# from builtins import range
+# from builtins import object
 from past.utils import old_div
 # Copyright (c) 2015, Disney Research
 # All rights reserved.
@@ -8,9 +8,9 @@ from past.utils import old_div
 # Author(s): Sehoon Ha <sehoon.ha@disneyresearch.com>
 # Disney Research Robotics Group
 
-from OpenGL.GL import *
-from OpenGL.GLU import *
-from OpenGL.GLUT import *
+import OpenGL.GL as GL
+import OpenGL.GLU as GLU
+import OpenGL.GLUT as GLUT
 import math
 import numpy as np
 
@@ -36,85 +36,86 @@ def rad_to_deg(th):
 
 class Renderer(object):
     def __init__(self, ):
-        self.quadric = gluNewQuadric()
+        self.quadric = GLU.gluNewQuadric()
         self.textures = list()
-	# gluQuadricNormals(self.quadric, GLU_SMOOTH)
+        # gluQuadricNormals(self.quadric, GLU_SMOOTH)
         # gluQuadricTexture(self.quadric, GL_TRUE)
 
     def color(self, r, g, b, a=1.0):
-        glColor4d(r, g, b, a)
+        GL.glColor4d(r, g, b, a)
 
     def set_color(self, r, g, b, a=1.0):
-        glColor4d(r, g, b, a)
+        GL.glColor4d(r, g, b, a)
 
     def push(self):
-        glPushMatrix()
+        GL.glPushMatrix()
 
     def pop(self):
-        glPopMatrix()
+        GL.glPopMatrix()
 
     def parse_flag(self, x):
         if x == "COLOR_MATERIAL":
-            return GL_COLOR_MATERIAL
+            return GL.GL_COLOR_MATERIAL
         else:
             return x
 
     def enable(self, x):
-        glEnable(self.parse_flag(x))
+        GL.glEnable(self.parse_flag(x))
 
     def disable(self, x):
-        glDisable(self.parse_flag(x))
+        GL.glDisable(self.parse_flag(x))
 
     def translate(self, x, y, z=0.0):
-        glTranslate(x, y, z)
+        GL.glTranslate(x, y, z)
 
     def scale(self, x, y, z=1.0):
-        glScale(x, y, z)
+        GL.glScale(x, y, z)
 
     def rotate2d(self, angle_in_rad):
-        glRotate(rad_to_deg(angle_in_rad), 0.0, 0.0, 1.0)
+        GL.glRotate(rad_to_deg(angle_in_rad), 0.0, 0.0, 1.0)
 
     def mult_matrix(self, m):
         mat = [m[0, 0], m[1, 0], m[2, 0], m[3, 0],
                m[0, 1], m[1, 1], m[2, 1], m[3, 1],
                m[0, 2], m[1, 2], m[2, 2], m[3, 2],
                m[0, 3], m[1, 3], m[2, 3], m[3, 3], ]
-        glMultMatrixf(mat)
+        GL.glMultMatrixf(mat)
 
     def mult_matrix_raw(self, m):
-        glMultMatrixf(m)
+        GL.glMultMatrixf(m)
 
     def project(self, x, y, z, auto_flip_vertical=True):
-        modelview_mat = glGetDoublev(GL_MODELVIEW_MATRIX)
-        projection_mat = glGetDoublev(GL_PROJECTION_MATRIX)
-        viewport = glGetIntegerv(GL_VIEWPORT)
-        ret = gluProject(x, y, z, modelview_mat, projection_mat, viewport)
+        modelview_mat = GL.glGetDoublev(GL.GL_MODELVIEW_MATRIX)
+        projection_mat = GL.glGetDoublev(GL.GL_PROJECTION_MATRIX)
+        viewport = GL.glGetIntegerv(GL.GL_VIEWPORT)
+        ret = GLU.gluProject(x, y, z, modelview_mat, projection_mat, viewport)
         ret = list(ret)
         if auto_flip_vertical:
             ret[1] = viewport[-1] - ret[1]
         return ret
 
     def unproject(self, x, y, z, auto_flip_vertical=True):
-        modelview_mat = glGetDoublev(GL_MODELVIEW_MATRIX)
-        projection_mat = glGetDoublev(GL_PROJECTION_MATRIX)
-        viewport = glGetIntegerv(GL_VIEWPORT)
+        modelview_mat = GL.glGetDoublev(GL.GL_MODELVIEW_MATRIX)
+        projection_mat = GL.glGetDoublev(GL.GL_PROJECTION_MATRIX)
+        viewport = GL.glGetIntegerv(GL.GL_VIEWPORT)
         if auto_flip_vertical:
             y = viewport[-1] - y
-        ret = gluUnproject(x, y, z, modelview_mat, projection_mat, viewport)
+        ret = GLU.gluUnproject(x, y, z,
+                               modelview_mat, projection_mat, viewport)
         return ret
 
     def line_width(self, w):
-        glLineWidth(w)
+        GL.glLineWidth(w)
 
     def set_line_width(self, w):
-        glLineWidth(w)
+        GL.glLineWidth(w)
 
     def draw_line(self, p0, p1):
         self.push()
-        glBegin(GL_LINES)
-        glVertex2d(*p0)
-        glVertex2d(*p1)
-        glEnd()
+        GL.glBegin(GL.GL_LINES)
+        GL.glVertex2d(*p0)
+        GL.glVertex2d(*p1)
+        GL.glEnd()
         self.pop()
 
     def draw_arrow(self, p0, p1, head_len=20.0, head_angle=0.25):
@@ -133,27 +134,27 @@ class Renderer(object):
             self.translate(center[0], center[1])
         if angle is not None:
             self.rotate2d(angle)
-        glBegin(GL_LINE_LOOP if not fill else GL_POLYGON)
-        glVertex2d(0.5 * sx, 0.5 * sy)
-        glVertex2d(0.5 * sx, -0.5 * sy)
-        glVertex2d(-0.5 * sx, -0.5 * sy)
-        glVertex2d(-0.5 * sx, 0.5 * sy)
-        glEnd()
+        GL.glBegin(GL.GL_LINE_LOOP if not fill else GL.GL_POLYGON)
+        GL.glVertex2d(0.5 * sx, 0.5 * sy)
+        GL.glVertex2d(0.5 * sx, -0.5 * sy)
+        GL.glVertex2d(-0.5 * sx, -0.5 * sy)
+        GL.glVertex2d(-0.5 * sx, 0.5 * sy)
+        GL.glEnd()
         self.pop()
 
     def draw_circle(self, r, num_segments=20, center=None, fill=False):
         self.push()
         if center is not None:
             self.translate(center[0], center[1])
-        glBegin(GL_LINE_LOOP if not fill else GL_POLYGON)
+        GL.glBegin(GL.GL_LINE_LOOP if not fill else GL.GL_POLYGON)
         for i in range(num_segments):
             th = float(i) / float(num_segments) * 2.0 * math.pi
             cth = math.cos(th)
             sth = math.sin(th)
             x = r * cth
             y = r * sth
-            glVertex2d(x, y)
-        glEnd()
+            GL.glVertex2d(x, y)
+        GL.glEnd()
         self.pop()
 
     def draw_ellipse(self, p0, p1, b, num_segments=20, fill=False):
@@ -169,15 +170,15 @@ class Renderer(object):
         self.translate(center[0], center[1])
         self.rotate2d(angle)
 
-        glBegin(GL_LINE_LOOP if not fill else GL_POLYGON)
+        GL.glBegin(GL.GL_LINE_LOOP if not fill else GL.GL_POLYGON)
         for i in range(num_segments):
             th = float(i) / float(num_segments) * 2.0 * math.pi
             cth = math.cos(th)
             sth = math.sin(th)
             x = a * cth
             y = b * sth
-            glVertex2d(x, y)
-        glEnd()
+            GL.glVertex2d(x, y)
+        GL.glEnd()
         self.pop()
 
     def draw_ellipse_at(self, a, b, center=None, angle=None,
@@ -188,34 +189,34 @@ class Renderer(object):
         if angle is not None:
             self.rotate2d(angle)
 
-        glBegin(GL_LINE_LOOP if not fill else GL_POLYGON)
+        GL.glBegin(GL.GL_LINE_LOOP if not fill else GL.GL_POLYGON)
         for i in range(num_segments):
             th = float(i) / float(num_segments) * 2.0 * math.pi
             cth = math.cos(th)
             sth = math.sin(th)
             x = a * cth
             y = b * sth
-            glVertex2d(x, y)
-        glEnd()
+            GL.glVertex2d(x, y)
+        GL.glEnd()
         self.pop()
 
-    def draw_text(self, pos, text, font=GLUT_BITMAP_HELVETICA_18):
+    def draw_text(self, pos, text, font=GLUT.GLUT_BITMAP_HELVETICA_18):
         self.push()
-        glRasterPos(*pos)
+        GL.glRasterPos(*pos)
         for c in text:
-            glutBitmapCharacter(font, ord(c))
+            GLUT.glutBitmapCharacter(font, ord(c))
         self.pop()
 
     def gen_textures(self, num_textures=1):
-        im = glGenTextures(num_textures)
+        im = GL.glGenTextures(num_textures)
         self.textures.append(im)
         return im
 
     def delete_textures(self, textures):
-        glDeleteTextures(textures)
+        GL.glDeleteTextures(textures)
 
     def bind_texture(self, texture):
-        glBindTexture(GL_TEXTURE_2D, texture)
+        GL.glBindTexture(GL.GL_TEXTURE_2D, texture)
         # print("bind_texture: %d" % texture)
 
     def set_texture_as_image(self, img, texture=-1):
@@ -224,15 +225,17 @@ class Renderer(object):
         self.bind_texture(texture)
         textureData = np.fromstring(img.tostring(), np.uint8)
         width, height = img.size
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height,
-                     0, GL_RGBA, GL_UNSIGNED_BYTE, textureData)
+        GL.glTexParameteri(GL.GL_TEXTURE_2D,
+                           GL.GL_TEXTURE_MIN_FILTER,
+                           GL.GL_LINEAR)
+        GL.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGB, width, height,
+                        0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, textureData)
         # print("set_texture_data: %d x %d" % (width, height))
 
     def draw_image(self, sx, sy, texture=-1,
                    center=None, angle=None):
         self.set_color(1.0, 1.0, 1.0)
-        glEnable(GL_TEXTURE_2D)
+        GL.glEnable(GL.GL_TEXTURE_2D)
         if texture == -1:
             texture = self.textures[-1]
         self.bind_texture(texture)
@@ -241,40 +244,46 @@ class Renderer(object):
             self.translate(center[0], center[1])
         if angle is not None:
             self.rotate2d(angle)
-        glBegin(GL_QUADS)
-        glTexCoord2f(0, 0)
-        glVertex2d(-0.5 * sx, -0.5 * sy)
-        glTexCoord2f(0, 1)
-        glVertex2d(-0.5 * sx, 0.5 * sy)
-        glTexCoord2f(1, 1)
-        glVertex2d(0.5 * sx, 0.5 * sy)
-        glTexCoord2f(1, 0)
-        glVertex2d(0.5 * sx, -0.5 * sy)
-        glEnd()
+        GL.glBegin(GL.GL_QUADS)
+        GL.glTexCoord2f(0, 0)
+        GL.glVertex2d(-0.5 * sx, -0.5 * sy)
+        GL.glTexCoord2f(0, 1)
+        GL.glVertex2d(-0.5 * sx, 0.5 * sy)
+        GL.glTexCoord2f(1, 1)
+        GL.glVertex2d(0.5 * sx, 0.5 * sy)
+        GL.glTexCoord2f(1, 0)
+        GL.glVertex2d(0.5 * sx, -0.5 * sy)
+        GL.glEnd()
         self.pop()
-        glDisable(GL_TEXTURE_2D)
+        GL.glDisable(GL.GL_TEXTURE_2D)
 
     def render_line(self, p0, p1):
-        glBegin(GL_LINES)
-        glVertex(*p0)
-        glVertex(*p1)
-        glEnd()
+        GL.glBegin(GL.GL_LINES)
+        GL.glVertex(*p0)
+        GL.glVertex(*p1)
+        GL.glEnd()
+
+    def render_lines(self, points):
+        GL.glBegin(GL.GL_LINE_STRIP)
+        for pt in points:
+            GL.glVertex(*pt)
+        GL.glEnd()
 
     def render_sphere(self, pos, r, num_seg1=20, num_seg2=10):
-        glPushMatrix()
-        glTranslated(*pos)
-        glutSolidSphere(r, num_seg1, num_seg2)
-        glPopMatrix()
+        GL.glPushMatrix()
+        GL.glTranslated(*pos)
+        GLUT.glutSolidSphere(r, num_seg1, num_seg2)
+        GL.glPopMatrix()
 
     def render_box(self, pos, size):
-        glPushMatrix()
-        glTranslated(*pos)
-        glScaled(*size)
-        glutSolidCube(1.0)
-        glPopMatrix()
+        GL.glPushMatrix()
+        GL.glTranslated(*pos)
+        GL.glScaled(*size)
+        GLUT.glutSolidCube(1.0)
+        GL.glPopMatrix()
 
     def render_chessboard(self, sz, n=10, color1=None, color2=None):
-        glDisable(GL_LIGHTING)
+        GL.glDisable(GL.GL_LIGHTING)
         step = old_div(sz, float(n))
         if color1 is None:
             color1 = np.array([0.95, 0.95, 0.95])
@@ -290,16 +299,16 @@ class Renderer(object):
                 else:
                     self.set_color(*color2)
 
-                glBegin(GL_POLYGON)
-                glVertex([x, 0, z])
-                glVertex([x, 0, z2])
-                glVertex([x2, 0, z2])
-                glVertex([x2, 0, z])
-                glEnd()
-        glEnable(GL_LIGHTING)
+                GL.glBegin(GL.GL_POLYGON)
+                GL.glVertex([x, 0, z])
+                GL.glVertex([x, 0, z2])
+                GL.glVertex([x2, 0, z2])
+                GL.glVertex([x2, 0, z])
+                GL.glEnd()
+        GL.glEnable(GL.GL_LIGHTING)
 
     def render_chessboard_xy(self, sz, n=10, color1=None, color2=None):
-        glDisable(GL_LIGHTING)
+        GL.glDisable(GL.GL_LIGHTING)
         step = old_div(sz, float(n))
         if color1 is None:
             color1 = np.array([0.95, 0.95, 0.95])
@@ -315,24 +324,24 @@ class Renderer(object):
                 else:
                     self.set_color(*color2)
 
-                glBegin(GL_POLYGON)
-                glVertex([x, y, 0])
-                glVertex([x, y2, 0])
-                glVertex([x2, y2, 0])
-                glVertex([x2, y, 0])
-                glEnd()
-        glEnable(GL_LIGHTING)
+                GL.glBegin(GL.GL_POLYGON)
+                GL.glVertex([x, y, 0])
+                GL.glVertex([x, y2, 0])
+                GL.glVertex([x2, y2, 0])
+                GL.glVertex([x2, y, 0])
+                GL.glEnd()
+        GL.glEnable(GL.GL_LIGHTING)
 
     def render_cylinder(self, pos, r, h, num_seg1=20, num_seg2=10):
-        glPushMatrix()
-        glTranslated(*pos)
-        gluCylinder(self.quadric, r, r, h, num_seg1, num_seg2)
-        glRotatef(180, 1, 0, 0)
-        gluDisk(self.quadric, 0.0, r, num_seg1, 1)
-        glRotatef(180, 1, 0, 0)
-        glTranslatef(0.0, 0.0, h)
-        gluDisk(self.quadric, 0.0, r, num_seg1, 1)
-        glPopMatrix()
+        GL.glPushMatrix()
+        GL.glTranslated(*pos)
+        GLU.gluCylinder(self.quadric, r, r, h, num_seg1, num_seg2)
+        GL.glRotatef(180, 1, 0, 0)
+        GLU.gluDisk(self.quadric, 0.0, r, num_seg1, 1)
+        GL.glRotatef(180, 1, 0, 0)
+        GL.glTranslatef(0.0, 0.0, h)
+        GLU.gluDisk(self.quadric, 0.0, r, num_seg1, 1)
+        GL.glPopMatrix()
 
     def render_cylinder_two_points(self, p0, p1, radius):
         self.render_arrow(p0, p1, r_base=radius,
@@ -341,7 +350,7 @@ class Renderer(object):
     def render_arrow(self, p, q, r_base=0.01, head_width=0.015, head_len=0.01):
         # glDisable(GL_LIGHTING)
         m_quadric = self.quadric
-        gluQuadricNormals(m_quadric, GLU_SMOOTH)
+        GLU.gluQuadricNormals(m_quadric, GLU.GLU_SMOOTH)
         p = np.array(p)
         q = np.array(q)
         u = (q - p)
@@ -362,19 +371,19 @@ class Renderer(object):
         m2 = [M[0, 0], M[1, 0], M[2, 0], 0.0, M[0, 1], M[1, 1], M[2, 1], 0.0,
               M[0, 2], M[1, 2], M[2, 2], 0.0, p[0], p[1], p[2], 1.0]
 
-        glPushMatrix()
-        glMultMatrixd(m2)
+        GL.glPushMatrix()
+        GL.glMultMatrixd(m2)
         arrow_len = norm(q - p) - head_len
         # glColor(0.9, 0.2, 0.2)
-        gluCylinder(m_quadric, r_base, r_base, arrow_len, 10, 10)
-        glPopMatrix()
+        GLU.gluCylinder(m_quadric, r_base, r_base, arrow_len, 10, 10)
+        GL.glPopMatrix()
 
         if head_width > 1e-6 and head_len > 1e-6:
             # glColor(1.0, 0.0, 0.0)
-            glPushMatrix()
-            glMultMatrixd(m)
-            glutSolidCone(head_width, head_len, 10, 3)
-            glPopMatrix()
+            GL.glPushMatrix()
+            GL.glMultMatrixd(m)
+            GLUT.glutSolidCone(head_width, head_len, 10, 3)
+            GL.glPopMatrix()
             # gluDeleteQuadric(m_quadric)
             # glEnable(GL_LIGHTING)
 

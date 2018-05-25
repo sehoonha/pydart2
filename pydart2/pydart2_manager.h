@@ -5,8 +5,15 @@
 
 // Dart headers
 #include "dart/dart.hpp"
+#ifdef PYDART2_BULLET_FOUND
+#include "dart/collision/bullet/BulletCollisionDetector.hpp"
+#endif
+#ifdef PYDART2_ODE_FOUND
+#include "dart/collision/ode/OdeCollisionDetector.hpp"
+#endif
 #include "dart/gui/gui.hpp"
 #include "dart/utils/utils.hpp"
+#include "dart/utils/urdf/DartLoader.hpp"
 
 namespace pydart {
 

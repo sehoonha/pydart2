@@ -1,8 +1,8 @@
 from __future__ import print_function
 from __future__ import absolute_import
 from builtins import str
-from builtins import range
-from builtins import object
+# from builtins import range
+# from builtins import object
 from six import string_types
 
 # Copyright (c) 2015, Disney Research
@@ -51,7 +51,8 @@ class Skeleton(object):
 
         # Initialize bodynodes
         _nbodynodes = papi.skeleton__getNumBodyNodes(self.world.id, self.id)
-        self.bodynodes = [BodyNode(self, i) for i in range(_nbodynodes)]
+        self.bodynodes = [BodyNode(self, i)
+                          for i in range(_nbodynodes)]
         self.name_to_body = {body.name: body for body in self.bodynodes}
 
         # Initialize markers
@@ -70,6 +71,11 @@ class Skeleton(object):
     def set_root_joint_to_trans_and_euler(self, ):
         papi.skeleton__setRootJointToTransAndEuler(self.world.id,
                                                    self.id)
+        self.build()
+
+    def set_root_joint_to_weld(self, ):
+        papi.skeleton__setRootJointToWeld(self.world.id,
+                                          self.id)
         self.build()
 
     def set_controller(self, _controller):

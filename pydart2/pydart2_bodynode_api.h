@@ -42,7 +42,9 @@ void BODY(setCollidable)(int wid, int skid, int bid, bool _isCollidable);
 ////////////////////////////////////////
 // BodyNode::Inertia Functions
 double BODY(getMass)(int wid, int skid, int bid);
+void BODY(setMass)(int wid, int skid, int bid, double mass);
 void BODY(getInertia)(int wid, int skid, int bid, double outv33[3][3]);
+void BODY(setInertia)(int wid, int skid, int bid, double inv33[3][3]);
 
 ////////////////////////////////////////
 // BodyNode::Momentum Functions

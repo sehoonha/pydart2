@@ -1,6 +1,6 @@
 from __future__ import division
 from __future__ import absolute_import
-from builtins import object
+# from builtins import object
 from past.utils import old_div
 # Copyright (c) 2015, Disney Research
 # All rights reserved.
@@ -29,6 +29,13 @@ class CollisionResult(object):
 
     def num_contacted_bodies(self,):
         return len(self.contacted_bodies)
+
+    def copy(self, ):
+        ret = CollisionResult(self.world)
+        ret.id = self.id
+        ret.contacts = list(self.contacts)
+        ret.contacted_bodies = list(self.contacted_bodies)
+        return ret
 
     def update(self,):
         self.contacts = list()

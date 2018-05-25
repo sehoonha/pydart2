@@ -19,3 +19,4 @@ For source codes and data files, please visit the repository
    examples/biped_stand.rst
    examples/soft_bodies.rst
    examples/gravity_compensation.rst
+   examples/inverse_kinematics.rst

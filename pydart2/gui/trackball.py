@@ -79,7 +79,7 @@ phi relates to the rotation angle around Z axis.
 '''
 from __future__ import division
 from builtins import str
-from builtins import object
+# from builtins import object
 from past.utils import old_div
 __docformat__ = 'restructuredtext'
 __version__ = '1.0'

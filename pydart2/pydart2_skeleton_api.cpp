@@ -88,9 +88,31 @@ void SKEL(setRootJointToTransAndEuler)(int wid, int skid) {
     dart::dynamics::Joint* newJoint = ret.first;
     newJoint->setName("root_t");
     dart::dynamics::BodyNode* newBody = ret.second;
+    newBody->setMass(0.0);
     // rearrange the root joints
     oldRoot->moveTo(newBody);
 }
+
+
+void SKEL(setRootJointToWeld)(int wid, int skid) {
+    dart::dynamics::SkeletonPtr skel = GET_SKELETON(wid, skid);
+    // change the joint type to euler
+    dart::dynamics::BodyNode* oldRoot = skel->getRootBodyNode();
+    oldRoot->changeParentJointType<dart::dynamics::WeldJoint>();
+
+    // oldRoot->getParentJoint()->setName("root_r");
+    // // create a new root
+    // std::pair<dart::dynamics::Joint*, dart::dynamics::BodyNode*> ret =
+    //     skel->createJointAndBodyNodePair
+    //     <dart::dynamics::TranslationalJoint, dart::dynamics::BodyNode>();
+    // dart::dynamics::Joint* newJoint = ret.first;
+    // newJoint->setName("root_t");
+    // dart::dynamics::BodyNode* newBody = ret.second;
+    // newBody->setMass(0.0);
+    // // rearrange the root joints
+    // oldRoot->moveTo(newBody);
+}
+
 
 ////////////////////////////////////////
 // Skeleton::Structure Information Functions

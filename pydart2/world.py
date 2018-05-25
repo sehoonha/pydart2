@@ -1,6 +1,6 @@
 from __future__ import absolute_import
-from builtins import range
-from builtins import object
+# from builtins import range
+# from builtins import object
 # Copyright (c) 2015, Disney Research
 # All rights reserved.
 #
@@ -12,7 +12,10 @@ import os.path
 import numpy as np
 from . import pydart2_api as papi
 from .skeleton import Skeleton
+# from .bodynode import BodyNode
+
 from .collision_result import CollisionResult
+from .recording import Recording
 
 
 def create_world(step, skel_path=None):
@@ -23,11 +26,16 @@ def create_world(step, skel_path=None):
 class World(object):
     DART_COLLISION_DETECTOR, \
         FCL_COLLISION_DETECTOR, \
-        BULLET_COLLISION_DETECTOR = list(range(3))
+        BULLET_COLLISION_DETECTOR, \
+        ODE_COLLISION_DETECTOR = list(range(4))
+
+    CLASS_SKELETON = Skeleton  # Modify this for inherited skeleton class
 
     def __init__(self, step, skel_path=None):
         self.skeletons = list()
         self.control_skel = None
+        self.recording = None
+
         if skel_path is not None:
             skel_path = os.path.realpath(skel_path)
             self.id = papi.createWorldFromSkel(skel_path)
@@ -39,17 +47,21 @@ class World(object):
             self.id = papi.createWorld(step)
 
         self.reset()
+        self.enable_recording()
 
     def destroy(self):
         papi.destroyWorld(self.id)
 
-    def add_skeleton(self, filename):
-        skel = Skeleton(self, _filename=filename)
+    def add_skeleton(self, filename, CLASS=None):
+        if CLASS is not None:
+            skel = CLASS(self, _filename=filename)
+        else:
+            skel = World.CLASS_SKELETON(self, _filename=filename)
         self.skeletons.append(skel)
         return skel
 
     def add_skeleton_from_id(self, _skel_id):
-        skel = Skeleton(_world=self, _id=_skel_id)
+        skel = World.CLASS_SKELETON(_world=self, _id=_skel_id)
         self.skeletons.append(skel)
         return skel
 
@@ -87,16 +99,27 @@ class World(object):
         self.set_time_step(_dt)
 
     def num_frames(self):
-        return papi.world__getSimFrames(self.id)
+        # return papi.world__getSimFrames(self.id)
+        if self.recording:
+            return self.recording.num_frames()
+        else:
+            return 0
 
     @property
     def nframes(self):
         return self.num_frames()
 
+    def set_frame(self, frame_index):
+        if self.recording:
+            return self.recording.set_frame(frame_index)
+        return False
+
     def reset(self):
         papi.world__reset(self.id)
         self._frame = 0
         self.collision_result = CollisionResult(self)
+        if self.recording:
+            self.recording.clear()
 
     def step(self):
         for skel in self.skeletons:
@@ -106,6 +129,8 @@ class World(object):
         papi.world__step(self.id)
         self._frame += 1
         self.collision_result.update()
+        if self.recording:
+            self.recording.bake()
 
     def check_collision(self, ):
         papi.world__checkCollision(self.id)
@@ -137,7 +162,9 @@ class World(object):
                            scale=render_contact_force_scale)
 
     def states(self):
-        return np.concatenate([skel.x for skel in self.skels])
+        if len(self.skeletons) == 0:
+            return np.array(())
+        return np.concatenate([skel.x for skel in self.skeletons])
 
     @property
     def x(self):
@@ -145,7 +172,7 @@ class World(object):
 
     def set_states(self, _x):
         lo = 0
-        for skel in self.skels:
+        for skel in self.skeletons:
             hi = lo + 2 * skel.ndofs
             skel.x = _x[lo:hi]
             lo = hi
@@ -195,5 +222,23 @@ class World(object):
     #                                body2.skel.id, body2.id,
     #                                flag_enable)
 
+    def is_recording(self, ):
+        return (self.recording is not None)
+
+    def set_recording(self, enable):
+        if enable:
+            self.enable_recording()
+        else:
+            self.disable_recording()
+
+    def enable_recording(self, ):
+        if self.recording is None:
+            self.recording = Recording(self)
+        assert(self.recording)
+
+    def disable_recording(self, ):
+        self.recording = None
+
     def __repr__(self):
-        return "[World.%d %.4f]" % (self.id, self.t)
+        return "[World ID:%d time:%.4f # frames: %d]" % (
+            self.id, self.t, self.num_frames())

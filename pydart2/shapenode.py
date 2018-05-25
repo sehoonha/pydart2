@@ -1,12 +1,12 @@
 from __future__ import absolute_import
-from builtins import object
+# from builtins import object
 # Copyright (c) 2015, Disney Research
 # All rights reserved.
 #
 # Author(s): Sehoon Ha <sehoon.ha@disneyresearch.com>
 # Disney Research Robotics Group
 from . import pydart2_api as papi
-from .shape import Shape
+from .shape import create_shape
 
 
 class ShapeNode(object):
@@ -19,7 +19,8 @@ class ShapeNode(object):
         self.bodynode = _bodynode
         self.skeleton = _bodynode.skeleton
         self.id = _id
-        self.shape = Shape(self)
+        # self.shape = Shape(self)
+        self.shape = create_shape(self)
 
     @property
     def skel(self):

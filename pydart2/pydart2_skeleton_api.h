@@ -21,6 +21,7 @@ void SKEL(setSelfCollisionCheck)(int wid, int skid, int enable);
 bool SKEL(getAdjacentBodyCheck)(int wid, int skid);
 void SKEL(setAdjacentBodyCheck)(int wid, int skid, int enable);
 void SKEL(setRootJointToTransAndEuler)(int wid, int skid);
+void SKEL(setRootJointToWeld)(int wid, int skid);
 
 ////////////////////////////////////////
 // Skeleton::Structure Information Functions

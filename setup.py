@@ -4,13 +4,49 @@ from distutils.core import Extension
 from sys import platform as _platform
 import sys
 import glob
+import os.path
+
+
+def check_file(directories, file):
+    print("> search... %s" % file)
+    for directory in directories:
+        path = os.path.join(directory, file)
+        detected = os.path.isfile(path)
+        print("check [%s] -> %s" % (path, detected))
+        if detected:
+            return True
+    return False
+
 
 DIR = 'pydart2/'
+dirs = ['/usr/include', '/usr/local/include']
+print("-- check DART headers --")
+PYDART2_BULLET_FOUND = \
+    check_file(dirs, "dart/collision/bullet/BulletCollisionDetector.hpp")
+print("PYDART2_BULLET_FOUND = %s" % PYDART2_BULLET_FOUND)
+
+PYDART2_ODE_FOUND = \
+    check_file(dirs, "dart/collision/ode/OdeCollisionDetector.hpp")
+print("PYDART2_ODE_FOUND = %s" % PYDART2_ODE_FOUND)
+print("------------------------")
 
 CXX_FLAGS = '-Wall -msse2 -fPIC -std=c++11 -Xlinker -rpath /usr/local/lib '
 CXX_FLAGS += '-O3 -DNDEBUG -shared '
 CXX_FLAGS += '-g -fno-omit-frame-pointer -fno-inline-functions '
-CXX_FLAGS += '-fno-inline-functions-called-once -fno-optimize-sibling-calls '
+CXX_FLAGS += '-fno-optimize-sibling-calls '
+
+
+if PYDART2_BULLET_FOUND:
+    CXX_FLAGS += "-DPYDART2_BULLET_FOUND "
+if PYDART2_ODE_FOUND:
+    CXX_FLAGS += "-DPYDART2_ODE_FOUND "
+
+print("CXX_FLAGS: %s" % str(CXX_FLAGS))
+
+# CXX_FLAGS = '-fopenmp -Wall -Wextra -fPIC -std=c++11 '
+# CXX_FLAGS = '-O3 -DNDEBUG'
+
+# CXX_FLAGS += '-fno-stack-protector '
 # CXX_FLAGS += '-DPY_VERSION_HEX=0x03000000'
 
 include_dirs = list()
@@ -32,6 +68,9 @@ include_dirs += ['/usr/include/bullet']
 include_dirs += ['/usr/local/include']
 include_dirs += ['/usr/local/include/eigen3']
 include_dirs += ['/usr/local/include/bullet']
+include_dirs += ['/usr/local/include/ode']
+include_dirs += ['/usr/local/Cellar/urdfdom_headers/0.2.3/include']
+
 try:
     import numpy
     NP_DIRS = [numpy.get_include()]
@@ -48,15 +87,27 @@ include_dirs += NP_DIRS
 
 libraries = list()
 libraries += ['dart', 'dart-gui']
-libraries += ['dart-optimizer-ipopt', 'dart-optimizer-nlopt',
-              'dart-planning', 'dart-utils', 'dart-utils-urdf']
+libraries += ['dart-optimizer-nlopt',
+              'dart-planning', 'dart-utils', 'dart-utils-urdf', ]
+
 # libraries += [current_python]
 if _platform == "linux" or _platform == "linux2":
     libraries += ['GL', 'glut', 'Xmu', 'Xi']
+    CXX_FLAGS += '-fno-inline-functions-called-once '
 elif _platform == "darwin":
-    libraries += ['GLUT', 'Cocoa', 'OpenGL']
+    CXX_FLAGS += '-framework Cocoa '
+    CXX_FLAGS += '-framework OpenGL '
+    CXX_FLAGS += '-framework GLUT '
+    CXX_FLAGS += '-mmacosx-version-min=10.9 '
+
+    # libraries += ['GLUT', 'Cocoa', 'OpenGL']
 libraries += ['BulletDynamics', 'BulletCollision',
               'LinearMath', 'BulletSoftBody']
+if PYDART2_BULLET_FOUND:
+    libraries += ['dart-collision-bullet']
+if PYDART2_ODE_FOUND:
+    libraries += ['dart-collision-ode']
+    libraries += ['ode']
 
 swig_opts = ['-c++']
 if python_major_version == 3:
@@ -94,13 +145,12 @@ pydart2_api = Extension('_pydart2_api',
                         sources=sources,
                         depends=depends)
 
-requires = ['numpy', 'PyOpenGL', 'PyOpenGL_accelerate']
-if python_major_version == 3:
-    requires.append("future")
-    requires.append("six")
+requires = ['numpy', 'PyOpenGL',
+            # 'PyOpenGL_accelerate',
+            'future', 'six', 'colorama', ]
 
 setup(name='pydart2',
-      version='0.5.5',
+      version='0.7.0',
       description='Python Interface for DART Simulator',
       url='https://github.com/sehoonha/pydart2',
       author='Sehoon Ha',
@@ -111,7 +161,10 @@ setup(name='pydart2',
       classifiers=['Development Status :: 2 - Pre-Alpha',
                    'License :: OSI Approved :: BSD License',
                    'Operating System :: POSIX :: Linux',
-                   'Programming Language :: Python :: 2 :: Only',
+                   'Intended Audience :: Science/Research',
+                   "Programming Language :: Python",
+                   'Programming Language :: Python :: 2.7',
+                   'Programming Language :: Python :: 3.5',
                    'Topic :: Games/Entertainment :: Simulation'],
       packages=find_packages(),
       ext_modules=[pydart2_api])

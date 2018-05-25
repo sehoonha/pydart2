@@ -37,9 +37,9 @@ CXX_FLAGS += '-fno-optimize-sibling-calls '
 
 
 if PYDART2_BULLET_FOUND:
-    CXX_FLAGS += " -DPYDART2_BULLET_FOUND"
+    CXX_FLAGS += " -DPYDART2_BULLET_FOUND "
 if PYDART2_ODE_FOUND:
-    CXX_FLAGS += " -DPYDART2_ODE_FOUND"
+    CXX_FLAGS += " -DPYDART2_ODE_FOUND "
 
 print("CXX_FLAGS: %s" % str(CXX_FLAGS))
 
@@ -93,7 +93,7 @@ libraries += ['dart-optimizer-nlopt',
 # libraries += [current_python]
 if _platform == "linux" or _platform == "linux2":
     libraries += ['GL', 'glut', 'Xmu', 'Xi']
-    CXX_FLAGS += '-fno-inline-functions-called-once'
+    CXX_FLAGS += '-fno-inline-functions-called-once '
 elif _platform == "darwin":
     CXX_FLAGS += '-framework Cocoa '
     CXX_FLAGS += '-framework OpenGL '

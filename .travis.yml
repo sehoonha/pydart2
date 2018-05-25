@@ -6,10 +6,12 @@ matrix:
   include:
     - os: linux
       dist: trusty
-      python:
-        - "2.7"
-        - "3.4"
+      python: "2.7"
+    - os: linux
+      dist: trusty
+      python: "3.4"
     - os: osx
+      osx_image: xcode9.3
       python: "3.6"
 
 before_install:
@@ -24,6 +26,7 @@ before_install:
       if [[ $TRAVIS_PYTHON_VERSION == 3.4 ]]; then sudo apt-get install python3-pip python3-pyqt4 python3-pyqt4.qtopengl -y; fi;
     fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      security set-key-partition-list -S apple-tool:,apple: -s -k keychainPass keychainName
       brew install dartsim;
       brew install swig;
     fi

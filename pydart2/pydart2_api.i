@@ -9,6 +9,7 @@
   #include "pydart2_dof_api.h"
   #include "pydart2_joint_api.h"
   #include "pydart2_shape_api.h"
+  #include "pydart2_ik.h"
 %}
 
 /* Include the NumPy typemaps library */
@@ -42,6 +43,7 @@ namespace std {
 %apply (double* IN_ARRAY1, int DIM1) {(double* inv, int ndofs)};
 %apply (double* IN_ARRAY1, int DIM1) {(double* inv1, int indofs1)};
 %apply (double* IN_ARRAY1, int DIM1) {(double* inv2, int indofs2)};
+%apply (double* IN_ARRAY2, int DIM1, int DIM2) {(double* v, int dim1, int dim2)};
 
 %apply (double* ARGOUT_ARRAY1, int DIM1) {(double* outv, int ndofs)};
 %apply (double* ARGOUT_ARRAY1, int DIM1) {(double* outv1, int ondofs1)};
@@ -56,3 +58,4 @@ namespace std {
 %include "pydart2_dof_api.h"
 %include "pydart2_joint_api.h"
 %include "pydart2_shape_api.h"
+%include "pydart2_ik.h"

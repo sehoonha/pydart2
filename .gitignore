@@ -94,3 +94,6 @@ pydart2/*wrap*
 
 examples/*.mp4
 examples/data/captures/*.png
+examples/data/vsk/
+examples/*.txt
+examples/*.csv

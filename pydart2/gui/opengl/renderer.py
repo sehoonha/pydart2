@@ -56,6 +56,8 @@ class Renderer(object):
     def parse_flag(self, x):
         if x == "COLOR_MATERIAL":
             return GL.GL_COLOR_MATERIAL
+        if x == "TEXTURE_2D":
+            return GL.GL_TEXTURE_2D
         else:
             return x
 

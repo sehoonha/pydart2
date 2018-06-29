@@ -108,6 +108,8 @@ if PYDART2_ODE_FOUND:
     libraries += ['dart-collision-ode']
     libraries += ['ode']
 
+libraries += ['nlopt']
+
 swig_opts = ['-c++']
 if python_major_version == 3:
     swig_opts.append('-py3')

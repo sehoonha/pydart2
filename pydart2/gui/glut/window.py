@@ -2,6 +2,8 @@ import OpenGL.GL as GL
 import OpenGL.GLU as GLU
 import OpenGL.GLUT as GLUT
 import sys
+import os
+import errno
 import numpy as np
 from pydart2.gui.opengl.scene import OpenGLScene
 
@@ -106,9 +108,15 @@ class GLUTWindow(object):
         GL.glPixelStorei(GL.GL_PACK_ALIGNMENT, 1)
         w, h = 1280, 720
         data = GL.glReadPixels(0, 0, w, h, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE)
-        img = Image.fromstring("RGBA", (w, h), data)
+        img = Image.frombytes("RGBA", (w, h), data)
         img = img.transpose(Image.FLIP_TOP_BOTTOM)
-        filename = "./data/captures/capture%04d.png" % self.capture_index
+        filename = os.path.join("data", "captures", "capture{:04d}.png".format(self.capture_index))
+        if not os.path.exists(os.path.dirname(filename)):
+            try:
+                os.makedirs(os.path.dirname(filename))
+            except OSError as exc:
+                if exc.errno != errno.EEXIST:
+                    raise
         img.save(filename, 'png')
         self.capture_index += 1
 

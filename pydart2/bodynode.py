@@ -185,6 +185,9 @@ class BodyNode(object):
 # Momentum Functions
     def local_com(self, ):
         return papi.bodynode__getLocalCOM(self.wid, self.skid, self.id)
+    
+    def set_local_com(self, v):
+        return papi.bodynode__setLocalCOM(self.wid, self.skid, self.id, v)
 
     def com(self, ):
         return papi.bodynode__getCOM(self.wid, self.skid, self.id)

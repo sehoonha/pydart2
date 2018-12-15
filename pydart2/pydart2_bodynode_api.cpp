@@ -213,6 +213,11 @@ void BODY(getCOMSpatialAcceleration)(int wid, int skid, int bid, double outv6[6]
     write(body->getCOMSpatialAcceleration(), outv6);
 }
 
+void BODY(setLocalCOM)(int wid, int skid, int bid, double inv3[3]) {
+    dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
+    body->setLocalCOM(Eigen::Vector3d(inv3[0], inv3[1], inv3[2]));
+}
+
 void BODY(getLinearMomentum)(int wid, int skid, int bid, double outv3[3]) {
     dart::dynamics::BodyNodePtr body = GET_BODY(wid, skid, bid);
     write(body->getLinearMomentum(), outv3);

@@ -11,7 +11,7 @@
 // #include "dart/dynamics/CapsuleShape.hpp"
 // #include "dart/dynamics/ConeShape.hpp"
 // #include "dart/dynamics/PlaneShape.hpp"
-// #include "dart/dynamics/MultiSphereShape.hpp"
+// #include "dart/dynamics/MultiSphereConvexHullShape.hpp"
 // #include "dart/dynamics/MeshShape.hpp"
 // #include "dart/dynamics/SoftMeshShape.hpp"
 // #include "dart/dynamics/LineSegmentShape.hpp"
@@ -172,7 +172,7 @@ void drawShapeFrame(
 //         // using dart::dynamics::CapsuleShape;
 //         // using dart::dynamics::ConeShape;
 //         using dart::dynamics::PlaneShape;
-//         // using dart::dynamics::MultiSphereShape;
+//         // using dart::dynamics::MultiSphereConvexHullShape;
 //         using dart::dynamics::MeshShape;
 //         using dart::dynamics::SoftMeshShape;
 //         using dart::dynamics::LineSegmentShape;
@@ -207,9 +207,9 @@ void drawShapeFrame(
 //         //   const auto* cone = static_cast<const ConeShape*>(shape);
 //         //   ri->drawCone(cone->getRadius(), cone->getHeight());
 //         // }
-//         // else if (dynamic_cast<const MultiSphereShape*>(shape) != NULL)
+//         // else if (dynamic_cast<const MultiSphereConvexHullShape*>(shape) != NULL)
 //         // {
-//         //   const auto* multiSphere = static_cast<const MultiSphereShape*>(shape);
+//         //   const auto* multiSphere = static_cast<const MultiSphereConvexHullShape*>(shape);
 //         //   const auto& spheres = multiSphere->getSpheres();
 //         //   for (const auto& sphere : spheres)
 //         //   {
@@ -283,7 +283,7 @@ void drawShape(
         using dart::dynamics::CapsuleShape;
         using dart::dynamics::ConeShape;
         using dart::dynamics::PlaneShape;
-        using dart::dynamics::MultiSphereShape;
+        using dart::dynamics::MultiSphereConvexHullShape;
         using dart::dynamics::MeshShape;
         using dart::dynamics::SoftMeshShape;
         using dart::dynamics::LineSegmentShape;
@@ -301,7 +301,7 @@ void drawShape(
         else if (shape->is<EllipsoidShape>())
         {
           const auto* ellipsoid = static_cast<const EllipsoidShape*>(shape);
-          ri->drawEllipsoid(ellipsoid->getSize());
+          ri->drawEllipsoid(ellipsoid->getDiameters());
         }
         else if (shape->is<CylinderShape>())
         {
@@ -318,9 +318,9 @@ void drawShape(
           const auto* cone = static_cast<const ConeShape*>(shape);
           ri->drawCone(cone->getRadius(), cone->getHeight());
         }
-        else if (shape->is<MultiSphereShape>())
+        else if (shape->is<MultiSphereConvexHullShape>())
         {
-          const auto* multiSphere = static_cast<const MultiSphereShape*>(shape);
+          const auto* multiSphere = static_cast<const MultiSphereConvexHullShape*>(shape);
           const auto& spheres = multiSphere->getSpheres();
           for (const auto& sphere : spheres)
           {

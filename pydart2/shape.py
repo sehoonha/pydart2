@@ -12,6 +12,7 @@ import numpy as np
 class Shape(object):
     """
     """
+
     def __init__(self, _shapenode):
         """
         """
@@ -44,7 +45,7 @@ class Shape(object):
 
     def shape_type(self, ):
         return self.type_id()
-        # type_ = papi.shape__getShapeType(self.wid, self.skid,
+        # type_ = papi.shape__getType(self.wid, self.skid,
         #                                  self.bid, self.id)
         # type_ = 1 if type_ == -1 else type_  # Assume to be ELLIPSOID
         # return type_
@@ -118,13 +119,13 @@ class EllipsoidShape(Shape):
         Shape.__init__(self, _shapenode)
 
     def size(self, ):
-        return papi.ellipsoid_shape__getSize(self.wid, self.skid,
-                                             self.bid, self.id)
+        return papi.ellipsoid_shape__getDiameters(self.wid, self.skid,
+                                                  self.bid, self.id)
 
     def set_size(self, _size):
-        return papi.ellipsoid_shape__setSize(self.wid, self.skid,
-                                             self.bid, self.id,
-                                             _size)
+        return papi.ellipsoid_shape__setDiameters(self.wid, self.skid,
+                                                  self.bid, self.id,
+                                                  _size)
 
     def __repr__(self):
         return '[EllipsoidShape(%d:%d)]' % (self.bid, self.id)
@@ -226,30 +227,30 @@ class PlaneShape(Shape):
         return '[PlaneShape(%d:%d)]' % (self.bid, self.id)
 
 
-class MultiSphereShape(Shape):
+class MultiSphereConvexHullShape(Shape):
     def __init__(self, _shapenode):
         Shape.__init__(self, _shapenode)
 
     def add_sphere(self, r, pos):
         sphere = np.concatenate([[r], pos])
-        papi.multisphereshape__addSphere(self.wid, self.skid, self.bid,
-                                         self.id, sphere)
+        papi.multisphereconvexhullshape__addSphere(self.wid, self.skid, self.bid,
+                                                   self.id, sphere)
 
     def spheres(self, ):
         n = self.num_spheres()
-        data = papi.multisphereshape__getSpheres(self.wid, self.skid,
-                                                 self.bid, self.id,
-                                                 n * 4)
+        data = papi.multisphereconvexhullshape__getSpheres(self.wid, self.skid,
+                                                           self.bid, self.id,
+                                                           n * 4)
         spheres = np.split(data, n)
         spheres = [{'r': s[0], 'pos': s[1:]} for s in spheres]
         return spheres
 
     def num_spheres(self, ):
-        return papi.multisphereshape__getNumSpheres(self.wid, self.skid,
-                                                    self.bid, self.id)
+        return papi.multisphereconvexhullshape__getNumSpheres(self.wid, self.skid,
+                                                              self.bid, self.id)
 
     def __repr__(self):
-        return '[MultiSphereShape(%d:%d)]' % (self.bid, self.id)
+        return '[MultiSphereConvexHullShape(%d:%d)]' % (self.bid, self.id)
 
 
 class MeshShape(Shape):
@@ -294,7 +295,7 @@ def create_shape(shapenode):
     type_ = papi.shape__getTypeID(wid, skid, bid, id)
     # type_ = 1 if type_ == -1 else type_  # Assume to be ELLIPSOID
     shape_classes = [SphereShape, BoxShape, EllipsoidShape, CylinderShape,
-                     CapsuleShape, ConeShape, PlaneShape, MultiSphereShape,
+                     CapsuleShape, ConeShape, PlaneShape, MultiSphereConvexHullShape,
                      MeshShape, SoftMeshShape, LineSegmentShape]
     if 0 <= type_ < len(shape_classes):
         cls = shape_classes[type_]

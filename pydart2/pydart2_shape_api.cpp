@@ -91,7 +91,7 @@ int SHAPE(getTypeID)(int wid, int skid, int bid, int sid) {
     using dart::dynamics::CapsuleShape;
     using dart::dynamics::ConeShape;
     using dart::dynamics::PlaneShape;
-    using dart::dynamics::MultiSphereShape;
+    using dart::dynamics::MultiSphereConvexHullShape;
     using dart::dynamics::MeshShape;
     using dart::dynamics::SoftMeshShape;
     using dart::dynamics::LineSegmentShape;
@@ -105,7 +105,7 @@ int SHAPE(getTypeID)(int wid, int skid, int bid, int sid) {
     else if (shape->is<CapsuleShape>()) return 4;
     else if (shape->is<ConeShape>()) return 5;
     else if (shape->is<PlaneShape>()) return 6;
-    else if (shape->is<MultiSphereShape>()) return 7;
+    else if (shape->is<MultiSphereConvexHullShape>()) return 7;
     else if (shape->is<MeshShape>()) return 8;
     else if (shape->is<SoftMeshShape>()) return 9;
     else if (shape->is<LineSegmentShape>()) return 10;
@@ -157,17 +157,17 @@ void BOX_SHAPE(setSize)(int wid, int skid, int bid, int sid, double inv3[3]) {
 
 ////////////////////////////////////////
 // EllipsoidShape Functions
-void ELLIPSOID_SHAPE(getSize)(int wid, int skid, int bid, int sid, double outv3[3]) {
+void ELLIPSOID_SHAPE(getDiameters)(int wid, int skid, int bid, int sid, double outv3[3]) {
     dart::dynamics::EllipsoidShape* shape = GET_ELLIPSOID_SHAPE(wid, skid, bid, sid);
     if (shape != NULL) {
-      write(shape->getSize(), outv3);
+      write(shape->getDiameters(), outv3);
     }
 }
 
-void ELLIPSOID_SHAPE(setSize)(int wid, int skid, int bid, int sid, double inv3[3]) {
+void ELLIPSOID_SHAPE(setDiameters)(int wid, int skid, int bid, int sid, double inv3[3]) {
     dart::dynamics::EllipsoidShape* shape = GET_ELLIPSOID_SHAPE(wid, skid, bid, sid);
     if (shape != NULL) {
-        shape->setSize(read(inv3, 3));
+        shape->setDiameters(read(inv3, 3));
     }
 }
 
@@ -274,14 +274,14 @@ void PLANE_SHAPE(setOffset)(int wid, int skid, int bid, int sid, double _offset)
 }
 
 ////////////////////////////////////////
-// MultiSphereShape Functions
-void MULTISPHERE_SHAPE(addSphere)(int wid, int skid, int bid, int sid, double inv4[4]) {
-    auto shape = GET_MULTISPHERE_SHAPE(wid, skid, bid, sid);
+// MultiSphereConvexHullShape Functions
+void MULTISPHERECONVEXHULL_SHAPE(addSphere)(int wid, int skid, int bid, int sid, double inv4[4]) {
+    auto shape = GET_MULTISPHERECONVEXHULL_SHAPE(wid, skid, bid, sid);
     shape->addSphere(inv4[0], Eigen::Vector3d(inv4[1], inv4[2], inv4[3]));
 }
 
-void MULTISPHERE_SHAPE(getSpheres)(int wid, int skid, int bid, int sid, double* outv, int nout) {
-    auto shape = GET_MULTISPHERE_SHAPE(wid, skid, bid, sid);
+void MULTISPHERECONVEXHULL_SHAPE(getSpheres)(int wid, int skid, int bid, int sid, double* outv, int nout) {
+    auto shape = GET_MULTISPHERECONVEXHULL_SHAPE(wid, skid, bid, sid);
     auto spheres = shape->getSpheres();
 
     int ptr = 0;
@@ -295,8 +295,8 @@ void MULTISPHERE_SHAPE(getSpheres)(int wid, int skid, int bid, int sid, double* 
     }
 }
 
-int MULTISPHERE_SHAPE(getNumSpheres)(int wid, int skid, int bid, int sid) {
-    auto shape = GET_MULTISPHERE_SHAPE(wid, skid, bid, sid);
+int MULTISPHERECONVEXHULL_SHAPE(getNumSpheres)(int wid, int skid, int bid, int sid) {
+    auto shape = GET_MULTISPHERECONVEXHULL_SHAPE(wid, skid, bid, sid);
     return shape->getNumSpheres();
 }
 

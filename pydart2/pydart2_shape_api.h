@@ -55,8 +55,8 @@ void BOX_SHAPE(setSize)(int wid, int skid, int bid, int sid, double inv3[3]);
 #define ELLIPSOID_SHAPE(funcname) ellipsoid_shape__##funcname
 #define GET_ELLIPSOID_SHAPE(wid, skid, bid, sid) dynamic_cast<dart::dynamics::EllipsoidShape*>((Manager::skeleton(wid, skid)->getBodyNode(bid)->getShapeNodes()[sid])->getShape().get());
 
-void ELLIPSOID_SHAPE(getSize)(int wid, int skid, int bid, int sid, double outv3[3]);
-void ELLIPSOID_SHAPE(setSize)(int wid, int skid, int bid, int sid, double inv3[3]);
+void ELLIPSOID_SHAPE(getDiameters)(int wid, int skid, int bid, int sid, double outv3[3]);
+void ELLIPSOID_SHAPE(setDiameters)(int wid, int skid, int bid, int sid, double inv3[3]);
 
 ////////////////////////////////////////
 // CylinderShape Functions
@@ -103,13 +103,13 @@ void PLANE_SHAPE(setOffset)(int wid, int skid, int bid, int sid, double _offset)
 
 
 ////////////////////////////////////////
-// MultiSphereShape Functions
-#define MULTISPHERE_SHAPE(funcname) multisphereshape__##funcname
-#define GET_MULTISPHERE_SHAPE(wid, skid, bid, sid) dynamic_cast<dart::dynamics::MultiSphereShape*>((Manager::skeleton(wid, skid)->getBodyNode(bid)->getShapeNodes()[sid])->getShape().get());
+// MultiSphereConvexHullShape Functions
+#define MULTISPHERECONVEXHULL_SHAPE(funcname) multisphereconvexhullshape__##funcname
+#define GET_MULTISPHERECONVEXHULL_SHAPE(wid, skid, bid, sid) dynamic_cast<dart::dynamics::MultiSphereConvexHullShape*>((Manager::skeleton(wid, skid)->getBodyNode(bid)->getShapeNodes()[sid])->getShape().get());
 
-void MULTISPHERE_SHAPE(addSphere)(int wid, int skid, int bid, int sid, double inv4[4]);
-void MULTISPHERE_SHAPE(getSpheres)(int wid, int skid, int bid, int sid, double* outv, int nout);
-int MULTISPHERE_SHAPE(getNumSpheres)(int wid, int skid, int bid, int sid);
+void MULTISPHERECONVEXHULL_SHAPE(addSphere)(int wid, int skid, int bid, int sid, double inv4[4]);
+void MULTISPHERECONVEXHULL_SHAPE(getSpheres)(int wid, int skid, int bid, int sid, double* outv, int nout);
+int MULTISPHERECONVEXHULL_SHAPE(getNumSpheres)(int wid, int skid, int bid, int sid);
 
 
 

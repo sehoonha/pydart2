@@ -20,9 +20,9 @@
 #include "dart/dynamics/Marker.hpp"
 #include "dart/constraint/ConstraintSolver.hpp"
 #include "dart/collision/CollisionDetector.hpp"
-#include "dart/gui/LoadGlut.hpp"
-#include "dart/gui/GLFuncs.hpp"
-#include "dart/gui/GraphWindow.hpp"
+#include "dart/gui/glut/LoadGlut.hpp"
+#include "dart/gui/glut/GLUTFuncs.hpp"
+#include "dart/gui/glut/GraphWindow.hpp"
 #include "dart/utils/FileInfoWorld.hpp"
 
 
